@@ -1,0 +1,36 @@
+- provide :title, 'Customer Contact'
+
+.index-header
+  %h1 Customer Contact
+  %p
+
+.index-table
+  .gs
+    .g-2
+      .index-table__content
+        .index-table__wrapper
+          %table.index_table
+            %thead
+              %tr
+                %th Type
+                %th Subject
+                %th Recieved
+                %th.align-center Delete?
+            %tbody
+              - @notifications.each do |notification|
+                %tr{class: (notification.read ? (notification == @notification ? 'open' : 'read') : 'unread')}
+                  %td= notification.display_type
+                  %td= link_to notification.display_name, notification
+                  %td= notification.created_at
+                  %td.align-center= link_to fa_icon('trash'), @notification, method: :delete, style: 'color: red'
+    .g-3.g-gutter
+      .index-table__content
+        .index-table__wrapper
+          %table.index_table
+            %thead
+              %tr
+                %th= @notification.display_type
+                %th.narrow= link_to fa_icon('times'), notifications_path, style: 'color: gray'
+            %tbody
+              %tr
+                %td{colspan: 2}= render partial: "#{@notification.notifiable_type.downcase.gsub('::', '_')}"

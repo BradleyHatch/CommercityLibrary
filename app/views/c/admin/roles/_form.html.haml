@@ -1,0 +1,42 @@
+#form_page
+  = form_for @role do |f|
+    = f.error_messages
+    #upper_form
+      .title_field.sync_field
+        = f.text_field :name, placeholder: 'Name'
+      .right_form_buttons.full_form
+        = f.submit class: 'btn'
+        = link_to 'Delete', @object, method: :delete, data: { confirm: 'Are you sure? This cannot be undone' }, class: 'btn btn--secondary'
+    #main_form.two_panel_form
+      #summary_form_panel
+        .summary_title
+          %h3 Role Details
+        .field.sync_field
+          = f.label :name
+          = f.text_area :name
+        .field
+          = f.label :body
+          = f.text_area :body
+      #tabs_form_panel
+        .tabs_container
+          = tabs do
+            = tab :role do
+              %table
+                %tr
+                  %td
+                  %td Read
+                  %td Create
+                  %td Update
+                  %td Delete
+                = f.fields_for :permissions, @role.build_or_find_permissions do |ff|
+                  %tr
+                    = ff.hidden_field :permission_subject_id
+                    %td= ff.object.name
+                    %td= ff.check_box :read
+                    %td= ff.check_box :new
+                    %td= ff.check_box :edit
+                    %td= ff.check_box :remove
+
+    .actions.form-page__actions
+      = f.submit class: 'btn'
+      = link_to 'Delete', @object, method: :delete, data: { confirm: 'Are you sure? This cannot be undone' }, class: 'btn btn--secondary'

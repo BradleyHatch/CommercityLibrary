@@ -1,0 +1,19 @@
+- provide :title, 'Regions'
+
+.index-header
+  %h1= pluralize(@regions.count, 'Region')
+  = link_to '+ Create Region', new_template_region_path, class: 'btn btn--small'
+  %p
+
+.gs
+  .g-1
+
+    = index_table @regions.ordered, C::Template::Region::INDEX_TABLE, sortable: sort_template_regions_path
+
+  .g-1.form-page__intro.regions-preview
+    %label Regions Preview
+    %fieldset
+      - if (page = C::Content.basic_page.find_by(slug: :home))
+        = template_regions(page, '--m')
+      - else
+        %p No home page

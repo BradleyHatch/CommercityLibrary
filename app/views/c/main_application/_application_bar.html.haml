@@ -1,0 +1,48 @@
+- if user_signed_in?
+  .app-bar
+    = link_to raw("Homepage #{fa_icon('home')}"),
+              front_end_root_path,
+              data: { no_turbolink: true }
+
+    = link_to raw("Dashboard #{fa_icon('pie-chart')}"),
+              c.root_path,
+              data: { no_turbolink: true }
+
+    - if C.commerce
+      = link_to 'Products',
+                c.product_masters_path(q: {main_variant_status_eq: 'active'}),
+                data: { no_turbolink: true }
+
+      = link_to 'Brands',
+                c.brands_path,
+                data: { no_turbolink: true }
+
+      = link_to 'Categories',
+                c.categories_path,
+                data: { no_turbolink: true }
+
+      = link_to 'Orders',
+                c.order_sales_path,
+                data: { no_turbolink: true }
+
+      = link_to 'Customers',
+                c.customers_path,
+                data: { no_turbolink: true }
+
+      = link_to 'Enquiries',
+                c.enquiries_path,
+                data: { no_turbolink: true }
+
+    = link_to 'Navigation',
+              c.menu_items_path,
+              data: { no_turbolink: true }
+
+    - if admin_edit_path
+      .app-bar__right
+        - if session[:cache_product_masters_q].present?
+          = link_to raw("Back to scoped index"),
+                    cached_search_redirect_product_masters_path,
+                    data: { no_turbolinks: true }
+        = link_to raw("Edit #{fa_icon('edit')}"),
+                  admin_edit_path,
+                  data: { no_turbolinks: true }

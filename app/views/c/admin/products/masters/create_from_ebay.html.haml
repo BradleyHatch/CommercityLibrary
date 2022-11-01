@@ -1,0 +1,14 @@
+.form-page__intro
+  %h1 Import a product from eBay
+  %p Enter a valid eBay Item ID below and hit the submit button
+.form-page--narrow
+  .form-page__form
+    = form_tag create_from_ebay_product_masters_path do
+      .columns
+        -
+        .columns__narrow_form
+          .field
+            = label_tag 'Item ID'
+            = text_field_tag 'ItemID'
+          .field
+            = button_tag 'Submit', class: 'btn'

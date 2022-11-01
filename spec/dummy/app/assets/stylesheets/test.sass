@@ -1,0 +1,83 @@
+.home-blocks
+  padding: 0 0 5px
+  margin: 0 auto
+
+  @media (min-width: 1601px)
+    width: $site_width
+  @media (max-width: 1600px) and (min-width: 1301px)
+    width: 1200px
+  @media (max-width: 1300px) and (min-width: $l)
+    width: 1000px
+
+.home-block
+  margin: 5px
+
+  @media (min-width: 1601px)
+    height: 360px
+  @media (max-width: 1600px) and (min-width: 1301px)
+    height: 287px
+  @media (max-width: 1300px) and (min-width: $l)
+    height: 197px
+
+  background-color: whitesmoke
+  background-size: cover
+  display: block
+  background-repeat: no-repeat
+  background-position: center
+
+  &--no-background
+    background-color: white
+  &--no-height
+    height: auto
+  &--text
+    padding: 16px
+
+  &.tall
+    @media (min-width: 1601px)
+      height: 540px
+    @media (max-width: 1600px) and (min-width: 1301px)
+      height: 432px
+    @media (max-width: 1300px) and (min-width: $l)
+      height: 360px
+    @media (max-width: $l)
+      padding-bottom: 36%!important
+  &.g-3
+    @media (max-width: $l)
+      padding-bottom: 21%
+    @media (max-width: $m)
+      padding-bottom: 21%
+  &.g-2
+    @media (max-width: $l)
+      padding-bottom: 21%
+    @media (max-width: $m)
+      padding-bottom: 48%
+  &.g-1
+    @media (max-width: $l)
+      padding-bottom: 21%
+    @media (max-width: $m)
+      padding-bottom: 63%
+
+.home-block--slider
+  position: relative
+
+  &:hover
+
+    .flex-direction-nav
+      a, div
+        transition: opacity 0.2s
+
+      a
+        opacity: 1
+
+  a
+    top: 45%
+    font-size: 1.5rem
+
+  a:before
+    content: none !important
+
+  .flex-next
+    right: -30px
+
+  .flex-prev
+    left: -30px

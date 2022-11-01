@@ -1,0 +1,20 @@
+= f.fields_for :main_variant do |ff|
+  %table.form_table
+    %tbody
+      %tr
+        %th
+          %span Options
+        %th Available for this product?
+
+      = ff.collection_check_boxes(:option_ids, C::Product::Option.all, :id, :name_and_price) do |b|
+        - id = b.value
+        - option_variant = C::Product::OptionVariant.find_by(option_id: id, variant_id: @master.main_variant.id)
+        - has_carts = option_variant.present? ? option_variant.cart_item_option_variants.any? : false
+        %tr
+          %td.padded_td= b.label
+          %td.padded_td
+            = b.check_box 
+            - if has_carts
+              %i
+                = " "  
+                (is currently in a cart)

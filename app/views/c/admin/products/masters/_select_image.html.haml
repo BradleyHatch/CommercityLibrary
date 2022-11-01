@@ -1,0 +1,10 @@
+- master.images.each do |image|
+  - channel = master.send("#{channel_type}_channel")
+  - unless channel.channel_images.find_by(image_id: image.id)
+    .image_container.no_drag{class: "select_image_#{image.id}"}
+      .gs
+        .column.select_image_link
+          - unless channel.class.name == 'C::Product::Channel::Amazon' && channel.channel_images.count  > 8
+            = link_to fa_icon('arrow-right'), create_channel_image_product_master_path(image_id: image.id, channel_type: channel_type), method: :post, remote: true
+        .g-1.column
+          = image_tag(image.image.thumbnail)

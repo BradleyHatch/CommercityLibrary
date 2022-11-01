@@ -1,0 +1,14 @@
+%table.index_table.image_table{class: 'sortable_table', style: "min-height: #{222*@variant.images.count}px"}
+  %tbody{'index_data-sort' => sort_product_master_product_variant_images_path(@master, @variant)}
+    - @variant.images.ordered.each do |image|
+      %tr.no-border{id: "#{controller_name.singularize}_image_#{image.id}"}
+        %td.sort_handle
+          = fa_icon('ellipsis-v')
+        %td
+          .image_container.sortable_image_container{class: "image_#{image.id}"}
+            .column.deselect_image_link
+              = link_to fa_icon('arrow-left'), unassign_image_product_master_product_variant_path(@master, @variant, image_id: image.id), method: :post
+            .g-1
+              = image_tag(image.image.thumbnail)
+              .name
+                %span= File.basename(image.image.path)

@@ -1,0 +1,27 @@
+$("#images_container").html("<p>Images uploaded. Reload or save the form to enable adding alt tags for images.</p><%= escape_javascript(render 'c/admin/products/masters/form_tabs/uploaded_images') %>")
+$(".dz-complete").remove()
+
+$("#amazon_images_container").html("<%= escape_javascript(render 'select_image', master: @master, channel_type: :amazon) %>")
+$("#amazon_channel_images_container").html("<%= escape_javascript(render 'channel_image', master: @master, channel_type: :amazon) %>")
+
+$("#web_images_container").html("<%= escape_javascript(render 'select_image', master: @master, channel_type: :web) %>")
+$("#web_channel_images_container").html("<%= escape_javascript(render 'channel_image', master: @master, channel_type: :web) %>")
+
+$("#ebay_images_container").html("<%= escape_javascript(render 'select_image', master: @master, channel_type: :ebay) %>")
+$("#ebay_channel_images_container").html("<%= escape_javascript(render 'channel_image', master: @master, channel_type: :ebay) %>")
+
+$(".features-reload").html("<%= escape_javascript(render 'c/admin/products/masters/features_table', master: @master) %>")
+$('.sortable_table tbody').sortable({
+    axis:'y',
+    handle: '.sort_handle',
+    tolerance: 'pointer',
+    containment: 'parent',
+    revert: 50,
+    update: function(){
+      $.ajax({
+        url: $(this).attr('index_data-sort'),
+        method: 'POST',
+        dataType: 'script',
+        data: $(this).sortable('serialize')});
+    }
+});

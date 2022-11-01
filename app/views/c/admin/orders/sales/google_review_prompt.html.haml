@@ -1,0 +1,14 @@
+.row
+  = form_tag send_google_review_prompt_order_sales_path do
+    %h2 Sending Google Review prompt emails to the following customer emails:
+
+    %ul
+      - @sales.each do |sale|
+        %li= sale.email
+    %p
+
+    = hidden_field_tag :ids, params[:ids]
+
+    = submit_tag 'Send', class: "btn"
+    or
+    = link_to 'Cancel', { action: :index }, { class: 'btn btn--secondary' }

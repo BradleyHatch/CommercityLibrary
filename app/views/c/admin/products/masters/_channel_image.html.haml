@@ -1,0 +1,13 @@
+- channel = master.send("#{channel_type}_channel")
+- channel.channel_images.ordered.each do |channel_image|
+  .image_container.sortable_image_container{class: "channel_image_#{channel_image.id}"}
+    .gs.sort_handle
+      .column.deselect_image_link
+        = hidden_field_tag "#{channel_type.to_s}_weights[#{channel_image.id}]", channel_image.weight, class: 'order_field'
+        = link_to fa_icon('arrow-left'), destroy_channel_image_product_master_path(channel_image_id: channel_image.id, channel_type: channel_type), method: :post, remote: true
+      .g-1
+        - thumb = channel_image&.image&.image&.thumbnail
+        - if thumb.present?
+          = image_tag(thumb)
+      .g-1.drag_arrows
+        = fa_icon('arrows-v')

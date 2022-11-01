@@ -1,0 +1,60 @@
+.gs
+  .g-2
+    = form_for @dropdown do |f|
+      = f.error_messages
+      .gs
+        .fixed-form-panel
+          .field
+            = f.label :name
+            = f.text_field :name
+
+          .field
+            = f.label :active do
+              = f.check_box :active
+              %span Active?
+
+          - if @dropdown.new_record?
+            %p.padded
+              You can choose specific products here after the record is saved
+          - else
+            .field
+              = f.label :variant_ids, 'Specific Products'
+              - variants = C::Product::Variant.order(sku: :asc).pluck(:sku, :name, :id).map { |sku, name, id| ["#{sku} - #{name}", id]}
+              = f.select :variant_ids, variants , { include_blank: '-- Choose Products --', style: "height: auto;" }, multiple: true
+
+        .g-1
+          = tabs do
+            = tab :Options, class: 'table_tab' do
+              - if @dropdown.new_record?
+                .padded
+                  Your options will appear here after the record is saved
+              - else
+                .index-table
+                  .index-table__content
+                    .index-table__wrapper
+                      %table.index_table
+                        %thead
+                          %tr
+                            %th Name
+                        %tbody
+                          - @dropdown.dropdown_options.each do |dropdown_option|
+                            %tr
+                              %td= link_to dropdown_option.name, [:edit, @dropdown, dropdown_option]
+
+                .padded
+                  = link_to 'Add Option', [:new, @dropdown, :product_dropdown_option], class: 'button' unless @dropdown.new_record?
+            
+            = tab "Enabled Categories" do
+              - if @dropdown.new_record?
+                .padded
+                  Your options will appear here after the record is saved
+              - else
+                .collection_checkboxes
+                  = f.collection_check_boxes(:category_ids, C::Category.all.order(name: :asc), :id, :name) do |b|
+                    = b.label(:"data-value" => b.value)  do
+                      = b.check_box
+                      = b.text
+
+        .actions.form-page__actions.g-full
+          = f.submit class: 'btn'
+          = link_to 'Delete', @dropdown, method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn--secondary' unless @dropdown.new_record?

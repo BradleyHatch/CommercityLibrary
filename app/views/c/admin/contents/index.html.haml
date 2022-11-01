@@ -1,0 +1,11 @@
+- provide :title, action_name.titleize
+
+.index-header
+  %h1= pluralize(@contents.count, action_name.titleize)
+  = link_to "+ Create #{action_name.titleize}",
+            new_content_path(content_type: action_name),
+            class: 'btn btn--small'
+  %p
+    This is the list of the #{action_name.humanize.downcase} content on your site.
+
+= index_table @contents, C::Content::INDEX_TABLE

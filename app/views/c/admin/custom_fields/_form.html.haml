@@ -1,0 +1,12 @@
+= form_for @custom_field do |f|
+  = f.error_messages
+  = tabs do
+
+    = tab :content do
+      .field
+        = f.label :name
+        = f.text_field :name
+
+  .actions.form-page__actions
+    = f.submit class: 'btn'
+    = link_to_delete 'Delete', @custom_field, redirection: custom_fields_path, class: 'btn btn--secondary' unless @custom_field.new_record?

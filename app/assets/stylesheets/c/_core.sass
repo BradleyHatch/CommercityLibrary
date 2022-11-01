@@ -1,0 +1,316 @@
+//-- GENERAL ELEMENT STYLES --//
+*
+  box-sizing: border-box!important
+
+body
+  font-family: $font
+  -webkit-font-smoothing: antialiased
+  font-size: .875rem
+  color: #2D3138
+
+img
+  max-width: 100%
+
+a
+  color: $primary_color
+  text-decoration: none
+  &:hover
+    text-decoration: underline
+
+table
+  border-spacing: 0
+  width: 100%
+
+.hidden
+  display: none
+
+[data-url]
+  cursor: pointer
+
+//--BREAKPOINTS--//
+
+$s: 400px
+$m: 600px
+$l: 900px
+$xl: 1008px
+$xxl: 1280px
+
+$breakpoints_map: ( s: $s,  m: $m,  l: $l,  xl: $xl, xxl: $xxl )
+
+.page
+  background: white
+
+input:disabled
+  opacity: 0.7
+
+//-- Used to center content horizontally in the document --//
+.wrap
+  margin: 0 auto
+  max-width: $site_width
+  &--padded
+    padding: 24px
+  &__narrow
+    max-width: 900px
+    &-ultra
+      max-width: 500px
+    &-padded
+      padding: 0 16px
+
+.row
+  padding: 16px
+  &--colored
+    background-color: $primary_color
+    &-dark
+      background-color: #1b1b1b
+      a
+        color: white
+  &--sides
+    padding: 0 16px
+
+.logo
+  max-height: $logo_height
+  max-width: $logo_width
+  width: 100%
+  height: 100%
+  background-image: image_url('c/logo--dark.svg')
+  &--light
+    background-image: image_url('c/logo--light.svg')
+  &--checkout
+    background-image: image_url('c/logo--checkout.svg')
+  background-position: 0 50%
+  background-repeat: no-repeat
+  background-size: contain
+
+
+  &--no-container
+    height: $logo_height
+    width: $logo_width
+    margin: 0 auto
+
+//-- Grid System --//
+.gs
+  +flexbox
+  +flex-wrap(wrap)
+  &--centered
+    +align-items(center)
+  &--m
+    @media (min-width: $m)
+      +flexbox
+  &--l
+    @media (min-width: $l)
+      +flexbox
+  &--xl
+    @media (min-width: $xl)
+      +flexbox
+  &--xxl
+    @media (min-width: $xxl)
+      +flexbox
+  &--nowrap
+    +flex-wrap(nowrap)
+.g-gutter
+  padding-left: 16px
+  &--narrow
+    padding-left: 10px
+    &--xxl
+      @media (min-width: $xxl)
+        padding-left: 8px
+  &--m
+    @media (min-width: $m)
+      padding-left: 16px
+  &--l
+    @media (min-width: $l)
+      padding-left: 16px
+  &--xl
+    @media (min-width: $xl)
+      padding-left: 16px
+  &--xxl
+    @media (min-width: $xxl)
+      padding-left: 16px
+
+.g-gutter--bottom
+  padding-bottom: 16px
+  &--narrow
+    padding-bottom: 10px
+  &--m
+    @media (min-width: $m)
+      padding-bottom: 16px
+  &--l
+    @media (min-width: $l)
+      padding-bottom: 16px
+
+.g-gutter--top
+  padding-top: 16px
+  &--narrow
+    padding-top: 10px
+  &--m
+    @media (min-width: $m)
+      padding-top: 16px
+  &--l
+    @media (min-width: $l)
+      padding-top: 16px
+
+.g-gutter--right
+  padding-right: 16px
+  &--narrow
+    padding-right: 10px
+  &--m
+    @media (min-width: $m)
+      padding-right: 16px
+  &--l
+    @media (min-width: $l)
+      padding-right: 16px
+
+.g-full
+  +flex-basis(100%)
+
+.g-half
+  +flex-basis(50%)
+
+@for $i from 1 through 4
+  .g-#{$i}
+    +flex(#{$i})
+
+@for $i from 1 through 12
+  @media (min-width: $m)
+    .g-#{$i}--m
+      +flex(#{$i})
+
+@for $i from 1 through 6
+  @media (min-width: $l)
+    .g-#{$i}--l
+      +flex(#{$i})
+
+//-- Creates all classes for flex + media queries for each breakpoint --//
+//-- REVIEW probably a bad idea as a lot of lines of css added --//
+// @each $name, $value in $breakpoints_map
+//   @for $i from 1 through 12
+//     .g-#{$i}--#{$name}
+//       @media (min-width: $value)
+//         +flex(#{$i})
+
+/////////////// REVIEW is this the best way of doing this?? Could create loops
+
+.m_only
+  display: none
+  @media (min-width: $m)
+    display: block
+
+//-- General Rules --//
+.align
+  &-right
+    text-align: right
+  &-left
+    text-align: left
+  &-center
+    text-align: center
+
+.clear
+  clear: both
+
+.no-wrap
+  white-space: nowrap
+
+.centered__parent
+  display: table
+  height: 100%
+
+.centered__item
+  display: table-cell
+  vertical-align: middle
+
+
+///////////GENERAL PAGE STUFF ---- WHERE SHOULD THIS GO EY??
+.devise-form-page
+  background-color: white
+  padding: 50px 16px
+
+.app-bar
+  padding: 0 20px
+  background-color: #3D3D3D
+  a
+    display: inline-block
+    color: white
+    font-size: 12px
+    font-weight: 600
+    padding: 6px
+
+  &__right
+    display: inline-block
+    float: right
+    margin-right: 64px
+
+legend
+  position: relative
+  font-size: 12px
+  color: #666
+  background-color: transparent
+
+.checkbox-hidden
+  display: none
+  input[type='checkbox']:checked + &
+    display: block
+
+.checkbox-span-label
+  margin-left: 6px
+  font-size: 12px
+  margin-bottom: 0
+
+@import application/elements/buttons
+@import application/elements/shadows
+@import application/elements/forms
+@import application/elements/cookie
+@import application/elements/site_search
+@import c/application/accounts/show
+@import engine/flash_messages
+
+
+//////////Temp
+.inline_invoice_fields
+  display: table
+
+.inline_invoice_fields > *
+  display: table-cell
+  width: 180px
+
+div#invoice .label
+  font-weight: bold
+  margin-right: 10px
+
+div#invoice
+  line-height: 25px
+
+  .invoice-logo
+    max-width: 200px
+    img
+      height: 100%
+
+div#invoice-vat-exempt
+  text-align: center
+  border-top: 1px solid #eee
+  padding-top: 8px
+
+tr
+  &.read
+    opacity: 0.7
+  &.unread
+    font-weight: bold
+  &.open
+    background-color: rgba(80, 131, 219, 0.15)
+
+.c-message
+  width: 100%
+  height: 750px
+
+// for the regions + blocks
+.regions-preview
+  .home-blocks
+    padding: 5px 0
+
+  .home-block
+    margin: 5px
+    height: 360px
+    background-color: #fdf4e3
+    background-size: cover
+    background-repeat: no-repeat
+    background-position: center
+    overflow: hidden

@@ -1,0 +1,13 @@
+- question = @notification.notifiable
+%p
+  %b Subject:
+  = question.subject
+%p
+  %b Sender:
+  = question.display_sender
+%p
+  %b Product:
+  = question.variant.name
+%p
+  %b Body:
+  = question.body

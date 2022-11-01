@@ -1,0 +1,55 @@
+.grid-header
+  background-color: #f5f5f5
+  padding: 13px 16px
+  margin-bottom: 16px
+  border: 1px solid #e5e5e5
+  @media (max-width: 767px)
+    text-align: center
+    span
+      display: none
+
+.grid-header__table
+  @media (min-width: 768px)
+    display: table
+  width: 100%
+
+.grid-header__results
+  @media (min-width: 768px)
+    display: table-cell
+  vertical-align: middle
+  font-size: 1rem
+  a
+    display: inline-block
+    margin: 0 5px
+    color: #50bcca
+  select
+    -webkit-appearance: none
+    -moz-appearance: none
+    appearance: none
+    background-color: #fff
+    border-radius: 2px
+    border: none
+    color: #424947
+    padding: 8px 8px 8px
+    width: auto
+    margin: 0 0 0 10px
+    @media (max-width: 550px)
+      margin: 3px 0 0 0
+      display: block
+
+.grid-header__per-page
+  @media (min-width: 768px)
+    text-align: right
+    display: table-cell
+  vertical-align: middle
+  font-size: 0.95rem
+  @media (max-width: 767px)
+    padding-top: 12px
+  a
+    display: inline-block
+    padding: 8px 5px
+    background-color: #e5e5e5
+    color: rgba(black, 0.75)
+    margin: 0 2px
+    &.selected
+      background-color: darken(#e5e5e5, 15%)

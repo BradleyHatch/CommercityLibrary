@@ -1,0 +1,94 @@
+.wrap.wrap--padded.checkout
+  %h2 
+    Order
+    = " #{@order.order_number} (#{@order.status.titleize})"
+
+  #checkout_content.order_completion_page{ style: "display: block" }
+    .gs
+      %div{ style: "margin-right: 16px" }
+        %p
+          %strong Order Number
+        %p
+          %strong Email Address
+        - if @order.click_and_collect?
+          %p
+            %strong Click And Collect
+        - else
+          %p
+            %strong= "#{@order.click_and_collect? ? "" : "Delivery "}Address"
+      .g-1
+        %p #{@order.order_number}
+        %p #{@order.customer.email}
+
+        - if @order.click_and_collect?
+          %p 
+            We will contact you shortly when your order is available for collection at:
+            %br
+            = C.click_and_collect_address
+        - else
+          %p #{presenter(@order.shipping_address).block}
+
+    .items
+      %table.cart_items
+        %thead
+          %th.cart-items__heading.cart-items__heading--align-left
+          %th.cart-items__heading.cart-items__heading--align-left Name
+          %th.cart-items__heading.cart-items__heading--align-left Quantity
+          %th.cart-items__heading.cart-items__heading--align-right Price
+          %th.cart-items__heading.cart-items__heading--align-right Subtotal
+        %tbody
+          - @order.items.products.each do |item|
+            %tr.cart-items__row
+              %td.cart-items__cell.cart-items__cell--align-left
+                = image_tag item.product.primary_web_image
+              %td.cart-items__cell.cart-items__cell--align-left
+                = item.name
+                - if item.gift_wrapping?
+                  %br
+                  %em Item will be gift wrapped
+              %td.cart-items__cell.cart-items__cell--align-left
+                = item.quantity
+              %td.cart-items__cell.cart-items__cell--align-right
+                = humanized_money_with_symbol C.default_tax == :with_tax ? item.price : item.price_without_tax
+              %td.cart-items__cell.cart-items__cell--align-right
+                = humanized_money_with_symbol C.default_tax == :with_tax ? item.total_price : item.total_price_without_tax
+
+          - @order.items.vouchers.each do |item|
+            %tr.cart-items__row
+              %td.cart-items__cell.cart-items__cell--align-left
+              %td.cart-items__cell.cart-items__cell--align-left
+                = item.name
+              %td.cart-items__cell.cart-items__cell--align-left
+                = item.quantity
+              %td.cart-items__cell.cart-items__cell--align-right
+                = humanized_money_with_symbol item.price
+              %td.cart-items__cell.cart-items__cell--align-right
+                = humanized_money_with_symbol(item.price * item.quantity)
+
+          - if C.default_tax == :without_tax
+            %tr
+              %td
+              %td
+              %td
+              %td.cart-items__heading--align-right  VAT
+              %td.cart-items__cell.cart-items__cell--last.align-right
+                = humanized_money_with_symbol @order.total_tax
+
+          - if @order&.delivery&.price
+            %tr
+              %td
+              %td
+              %td
+              %td.cart-items__heading--align-right  Delivery
+              %td.cart-items__cell.cart-items__cell--last.align-right
+                = humanized_money_with_symbol @order.delivery.price
+
+          - if @order&.payment&.amount_paid
+            %tr
+              %th
+              %th
+              %th
+              %th.cart-items__heading--align-right  Total
+              %th.cart-items__cell.cart-items__cell--last.align-right
+                = humanized_money_with_symbol @order.payment.amount_paid
+

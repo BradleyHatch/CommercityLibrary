@@ -1,0 +1,39 @@
+- provide(:title, "Job ##{@amazon_processing_queue.feed_id}")
+
+#form_page
+  %h2 Feed: #{@amazon_processing_queue.feed_id}
+
+  %p
+    %strong Type:
+    = @amazon_processing_queue.feed_type
+
+  %p
+    %strong Submitted:
+    %span{title: @amazon_processing_queue.submitted_at}= time_ago_in_words @amazon_processing_queue.submitted_at
+    ago
+
+  - unless @amazon_processing_queue.completed_at.nil?
+    %p
+      %strong Completed:
+      %span{title: @amazon_processing_queue.completed_at}= time_ago_in_words @amazon_processing_queue.completed_at
+      ago
+
+  %p
+    %strong Status:
+    = @amazon_processing_queue.job_status
+
+  %h3 Products:
+
+  %ul
+    - @amazon_processing_queue.products.each do |product|
+      %li= product.name
+
+  - unless @amazon_processing_queue.feed_body.blank?
+    %p
+      %strong Feed Body:
+      %pre= @amazon_processing_queue.feed_body
+
+  - if @amazon_processing_queue.failed?
+    %p
+      %strong Failure Message:
+      %pre= JSON.pretty_generate(JSON.parse(@amazon_processing_queue.failure_message))

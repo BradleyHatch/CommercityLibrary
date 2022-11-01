@@ -1,0 +1,6 @@
+
+.wrap
+  %h1 Welcome to Commercity
+  - flash.each do |f|
+    = f
+  = render 'c/mailchimp/signup_newsletter'

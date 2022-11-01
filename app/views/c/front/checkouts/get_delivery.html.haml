@@ -1,0 +1,84 @@
+%h3 Delivery
+
+.checkout__content-summary
+  .gs
+    .g-2
+      %h4= @cart.prefer_click_and_collect ? "Collection Address" : "Shipping Address"
+    .g-2.align-right
+      = link_to 'Edit', new_address_checkout_path
+      
+  = presenter(@cart.shipping_address).block
+
+- if @delivery_click_and_collect_mix && !@delivery_click_and_collect_valid 
+  The follow products are available for click and collect delivery:
+  %br
+  %br
+  - cart_variant_items = @cart.cart_items.where.not(variant_id: nil)
+  - cc_variant_items = cart_variant_items.select { |cart_variant_item| cart_variant_item.variant.master.main_variant.click_and_collect? }
+
+  - cc_variant_items.each do |cc_variant_item|
+    %b= "#{cc_variant_item.sku} - #{cc_variant_item.name}"
+    %br
+    %br
+  
+  Orders eligible for click and collect must only contain the above click and collect products.
+  %br
+  %br
+
+
+= form_for @delivery, url: {action: :delivery} do |f|
+  = f.label :delivery_service_price_id, 'Delivery Service'
+  - services = @delivery_services
+  - if @delivery_override && !C.delivery_override_only_for_zones
+    - services = [["Custom delivery (£#{@cart.delivery_override})", 'override']]
+  - elsif @delivery_override && C.delivery_override_only_for_zones && @cart.order&.shipping_address&.country&.zone_id && C::Zone.pluck(:id).include?(@cart.order.shipping_address.country.zone_id)
+    - services = [["Custom delivery (£#{@cart.delivery_override})", 'override']]
+  - elsif C.manual_delivery
+    - services = @cart.variant_services.map { |ds| presenter(ds).for_select(@cart.price.fractional, @zone) }
+  - elsif C.combined_delivery_rate
+    - services = services.map { |ds| presenter(ds).for_select(@cart.price.fractional, @zone) }
+  - elsif C.flat_delivery_rate
+    - services = services.map { |ds| presenter(ds).for_select(@cart.price.fractional) }
+  - else
+    - services = services.map { |ds| presenter(ds).for_select(@weight, @zone) }
+
+  - services.compact!
+
+  - if services.any?
+    .field
+      - checked = services.first&.second 
+
+      - service_id_present_and_matches = @delivery.delivery_service_id.present? && services.find { |name,id| id == @delivery.delivery_service_id }.present?
+      - if service_id_present_and_matches
+        - checked = @delivery.delivery_service_id
+      
+      - if @delivery.delivery_service_id.blank?
+        - if @cart.prefer_click_and_collect?
+          - click_and_collect_service = services.find { |_name, d_id| C::Delivery::Service.find_by(id: d_id, click_and_collect: true) }
+          - if click_and_collect_service.present?
+            - checked = click_and_collect_service.second
+
+      = f.collection_radio_buttons :delivery_service_id, services, :second, :first, { checked: checked } do |bbb|
+        - id = bbb.object.last
+        - is_click_and_collect = C::Delivery::Service.find_by(id: id, click_and_collect: true).present?
+        .checkout__content-summary
+          .gs
+            = bbb.radio_button
+            .g-gutter
+              = bbb.label(class: 'radio_button')
+
+          - if is_click_and_collect
+            %br
+            %em We will contact you shortly after the order has been placed confirming when it is available for collection.
+
+
+    = render 'c/front/checkouts/custom_delivery_fields', f: f
+
+    = f.submit 'Next', class: 'btn'
+
+  - else
+    Sorry, no delivery services available. This might be due to:
+    %ul{ style: "margin-top: 2px" }
+      - if C.manual_delivery
+        %li These products cannot be shipped together. Try ordering separately
+      %li We can't deliver to your address. Please try another.

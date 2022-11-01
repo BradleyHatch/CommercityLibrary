@@ -1,0 +1,10 @@
+.index-header
+  = form_tag({action: :destroy}, method: :delete) do
+    %h2 Are you sure you want to delete this #{controller_name.humanize.singularize.downcase}?
+    %p
+      %b Warning:
+      This cannot be undone.
+    = submit_tag 'Delete', class: 'btn'
+    = link_to 'Cancel',
+              Rails.application.routes.url_helpers.method_defined?(:index) ? {action: :index} : '/admin',
+              class: 'btn btn--secondary'

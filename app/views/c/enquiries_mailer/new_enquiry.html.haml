@@ -1,0 +1,25 @@
+
+%b Name:
+%br
+= @enquiry.name
+%br
+%br
+%b Email:
+%br
+= @enquiry.email
+
+- if @enquiry.phone_number.present?
+  %br
+  %br
+  %b Phone:
+  %br
+  = @enquiry.phone_number
+
+%br
+%br
+%b Message:
+%br
+= simple_format @enquiry.body
+
+%br
+= link_to "Reply", "mailto:#{@enquiry.email}?subject=RE:New Enquiry"

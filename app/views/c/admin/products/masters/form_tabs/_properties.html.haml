@@ -1,0 +1,20 @@
+= tabs do
+  = tab "Keys: #{C::Product::PropertyKey.all.map{|x| x.key}.join(', ')}" do
+    = f.fields_for :main_variant do |ff|
+      .panel_buttons
+        .btn.btn--secondary
+          = ff.add_nested_fields_link :property_values, 'Add property value'
+      %table.form_table#property_values_table
+        %tbody
+          %tr
+            %th
+              %span Keys
+            %th Values
+            -# %th
+          = ff.nested_fields_for :property_values, wrapper_tag: :tr, wrapper_options: {class: 'bordered_tr'} do |fff|
+            %td.padded_td
+              = fff.select :property_key_id, C::Product::PropertyKey.order(key: :asc).pluck(:key, :id), {}, { class: 'property_key_field' }
+            %td.padded_td
+              = fff.text_field :value, placeholder: 'E.g. Red..', class: 'property_value_field'
+            %td.padded_td
+              .red_x_button= fff.remove_nested_fields_link 'x'

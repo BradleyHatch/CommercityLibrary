@@ -1,0 +1,26 @@
+= raw @rich_body
+
+- if @voucher
+  %p=  "Use voucher code: #{@voucher.code} for #{@voucher.breakdown}"
+
+%p You had in your cart: 
+
+%table{ style: "text-align: center" }
+  %thead
+    %th{ style: "padding: 4px" }
+      Name
+    %th{ style: "padding: 4px" }
+      Price
+    %th{ style: "padding: 4px" }
+      Quantity
+
+  %tbody
+    - @cart.cart_items.each do |item|
+      %tr
+        %td{ style: "padding: 4px" }
+          = item.name
+        %td{ style: "padding: 4px" }
+          - price = C.default_tax == :with_tax ? item.price  : item.price_without_tax
+          = ActionController::Base.helpers.humanized_money_with_symbol price
+        %td{ style: "padding: 4px" }
+          = item.quantity

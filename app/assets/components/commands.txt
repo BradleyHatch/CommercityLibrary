@@ -1,0 +1,74 @@
+You'll need to be in the current components directory to use the following commands.
+
+
+
+
+~ Prerequisites ~
+
+Node needs to be installed on your machine.
+If you have Homebrew installed just enter 'brew install node', then 'brew upgrade node'.
+
+
+
+
+~ setup ~
+
+All you need to do is download the node packages with 'npm install'.
+
+
+
+
+~ development ~
+
+Use 'npm run development' to have the bundled js file rebuilt on any change in the source.
+
+
+
+
+~ production ~
+
+'npm run build' will do a one off build of your bundled js.
+
+
+
+
+~ overview ~
+
+The code lives in the ./src directory.
+
+When 'npm run build' is run everything in src will be bundled together into one file called 'components.js',
+found in the ../javascripts/components directory.
+
+Generic components will need to be added to the generic_components file in src and app specific components to app_components.
+You'll need to add them into the switch statement in each file.
+
+Components can be used by calling the 'react_component' partial with a componentId and componentType param.
+
+e.g. =render 'react_component', componentId: 'background-jobs-display', componentType: 'BackgroundJobsDisplay'
+
+componentId - will be used as the id on the components parent div.
+componentType - must match the name of the component in the generic/app_components switch statements.
+
+
+
+
+~ commands ~
+
+npm install - installs all npm packages declared in the package.json.
+
+npm install #package-name# --save (or) --save-dev - add node package for production or development.
+
+npm install #package-name# --save (or) --save-dev - remove node package for production or development.
+
+npm run development - will watch the current directory and rebundle on change.
+
+npm run build - creates the bundled js file.
+
+npm shrinkwrap - This command locks down the versions of a node packages dependencies.
+
+npm prune - remove node packages no longer included in the package.json.
+
+
+(wont work currently) npm run development-server - runs a hot-reloading server for the frontend.
+
+(wont work currently) npm run tests - runs the karma test runner.

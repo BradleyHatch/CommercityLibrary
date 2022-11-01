@@ -1,0 +1,23 @@
+.form-page--narrow
+  .form-page__form
+    = form_for @notification_email do |f|
+      = f.error_messages
+      
+      .field
+        = f.label :email
+        = f.text_field :email
+
+      .field
+        = f.label :orders do
+          = f.check_box :orders
+          %span Receives orders emails
+
+      .field
+        = f.label :enquiries do
+          = f.check_box :enquiries
+          %span Receives enquiries emails
+
+      .actions
+        = f.submit class: 'btn'
+        = link_to_delete 'Delete', @notification_email, redirection: notification_emails_path, class: 'btn btn--secondary' unless @notification_email.new_record?
+

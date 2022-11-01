@@ -1,0 +1,39 @@
+@import 'colors';
+@import 'dimensions';
+@import 'generic_classes';
+@import 'transitions';
+@import 'z_indexes';
+
+
+.tabs {
+  @extend .flex-column;
+  background-color: #222;
+}
+
+.tabs__tabs_container {
+  @extend .flex-row-1;
+  min-height: $tabs-container-min-height;
+}
+
+.tabs__tab {
+  @extend .flex-center-1, .pointer, .width-auto;
+}
+
+.tabs__tab-clickable {
+  @extend .flex-1;
+  padding: 10px 26px;
+}
+
+.tabs__highlight-container {
+  @extend .relative, .width-100;
+  height: $tabs-highlight-height;
+}
+
+.tabs__highlight {
+  @extend .absolute-top-left;
+  width: 80px;
+  bottom: 0px;
+  background-color: $tabHighlight;
+  transition: left $tab-highlight-transition;
+  z-index: $tab-highligh-z-index;
+}

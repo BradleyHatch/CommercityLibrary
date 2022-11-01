@@ -1,0 +1,18 @@
+
+- provide :title, "Edit #{controller_name.classify}"
+
+.form-page
+  .form-page__intro
+    - begin
+      %h1
+        #{controller_name.gsub('_', ' ').singularize.titleize}:
+        - object = instance_variable_get("@#{controller_name.singularize}")
+        = object.name
+    - rescue
+      %h1= "Edit #{controller_name.gsub('_', ' ').singularize.titleize}"
+
+    - if object.respond_to?('slug')
+      .form-page__right-actions
+        = link_to 'View on site', send("front_end_#{controller_name.singularize}_path", object.to_param(:front)), class: 'btn btn--secondary' rescue nil
+
+  = render 'form'

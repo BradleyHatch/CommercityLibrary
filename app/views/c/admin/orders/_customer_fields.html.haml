@@ -1,0 +1,35 @@
+= field_set_tag '' do
+  %span.fieldset-title Customer Details
+  - editable = @order.dispatched? || @order.awaiting_dispatch?
+  -# - unless editable
+  -#   .customer_picker
+  -#     = f.label :customer_id, 'Select Customer'
+  -#     = f.collection_select :customer_id, C::Customer.all, :id, :name, include_blank: '-- Select Customer --'
+
+  - if @order.manual?
+    .field.field--inner-label
+      = f.label :name unless editable
+      = f.text_field :name, disabled: editable
+    .field.field--inner-label
+      = f.label :email unless editable
+      = f.text_field :email, disabled: editable
+    .field.field--inner-label
+      = f.label :phone unless editable
+      = f.text_field :phone, disabled: editable
+    .field.field--inner-label
+      = f.label :mobile unless editable
+      = f.text_field :mobile, disabled: editable
+  - else
+    = f.fields_for :customer, @customer do |ff|
+      .field.field--inner-label
+        = ff.label :name unless editable
+        = ff.text_field :name, disabled: editable
+      .field.field--inner-label
+        = ff.label :email unless editable
+        = ff.text_field :email, disabled: editable
+      .field.field--inner-label
+        = ff.label :phone unless editable
+        = ff.text_field :phone, disabled: editable
+      .field.field--inner-label
+        = ff.label :mobile unless editable
+        = ff.text_field :mobile, disabled: editable

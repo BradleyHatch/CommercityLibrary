@@ -1,0 +1,15 @@
+$(".features-reload").html("<%= escape_javascript(render 'c/admin/products/masters/features_table', master: @master) %>")
+$('.sortable_table tbody').sortable({
+    axis:'y',
+    handle: '.sort_handle',
+    tolerance: 'pointer',
+    containment: 'parent',
+    revert: 50,
+    update: function(){
+      $.ajax({
+        url: $(this).attr('index_data-sort'),
+        method: 'POST',
+        dataType: 'script',
+        data: $(this).sortable('serialize')});
+    }
+});

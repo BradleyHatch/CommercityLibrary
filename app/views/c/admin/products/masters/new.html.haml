@@ -1,0 +1,17 @@
+- provide :title, 'New Product'
+.form-page--narrow
+  .form-page__inner-intro
+    %h1 New Product
+    %p Enter an SKU and name to start building this product
+  .form-page__form
+    = form_for @master do |f|
+      = f.error_messages
+      = f.fields_for :main_variant do |ff|
+        .field.field--float-label
+          = ff.label :sku, 'SKU'
+          = ff.text_field :sku, placeholder: 'SKU'
+        .field.field--float-label
+          = ff.label :name
+          = ff.text_field :name, placeholder: 'Product Name'
+      .actions
+        = f.submit 'Configure Product >', class: 'btn'

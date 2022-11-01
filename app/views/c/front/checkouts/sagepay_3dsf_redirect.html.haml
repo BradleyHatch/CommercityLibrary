@@ -1,0 +1,12 @@
+
+%h3 3DSecure Redirect
+%p You will be redirected shortly.
+
+%form{:id => "pa-form" ,:action => @acsUrl, :method => "post"}
+  %input{:name => "PaReq", :type => "hidden", :value => @paReq }
+  - base = Rails.env === "development" ? C.dev_site_url : C.prod_site_url
+  %input{:name => "TermUrl", :type => "hidden", :value => "#{base}#{sagepay_3dsf_return_checkout_path}" }
+  %input{:name => "MD", :type => "hidden", :value => @md}
+
+:javascript
+  document.addEventListener("DOMContentLoaded",function(){var b=document.getElementById("pa-form");b&&b.submit()})

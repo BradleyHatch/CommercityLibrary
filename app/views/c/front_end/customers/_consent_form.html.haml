@@ -1,0 +1,55 @@
+= form_tag front_end_consent_path do
+  .field
+    = label_tag :email
+    = email_field_tag :email, @email, readonly: @email.present?
+    
+  .field
+    = label_tag :consent_order, "Inform me of the progress of my order/repair"
+    %span Yes
+    = radio_button_tag :consent_order, true
+
+    %span No
+    = radio_button_tag :consent_order, false, checked: true
+    
+  .field
+    = label_tag :consent_promotion, "Inform me of/invite me to promotions/events"
+    %span Yes
+    = radio_button_tag :consent_promotion, true
+
+    %span No
+    = radio_button_tag :consent_promotion, false, checked: true
+    
+  .field
+    = label_tag :consent_products, "Inform me of items which might interest me"
+    %span Yes
+    = radio_button_tag :consent_products, true
+
+    %span No
+    = radio_button_tag :consent_products, false, checked: true
+    
+  .field
+    = label_tag :consent_contact_post, "I consent to being contacted by post"
+    %span Yes
+    = radio_button_tag :consent_contact_post, true
+
+    %span No
+    = radio_button_tag :consent_contact_post, false, checked: true
+    
+  .field
+    = label_tag :consent_contact_phone, "I consent to being contacted by phone"
+    %span Yes
+    = radio_button_tag :consent_contact_phone, true
+
+    %span No
+    = radio_button_tag :consent_contact_phone, false, checked: true
+    
+  .field
+    = label_tag :consent_contact_email, "I consent to being contacted by email"
+    %span Yes
+    = radio_button_tag :consent_contact_email, true
+
+    %span No
+    = radio_button_tag :consent_contact_email, false, checked: true
+
+  .field
+    = submit_tag

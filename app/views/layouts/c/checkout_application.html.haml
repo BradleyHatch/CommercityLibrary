@@ -1,0 +1,25 @@
+!!!
+%html
+  %head
+    = meta_tags
+    = stylesheet_link_tag    'application', media: 'all'
+    = javascript_include_tag 'application'
+    = csrf_meta_tags
+    %meta{ content: 'width=device-width, initial-scale=1', name: 'viewport' }
+    %link{ href: '/fav.png', rel: 'shortcut icon', type: 'image/png' }
+    = render 'c/main_application/front_head_tags'
+  %body{ class: "#{controller_name} #{action_name}" }
+    .checkout__header
+      .wrap.wrap__narrow.checkout__header-inner
+        .logo.logo--checkout
+    .checkout
+      .wrap.wrap__narrow
+        .gs--m
+          .g-7--m
+            .checkout__content
+              = render 'c/main_application/checkout_breadcrumb'
+              = render 'c/admin/flash_messages'
+              = yield
+
+          .g-5--m
+            = render 'c/main_application/checkout_summary'

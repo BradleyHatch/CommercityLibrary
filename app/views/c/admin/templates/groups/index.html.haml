@@ -1,0 +1,11 @@
+- provide :title, 'Groups'
+
+.index-header
+  %h1= pluralize(@groups.count, 'Group')
+  = link_to '+ Create Group', new_template_group_path, class: 'btn btn--small'
+  %p
+
+.gs
+  .g-1
+
+    = index_table @groups.ordered, C::Template::Group::INDEX_TABLE, sortable: sort_template_groups_path

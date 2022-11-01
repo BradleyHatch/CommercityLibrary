@@ -1,0 +1,24 @@
+.wrap.wrap--padded.account
+  .wrap.wrap__narrow
+    .gs--m
+      .g-3--m.g-gutter--right
+        = render 'c/main_application/account_menu'
+      .g-9--m.g-gutter
+        .account__content
+          %h2 Orders
+          %table.index_table
+            %thead
+              %tr
+                %th Number
+                %th Created
+                %th.prime_column Items
+                %th Status
+                %th Total
+            %tbody
+            - @orders.each do |order|
+              %tr
+                %td= link_to order.order_number, front_order_path(order.access_token)
+                %td= order.created_at
+                %td= order.items.pluck(:name).join(', ')
+                %td= order.status.titleize
+                %td= humanized_money_with_symbol order.total_price

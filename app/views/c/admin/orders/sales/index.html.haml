@@ -1,0 +1,58 @@
+- provide :title, 'Orders'
+
+.index-header.gs
+  .g-3.g-gutter--right
+    %h1= pluralize(@orders.count, 'Order')
+    = link_to '+ Create manual order', new_order_sale_path, class: 'btn btn--small'
+    = link_to 'Print all orders awaiting dispatch', mass_print_order_sales_path	, class: 'btn btn--small btn--secondary'
+    
+    - if C.order_export_per_month
+      .order-month-export
+        = form_tag spreadsheet_item_list_export_order_sales_path do
+          = select_tag :order_months, options_for_select(C::Order::Sale.order_months), include_blank: "-- Select --"
+          = submit_tag 'Export all orders for a month', class: 'btn btn--small btn--secondary'
+
+    %p Below is a list of orders in your store. See different order states by clicking on the links above
+    %ul
+      %li
+        %b Awaiting Dispatch:
+        These are paid for and should be sent to the customer - then update the status by clicking dispatch
+      %li
+        %b Awaiting Payment:
+        These are orders that have gone through the order processed but not paid yet.
+      %li
+        %b Pending:
+        These are orders that are in an early order stage (eg still in cart).
+
+    %p{ style: "margin-bottom: 0; opacity: 1;" }
+      %span.index_key--toggle.btn.btn--small.btn--secondary Table key
+
+    %div.index_key
+      %p Table row colours
+      %ul
+        %li.sage_error Export has failed
+        %li.in_person_row In-person delivery service
+        %li.has_note_row Customer has left a checkout note
+        %li.has_voucher_row Voucher has been used
+        %li.has_pending_pro_forma_row Pending pro forma
+      %p Flag colours
+      %ul
+        %li.in_person In-person delivery service
+        %li.has_note Customer has left a checkout note
+        %li.has_voucher Voucher has been used
+        %li.has_pro_forma Is pro forma order
+        %li.has_gift_wrapping Customer selected gift wrapping
+
+
+  .g-1.g-gutter
+    = search_form_for @q do |f|
+      .gs
+        .g-3
+          - s_q = :id_or_shipping_address_name_or_shipping_address_postcode_or_customer_email_or_shipping_address_phone_or_trackings_number_or_items_sku_or_items_ebay_sku_or_products_item_id_or_ebay_order_buyer_username_cont
+          = f.search_field s_q, placeholder: 'Search'
+        .g-1.g-gutter--narrow
+          = submit_tag 'Search', class: 'btn btn--system'
+
+
+
+= index_table @orders, C::Order::Sale::INDEX_TABLE, bulk_actions: @archive ? C::Order::Sale::ARCHIVE_BULK_ACTIONS : C::Order::Sale::BULK_ACTIONS

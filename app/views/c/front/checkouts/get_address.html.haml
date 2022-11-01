@@ -1,0 +1,24 @@
+= render "c/front/checkouts/changed_country_in_paypal", cart: @cart
+
+%h3 1. Shipping Address
+= form_for @cart, url: {action: :address} do |f|
+  = f.error_messages
+
+  - if @addresses.any?
+    = f.fields_for(:order) do |ff|
+      - @addresses.each do |address|
+        .checkout__content-summary
+          .gs
+            %div
+              = ff.radio_button :shipping_address_id, address.id
+            .g-1.g-gutter
+              = ff.label "shipping_address_id_#{address.id}", presenter(address).line
+
+      .checkout__content-summary
+        = link_to 'Add Address', new_address_checkout_path
+
+  = f.fields_for :order do |ff|
+    = render 'info_fields', f: ff
+
+  = f.submit 'Next Step', class: 'btn'
+

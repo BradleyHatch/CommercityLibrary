@@ -1,0 +1,81 @@
+.product-grid__preview
+  display: inline-block
+  position: relative
+  vertical-align: top
+  margin-top: 10px
+  margin-bottom: 10px
+  text-decoration: none !important
+  border: 1px solid #e5e5e5
+  background: white
+
+  @media (min-width: 1001px)
+    width: 23.4693877551%
+    margin-right: 2.0408163265%
+    &:nth-child(4n)
+      margin-right: 0
+  @media (max-width: 1000px) and (min-width: 701px)
+    width: 31.2210424899%
+    margin-right: 3.1684362651%
+    &:nth-child(3n)
+      margin-right: 0
+  @media (max-width: 700px) and (min-width: 460px)
+    width: 48%
+    margin-right: 4%
+    &:nth-child(2n)
+      margin-right: 0
+  @media (max-width: 460px)
+    width: 100%
+
+  &:focus
+    box-shadow: 0px 0px 0 5px rgba($primary_color, 0.2)
+    
+  &:hover .product-grid__info
+    background-color: rgba($primary_color, 0.1)
+    a
+      text-decoration: none
+
+  figure
+    margin: 0
+    width: 100%
+    padding: 10px
+    img
+      width: 100%
+
+.product-grid__info
+  border-top: 1px solid #e5e5e5
+  padding: 10px 0
+  overflow: hidden
+  h3
+    font-size: 0.95rem
+    margin: 0
+    font-weight: 500
+    color: #222
+    min-height: 50px
+    padding: 0 8px
+  h4
+    color: #666
+    font-weight: normal
+    font-size: 14px
+    min-height: 20px
+    margin-bottom: 0
+    padding: 0 8px
+
+.product-grid__price
+  font-size: 1.2rem
+  font-weight: 600
+  color: $primary_color
+  padding: 0 8px
+
+.product-grid__more
+  display: block
+  width: 100%
+  padding: 10px
+  background-color: $primary_color
+  font-size: 14px
+  color: white
+  position: relative
+
+  i
+    position: absolute
+    right: 10px
+    top: 10px

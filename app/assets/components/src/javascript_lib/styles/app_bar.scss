@@ -1,0 +1,14 @@
+@import 'colors';
+@import 'box_shadows';
+@import 'generic_classes';
+@import 'dimensions';
+@import 'z_indexes';
+
+
+.app-bar {
+  @extend .fixed, .flex-width-100, .top-left;
+  height: $app-bar-height;
+  box-shadow: $shadow1;
+  z-index: $app-bar-z-index;
+  background-color: $appBarColor;
+}

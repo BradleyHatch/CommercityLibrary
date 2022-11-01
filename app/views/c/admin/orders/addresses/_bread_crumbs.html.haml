@@ -1,0 +1,9 @@
+.bread_crumbs
+  %span You are here:
+  - if @parent_resource
+    - parent = (request.path.remove root_path).split('/').first
+    = link_to parent.titleize, url_for(root_path + parent)
+    = fa_icon('chevron-right')
+  = @parent_resource.to_param
+  = fa_icon('chevron-right')
+  Edit Address

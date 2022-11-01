@@ -1,0 +1,269 @@
+.checkout
+  background-color: white
+  overflow: hidden
+  h3
+    margin: 0 0 28px
+    font-size: 1.4rem
+
+.checkout__header
+  background-color: $primary_color
+  padding-top: 20px
+
+.checkout__header-inner
+  height: 100px
+  padding: 10px 0
+
+.checkout__breadcrumb
+  color: #666
+  margin-bottom: 24px
+  font-size: 12px
+
+.checkout__content
+  padding: 50px 28px
+  position: relative
+  z-index: 1
+
+.checkout__summary-td
+  padding: 0 0 8px
+  img
+    max-width: 70px
+    margin-right: 10px
+    border: 1px solid #ddd
+    border-radius: 5px
+    overflow: hidden
+    display: block
+  &--label
+    color: #777
+    &-large
+      font-size: 16px
+  &--bold
+    font-size: 18px
+    font-weight: 600
+
+.checkout__content--splitter
+  height: 1px
+  width: 100%
+  background-color: #ddd
+  margin: 16px 0
+
+.checkout__anon
+  border-top: 1px solid #ddd
+  margin-top: 20px
+  padding-top: 20px
+  @media (min-width: $m)
+    padding: 0 0 0 25px
+    margin: 0 0 0 25px
+    border-top: none
+    border-left: 1px solid #ddd
+
+.checkout__summary
+  position: relative
+  height: 100%
+  margin: 25px 0 0 0
+  padding: 0
+  box-shadow:  0 -1px 1px rgba(0, 0, 0, 0.12)
+  @media (min-width: $m)
+    margin: 0 0 0 25px
+    padding: 0 0 0 25px
+    box-shadow: -1px 0 1px rgba(0, 0, 0, 0.12)
+  &:after
+    content: ""
+    display: block
+    width: 400%
+    position: absolute
+    top: 0
+    left: 0
+    bottom: 0
+    background: #fafafa
+    box-shadow: 0 -1px 0 #e1e1e1 inset
+    background-position: left top
+
+
+.checkout__content-summary
+  background-color: #fafafa
+  box-shadow: 0 0px 1px rgba(0, 0, 0, 0.6)
+  border-radius: 4px
+  padding: 16px
+  margin-bottom: 16px
+
+  h4
+    margin-top: 0
+
+.checkout__stock-warning
+  padding-top: 18px
+  margin-top: 18px
+  border-top: 1px solid #ddd
+  opacity: 0.7
+  h3
+    margin: 0
+    font-size: 1.1rem
+  p
+    margin-top: 5px
+    font-size: 0.8rem
+    font-style: italic
+
+.checkout__notes
+  h4
+    margin-bottom: 0
+
+  form
+    margin-top: 16px
+
+.checkout__note-confirm
+  color: #90d24d
+  font-size: 0.9rem
+  margin-top: 2px
+  display: block
+
+.payment-links
+  margin-bottom: 12px
+
+  a
+    display: inline-block
+    margin-bottom: 4px
+    margin-right: 1px
+
+.payment_details
+  margin-bottom: 16px
+
+  fieldset + fieldset
+    margin-top: 16px
+
+  &.sagepay
+    input[type='submit']
+      margin-top: 16px
+
+  &.finance
+    input[type='submit']
+      width: 100%
+
+  &--hide
+    display: none !important
+
+
+.deko
+  background-color: #122e34
+  color: white
+  margin-top: 32px
+  padding: 8px
+  border: 1px solid black
+  border-radius: 4px
+
+  fieldset
+    border: 0
+    padding-top: 7px
+
+  legend
+    color: white
+
+  label
+    margin-top: 10px
+
+  input[type='submit']
+    margin-top: 10px
+
+  input[type='range']
+    width: 100%
+
+  input[type='number']
+    color: $primary_text_color
+
+  table
+    width: 75%
+    margin: auto
+
+  th
+    text-align: left
+
+  th, tr
+    padding-top: 4px
+
+  p
+    margin: 0
+    color: white
+
+.BarclayCard
+
+  table
+    width: 100%
+    margin-bottom: 16px
+
+  small
+    font-size: 100%
+
+    small
+      font-size: 100%
+      font-weight: bold
+      
+  label
+    display: inline-block
+
+  td
+    padding: 4px 0
+
+  td:first-child
+    text-align: left !important
+
+  td:last-child
+    text-align: left !important
+    font-weight: bold
+
+  input[type="image"]
+    margin: 0 8px 8px !important
+    background-color: #fff
+    transition: 0.2s
+    transform: scale(1)
+    display: inline-block
+    border: 1px solid #ddd
+    padding: 4px
+    border-radius: 4px
+
+    &:hover
+      transform: scale(1.03)
+
+  input[type="submit"]
+    border-radius: 4px
+    font-size: 0.9rem
+    line-height: 1.25rem
+    padding: 9px 28px
+    outline: none
+    background-color: $primary_color
+    border: 1px solid $primary_color
+    color: white
+    -webkit-transition: 0.2s
+    transition: 0.2s
+    display: inline-block
+    text-align: center
+    vertical-align: middle
+
+  form[name="OGONE_PM_CHOICE_FORM"]
+    table
+      background-color: #fafafa
+      padding: 16PX
+      border: 1px solid #ddd
+      border-radius: 4px
+
+    table, tbody, tr, td
+      display: block
+      text-align: center !important
+      line-height: 1
+
+    tr:nth-child(2)
+      padding: 16px 0 0
+
+    tr:nth-child(2) > td:nth-child(1), tr:nth-child(3) > td:nth-child(1)
+      display: none
+
+    tr:nth-child(2) > td:nth-child(2), tr:nth-child(3) > td:nth-child(2)
+      padding: 0
+
+    small small span
+      position: absolute
+      top: 20px
+      left: 28px
+      font-weight: lighter
+      font-size: 80%
+      opacity: 0.66
+
+    small small a
+      display: block

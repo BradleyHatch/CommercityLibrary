@@ -1,0 +1,12 @@
+%table
+  %thead
+    %tr
+      - @rows.first['fieldname'].each do |fieldname|
+        %th= fieldname
+  %tbody
+    - @rows.each do |row|
+      %tr
+        - row['value'].each do |data|
+          %td= data
+
+= button_to 'Import', data_confirm_import_data_transfer_path(@data_transfer)

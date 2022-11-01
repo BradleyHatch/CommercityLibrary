@@ -1,0 +1,33 @@
+.field
+  = f.label :name
+  = f.text_field :name
+.field
+  = f.label :address_one
+  = f.text_field :address_one
+.field
+  = f.label :address_two
+  = f.text_field :address_two
+.field
+  = f.label :address_three
+  = f.text_field :address_three
+.field
+  = f.label :city
+  = f.text_field :city
+.field
+  = f.label :region
+  = f.text_field :region
+.field
+  = f.label :postcode
+  = f.text_field :postcode
+.field
+  = f.label :country_id
+  = f.select :country_id, C::Country.pluck(:name, :id)
+.field
+  = f.label :phone
+  = f.text_field :phone
+.field
+  = f.label :fax
+  = f.text_field :fax
+.field
+  = f.label :mobile
+  = f.text_field :mobile

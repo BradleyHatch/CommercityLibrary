@@ -1,0 +1,8 @@
+- provide :title, 'Testimonials'
+
+.index-header
+  %h1= pluralize(@testimonials.count, 'Testimonial')
+  = link_to '+ Create Testimonial', new_testimonial_path, class: 'btn btn--small'
+  %p Record and display your latest testimonials and reviews
+
+= index_table @testimonials, C::Testimonial::INDEX_TABLE

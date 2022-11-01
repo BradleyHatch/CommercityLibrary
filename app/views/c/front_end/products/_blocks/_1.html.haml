@@ -1,0 +1,14 @@
+- cache product do
+  %a{:href => front_end_product_path(product), title: product.name, class: 'product-grid__preview'}
+    %div{:class => "#{product.product_tag&.parameterize} product_perk"}
+    %figure= image_tag(product.primary_web_image(:square) || 'placeholder.png')
+    .product-grid__info
+      %h3.product-grid__title
+        = product.name
+      %h4.product-grid__mpn
+        = product.mpn
+      %span.product-grid__price
+        = humanized_money_with_symbol product.cache_web_price
+    %span.product-grid__more
+      View Product
+      = fa_icon('angle-right')

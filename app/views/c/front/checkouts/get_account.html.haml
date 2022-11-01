@@ -1,0 +1,39 @@
+.checkout.wrap.checkout__content
+  .wrap.wrap__narrow
+    = render 'c/main_application/checkout_breadcrumb'
+    .gs--m
+      .checkout__sign-in.g-6--m
+        %h3 Sign in
+        = form_for :front_customer_account, url: session_path(:front_customer_account, checkout: true), html: { id: 'cart_sign_in' } do |f|
+          .field
+            = f.label :email
+            = f.email_field :email
+          .field
+            = f.label :password
+            = f.password_field :password
+          .actions
+            = f.submit 'Login', class: 'btn'
+            = link_to 'Forgot password?', new_front_customer_account_password_path, class: 'btn btn--secondary'
+
+      .checkout__anon.g-6--m
+        %h3 Not got an account?
+        = form_for :front_customer_account, url: registration_path(:front_customer_account, checkout: true), html: { id: 'cart_sign_up' } do |f|
+          = f.fields_for(:customer_attributes) do |ff|
+            .field
+              = ff.label :name
+              = ff.text_field :name
+
+          .field
+            = f.label :email
+            = f.email_field :email
+          .field
+            = f.label :password
+            = f.password_field :password
+          .field
+            = f.label :password_confirmation
+            = f.password_field :password_confirmation
+
+          .actions
+            = f.submit 'Sign up', class: 'btn'
+            = link_to 'Checkout as guest', account_checkout_path(anonymous: true), class: 'btn btn--secondary', method: :patch
+

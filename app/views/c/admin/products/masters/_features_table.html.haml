@@ -1,0 +1,68 @@
+.gs
+  .g-1
+    -# below uses javascript post request instead of trying
+    -# to submit through form because it was easier
+    = field_set_tag '' do
+      %span.fieldset-title Wrap Features
+      .row
+        %table.index_table.sortable_table{ data: { 'toggle-table': true } }
+          %tbody{ 'index_data-sort': 'sort_product_features' }
+            - master.main_variant.product_features.ordered.each do |feature|
+              %tr.reorderable{id: "feature_#{feature.id}"}
+                %td.sort_handle
+                  %i.fa.fa-ellipsis-v
+                %td
+                  .field.gs.gs--centered
+                    .g-gutter--right
+                      = check_box_tag "ebay_feature_block", feature.feature.id, master.main_variant.product_features.include?(feature),  data: { 'toggle-post': true, 'path': 'ebay_feature_block', 'master-id': master.id }
+                      = feature.feature.name
+
+                    .image_container.image_container--flex
+                      - if feature.feature.feature_type == 'image' && feature.feature.image
+                        = image_tag feature.feature.image.url
+                      - if feature.feature.feature_type == 'text' || feature.feature.feature_type == 'link'
+                        = raw feature.feature.get_content
+
+            - C::Product::Feature.where.not(id: master.main_variant.features.pluck(:id)).each do |feature|
+              %tr
+                %td
+                %td
+                  .field.gs.gs--centered
+                    .g-gutter--right
+                      = check_box_tag "ebay_feature_block", feature.id, master.main_variant.features.include?(feature),  data: { 'toggle-post': true, 'path': 'ebay_feature_block', 'master-id': master.id }
+                      = feature.name
+
+                    .image_container.image_container--flex
+                      - if feature.feature_type == 'image' && feature.image
+                        = image_tag feature.image.url
+                      - if feature.feature_type == 'text' || feature.feature_type == 'link'
+                        = raw feature.get_content
+  .g-1
+    = field_set_tag '' do
+      %span.fieldset-title Wrap Images
+      .row
+        %table.index_table.sortable_table{ data: { 'toggle-table': true } }
+          %tbody{ 'index_data-sort': 'sort_feature_images' }
+            - master.ebay_channel.feature_images.ordered.each do |image|
+              - next if image.blank? || image.image.blank?
+              
+              %tr.reorderable{id: "image_#{image.id}"}
+                %td.sort_handle
+                  %i.fa.fa-ellipsis-v
+                %td
+                  .field.gs.gs--centered
+                    .g-gutter--right
+                      = check_box_tag "ebay_feature_image", image.image.id, master.ebay_channel.feature_images.pluck(:image_id).include?(image.image_id),  data: { 'toggle-post': true, 'path': 'ebay_feature_image', 'master-id': master.id }
+                    .image_container.image_container--no-margin
+                      = image_tag image.image.image.url
+
+            - master.images.where.not(id: master.ebay_channel.feature_images.pluck(:image_id)).each do |image|
+              - next if image.blank? 
+              %tr
+                %td
+                %td
+                  .field.gs.gs--centered
+                    .g-gutter--right
+                      = check_box_tag "ebay_feature_image", image.id, master.ebay_channel.feature_images.pluck(:image_id).include?(image.id),  data: { 'toggle-post': true, 'path': 'ebay_feature_image', 'master-id': master.id }
+                    .image_container.image_container--no-margin
+                      = image_tag image.image.url

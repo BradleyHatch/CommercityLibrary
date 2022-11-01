@@ -1,0 +1,82 @@
+- provide :title, 'Order'
+
+= form_for @order do |f|
+
+  .form-page
+    .form-page__intro
+      %h1 Order #{@order.id}
+      .form-page__right-actions
+        - if @order.flagged?
+          = link_to 'Resolve', toggle_flag_order_sale_path(state: 'resolved'), class: 'btn btn--secondary'
+        - else
+          = link_to 'Flag', toggle_flag_order_sale_path(state: 'flagged'), class: 'btn btn--secondary'
+        - if C.xero_enabled
+          = link_to 'Export to Xero', xero_export_order_sale_path(@order), class: 'btn btn--secondary'
+        = link_to 'Print', print_order_sales_path(ids: [@order.id]), target: :blank, class: 'btn btn--secondary'
+        = f.submit 'Save', class: 'btn'
+    .gs
+      .fixed-form-panel
+        - if current_user.id == 1
+          = f.text_field :export_status
+        = render 'c/admin/orders/customer_fields', f: f, order: @order
+
+        - unless @order.dispatched?
+          = render 'c/admin/orders/delivery_fields', f: f, order: @order
+
+        - if @payment.new_record? || @payment.payable&.kind_of?(C::PaymentMethod::Manual)
+          = render 'c/admin/orders/payment_fields', f: f, order: @order
+
+
+
+
+
+
+        = field_set_tag '' do
+          %span.fieldset-title Order Status
+          = f.select :status, C::Order::Sale.statuses.map{|k, v| [k.humanize , k]}, prompt: '-- Select --'
+
+        - if @order.manual?
+          = field_set_tag '' do
+            %span.fieldset-title Print Card Details (Note these details are not saved)
+            .field.field--inner-label
+              = label_tag :cc_number
+              %input.cc_number{type: 'text', data: {enc: :cc_number_encrypt}}
+              = hidden_field_tag :cc_number_encrypt
+            .field.field--inner-label
+              = label_tag :cvv
+              %input.cvv{type: 'text', data: {enc: :cvv_encrypt}}
+              = hidden_field_tag :cvv_encrypt
+            .field.field--inner-label
+              = label_tag :expiry
+              %input.expiry{type: 'text', data: {enc: :expiry_encrypt}}
+              = hidden_field_tag :expiry_encrypt
+            .actions
+              = f.submit 'Insert Card Details and Print', class: 'btn'
+
+      .g-1
+
+        = tabs do
+          = tab :invoice do
+            = render 'c/admin/orders/invoice', order: @order
+
+          = tab :info do
+            = render 'c/admin/orders/info', f: f, order: @order
+
+          = tab :notes do
+            = render 'c/admin/orders/order_notes', f: f, order: @order
+
+          - if C.sage_enabled
+            = tab :sage do
+              = render 'c/admin/orders/sage', order: @order
+
+          = tab :debug do
+            = render 'c/admin/orders/debug', order: @order
+            
+    - if !@order.new_record? && (C.allow_archive_all_orders || (@order.status == 'pending' || @order.status == 'awaiting_payment' || @order.status == 'awaiting_dispatch'))
+      .actions.form-page__actions
+        = link_to 'Delete', confirm_archive_order_sale_path(@order), class: 'btn btn--secondary' 
+
+.change_waiter
+
+:javascript
+  unloadEvents();

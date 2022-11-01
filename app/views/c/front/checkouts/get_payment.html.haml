@@ -1,0 +1,121 @@
+
+%h3 Payment Method
+%p All transactions are secure and encrypted.
+
+.payment-links
+  = render 'c/front/checkouts/custom_text'
+
+  - if current_front_customer_account&.customer&.is_trade?
+    = link_to 'Pay by Pro Forma', pro_forma_payment_checkout_path, method: :post, id: :pro_forma_link, class: 'btn'
+
+  - if C.use_credit && current_front_customer_account&.credit?
+    = link_to 'Pay with Credit', credit_payment_checkout_path, method: :post, id: :credit_link, class: 'btn'
+
+  = link_to 'Pay with Debit or Credit Card', 'javascript:void(0)', id: :worldpay_link, class: 'btn' if C.use_worldpay
+
+  - if C.use_worldpay_bg
+    = link_to 'Pay with Debit or Credit Card', worldpay_bg_payment_checkout_path, id: :worldpay_bg_link, class: 'btn', method: :post
+
+  - if C.use_worldpay_cardsave
+    = link_to 'Pay with Debit or Credit Card', worldpay_cardsave_payment_checkout_path, id: :worldpay_cardsave_link, class: 'btn', method: :post
+
+  - if C.use_paymentsense
+    = link_to 'Pay with Debit or Credit Card', payment_sense_payment_checkout_path, id: :payment_sense_link, class: 'btn', method: :post
+    = image_tag 'c/paymentsense.jpg'
+
+  = link_to 'Pay with Paypal', express_payment_checkout_path, id: :paypal_link, class: 'btn' if C.use_paypal
+  
+  = link_to 'Pay with Debit or Credit Card', 'javascript:void(0)', id: :sagepay_link, class: 'btn' if C.use_sagepay
+
+  - if C.use_barclaycard
+    = link_to 'Pay with Debit or Credit Card', barclaycard_checkout_path, id: :barclay_checkout_link, class: 'btn'
+
+- if @cart.finance_eligible? && C.v12_finance
+  - if @cart.has_voucher?
+    #finance_container.payment_details.finance
+      = field_set_tag 'Finance Options' do
+        %p Unfortunately, we can't offer finance payments for orders with a voucher. To pay with V12, please remove the voucher from your cart.
+  - else
+    #finance_container.payment_details.finance
+      = form_tag v12_payment_checkout_path, method: :post do
+        = field_set_tag 'Finance Options' do
+          = select_tag :v12_payment_option, options_for_select(C::PaymentMethod::V12Finance::FINANCE_OPTIONS.pluck :name, :id)
+          = submit_tag 'Pay with V12 Finance', id: :v12_link, class: 'minor_form_button'
+
+- if @cart.finance_eligible? && C.deko_finance
+  = render 'deko'
+
+- if C.use_worldpay
+  .payment_details.worldpay
+    = form_for @cart.order, url: {action: :world_pay_payment}, method: :post, html: {id: 'paymentForm'} do |f|
+      = f.error_messages
+      = hidden_field_tag :payment_token
+
+      = render 'billing_address_fields', f: f, address: @cart.billing_address
+
+      = field_set_tag 'Card Details' do
+        #worldpay_section
+
+      = f.submit 'Continue'
+
+  %script{src: 'https://cdn.worldpay.com/v1/worldpay.js'}
+
+- if C.use_sagepay
+  .payment_details.sagepay
+    = form_for @cart.order, url: {action: :sagepay_payment}, method: :post, html: {id: 'paymentForm'} do |f|
+      = f.error_messages
+
+      -# Merchant Session Key has value set by JS.
+      = hidden_field_tag :merchant_session_key
+
+      = render 'billing_address_fields', f: f, address: @cart.billing_address
+
+      -# This section of the form is rendered by sagepay.js#sagepayCheckout
+      = field_set_tag 'Card Details', class: 'payment_details--hide' do
+        #sagepay_section
+
+      = f.submit 'Continue', class: 'payment_details--hide'
+
+  - if ENV['SAGEPAY_ENV'] == 'LIVE'
+    %script{src: 'https://pi-live.sagepay.com/api/v1/js/sagepay.js'}
+  - else
+    %script{src: 'https://pi-test.sagepay.com/api/v1/js/sagepay.js'}
+
+:javascript
+  // Set up the embedded Sagepay card form if enabled. sagepayCheckout() comes
+  // from the sagepay.js file included above.
+  $("#sagepay_link").on("click", function() {
+  $('.payment_details--hide').removeClass('payment_details--hide');
+    $("#billing_section").show();
+    $.getJSON("/cart/checkout/sagepay_session_key").then(function (r) {
+        $("#merchant_session_key").val(r.merchantSessionKey);
+        sagepayCheckout({
+          "merchantSessionKey": r.merchantSessionKey,
+          "containerSelector": "#sagepay_section"
+        }).form({ "formSelector": "#paymentForm" });
+    });
+  });
+
+  $("#worldpay_link").on("click", function() {
+    section_id = 'worldpay_section';
+    token_field_id = 'payment_token';
+    $("#billing_section").show();
+    Worldpay.useTemplateForm({
+      'clientKey':'#{ENV['WORLDPAY_CLIENT_KEY']}',
+      'form':'new_order_payment',
+      'paymentSection': section_id,
+      'display':'inline',
+      'callback': function(obj) {
+        if (obj && obj.token) {
+          document.getElementById(token_field_id).value = obj.token;
+          document.getElementById(section_id).innerHTML = "<strong>Card Accepted</strong>";
+        }
+      }
+    });
+  });
+
+  $("#order_sale_same_as_shipping_same").on("change", function () {
+    $("#billing_address_section").toggle(!$(this).is(":checked"));
+  });
+
+  $("#order_sale_same_as_shipping_same").trigger("change");

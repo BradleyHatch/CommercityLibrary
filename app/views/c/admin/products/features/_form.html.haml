@@ -1,0 +1,28 @@
+
+= form_for @feature do |f|
+  = f.error_messages
+  .gs.gs--nowrap.clear.form-page--wide.shadow-2dp
+    .fixed-form-panel.fixed-form-panel--wide.shadow-2dp
+      .field
+        = f.label :name
+        = f.text_field :name
+
+      .field
+        = f.label :feature_type
+        = f.select :feature_type, C::Product::Feature.feature_types.keys.to_a
+
+      .field
+        = f.label :image
+        = f.image_field :image
+
+      .field
+        = f.label :link
+        = f.text_field :link
+
+      .actions
+        = f.submit class: 'btn'
+
+    .g-1.tight-tabs.row
+      .field
+        = f.label :body
+        = f.tiny_mce_text_area :body

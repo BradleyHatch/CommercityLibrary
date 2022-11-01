@@ -1,0 +1,53 @@
+.product-show
+  &__main_image
+    border: 1px solid $divider_color
+  &__thumbnail
+    display: inline-block
+    width: 32.5%
+    padding: 1%
+
+.product-thumbnails
+  margin: 0 -3px
+  padding-top: 10px
+  cursor: pointer
+
+.product-details
+  padding: 16px 0
+  h1
+    text-transform: uppercase
+    color: $primary_color
+    margin: 0
+    @media (max-width: $m - 1px)
+      margin: 24px 0 16px
+  h3
+    margin-top: 0
+    font-weight: lighter
+    text-transform: uppercase
+    font-size: 1.4rem
+  table
+    max-width: 300px
+    color: rgba(black, 0.9)
+  .btn--success
+    *
+      color: white
+      text-transform: uppercase
+
+.product-show__brand
+  margin-top: 12px
+
+.product-details__section
+  padding: 16px 0
+  text-transform: uppercase
+  &--bordered
+    border-top: 2px solid $divider_color
+    border-bottom: 2px solid $divider_color
+
+.product-details__qty
+  span
+    width: 20%
+    margin-right: 16px
+  input[type="number"]
+    width: 80%
+
+.product-details__cart
+  min-width: 185px

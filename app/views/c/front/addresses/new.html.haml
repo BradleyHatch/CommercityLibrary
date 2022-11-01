@@ -1,0 +1,15 @@
+.wrap.wrap--padded.account
+  .wrap.wrap__narrow
+    .gs--m
+      .g-3--m.g-gutter--right
+        = render 'c/main_application/account_menu'
+      .g-9--m.g-gutter
+        .account__content
+          %h2 New Address
+
+          = form_for(@address, url: front_addresses_path) do |f|
+            = f.error_messages
+
+            = render 'fields', f: f
+
+            = f.submit

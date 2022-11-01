@@ -1,0 +1,7 @@
+- provide :title, "New #{@content.content_type.titleize}"
+
+.form-page
+  .form-page__intro
+    %h1= "New #{@content.content_type.titleize}"
+
+  = render 'form'

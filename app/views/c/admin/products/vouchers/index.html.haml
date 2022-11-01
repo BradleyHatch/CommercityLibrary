@@ -1,0 +1,9 @@
+- provide :title, 'Vouchers'
+
+.index-header.gs
+  .g-3.g-gutter--right
+    %h1= pluralize(@vouchers.count, 'Voucher')
+    = link_to '+ Create New Voucher', new_product_voucher_path, class: 'btn btn--small'
+    %p Below is a list of vouchers in your store.
+
+= index_table @vouchers, C::Product::Voucher::INDEX_TABLE

@@ -1,0 +1,23 @@
+@import 'colors';
+@import '../javascript_lib/styles/generic_classes';
+
+
+.background-job {
+  @extend .flex-row-1, .pointer;
+  padding: 0px 7px;
+  line-height: 35px;
+}
+
+.background-job__light {
+  @extend .flex-center;
+}
+
+.background-job__name {
+  @extend .flex-align-center;
+  flex: 2;
+  justify-content: left;
+  padding-left: 2rem;
+  padding-right: 1rem;
+  font-size: 0.8rem;
+  color: $darkGrey3;
+}

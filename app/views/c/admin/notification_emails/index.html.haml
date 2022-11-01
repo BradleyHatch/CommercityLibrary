@@ -1,0 +1,22 @@
+- provide :title, 'Notification Emails'
+
+.index-header
+  %h1= pluralize(@notification_emails.count, 'Notification Email')
+  = link_to '+ Create Notification Email', new_notification_email_path, class: 'btn btn--small'
+  %p
+    This is the list of emails and what type of notifications they will receive.
+  %p
+    If this list is empty or if there are no emails flagged to received orders/enquiries, the default recipient(s) will be:
+    %br
+    = Array.wrap(C::NotificationEmail.default_recipients).join(", ")
+  %p
+    Order notification recipients:
+    %br
+    = Array.wrap(C::NotificationEmail.order_recipients).join(", ")
+  %p
+    Enquiry notification recipients:
+    %br
+    = Array.wrap(C::NotificationEmail.enquiry_recipients).join(", ")
+
+= index_table @notification_emails, C::NotificationEmail::INDEX_TABLE
+

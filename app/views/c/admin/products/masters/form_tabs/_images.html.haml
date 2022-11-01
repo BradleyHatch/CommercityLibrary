@@ -1,0 +1,27 @@
+- if C.three_sixty_image
+  = f.fields_for :main_variant do |ff|
+    .field.channel_toggle_check_box
+      .gs
+        .g-1
+          = ff.label :three_sixty_image do
+            = ff.check_box :three_sixty_image
+            %span.checkbox-span-label
+              360° image
+
+= tabs do
+  = tab pluralize(master.images.count, 'Image') do
+    - if C.alt_image_uploader
+      .field
+        = f.label :new_images
+        = f.file_field :new_images, multiple: true
+    .dropzone.product{ data: { product_id: @master.id }}
+      %label.panel_description Drag + Drop or click here to upload all of your images here!
+
+      %label.dz-loading-svg
+        %span Uploading images!
+        %div{ style: "height: 2px" }
+        = image_tag "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48c3ZnIHdpZHRoPSczNnB4JyBoZWlnaHQ9JzM2cHgnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIiBjbGFzcz0idWlsLXdoZWVsIj48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0ibm9uZSIgY2xhc3M9ImJrIj48L3JlY3Q+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNDAiIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMjAiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLWRhc2hhcnJheT0iMTRweCI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0ic3Ryb2tlLWRhc2hvZmZzZXQiIGZyb209IjAiIHRvPSIxMTAiIGJlZ2luPSIwIiBkdXI9IjFzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZmlsbD0iZnJlZXplIj48L2FuaW1hdGU+PC9jaXJjbGU+PC9zdmc+"
+
+    .column.column--2
+      #images_container
+        = render 'c/admin/products/masters/form_tabs/uploaded_images', f: f

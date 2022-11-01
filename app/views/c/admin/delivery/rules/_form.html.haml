@@ -1,0 +1,36 @@
+= form_for @rule, url: delivery_service_rule_path(@service, @rule) do |f|
+  = f.error_messages
+  .gs
+    .fixed-form-panel
+      .field
+        = f.label :zone
+        = f.select :zone_id, C::Zone.all.pluck(:name, :id), {include_blank: 'None'}
+      .field
+        = f.label :base_price
+        = f.number_field :base_price, min: 0, step: 0.01
+      .field
+        = f.label :min_cart_price_pennies
+        = f.number_field :min_cart_price_pennies, min: 0, step: 0.01
+      .field
+        = f.label :max_cart_price_pennies
+        = f.number_field :max_cart_price_pennies, min: 0, step: 0.01
+
+    .g-1
+
+      %table.index_table
+        %thead
+          %tr
+            %th Lower Bound (KG)
+            %th Additional Cost per KG
+            %th Delete?
+        %tbody
+          = f.nested_fields_for :gaps, wrapper_tag: :tr do |ff|
+            %td= ff.number_field :lower_bound
+            %td= ff.number_field :cost, min: 0, step: 0.01
+            %td= ff.remove_nested_fields_link fa_icon('trash')
+          %tr
+            %td{colspan: 3, style: 'text-align: left;'}= f.add_nested_fields_link :gaps, 'Add a Sub-Rule'
+
+  .actions.form-page__actions
+    = f.submit class: 'btn'
+    = link_to_delete 'Delete', @rule, url: delivery_service_rule_path(@service, @rule), class: 'btn btn--secondary', redirection: delivery_service_path(@service)

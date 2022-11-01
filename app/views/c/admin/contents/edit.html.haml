@@ -1,0 +1,10 @@
+
+- provide :title, "Edit #{@content.content_type.titleize}"
+
+.form-page
+  .form-page__intro
+    %h1= "#{@content.content_type.titleize}: #{@content.name}"
+    .form-page__right-actions
+      = link_to 'View on site', front_end_content_path(@content.to_param(:front)), class: 'btn btn--secondary'
+
+  = render 'form'

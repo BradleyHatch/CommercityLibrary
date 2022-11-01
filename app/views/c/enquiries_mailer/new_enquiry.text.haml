@@ -1,0 +1,13 @@
+
+Name:
+= @enquiry.name
+
+Email:
+= @enquiry.email
+
+- if @enquiry.phone_number.present?
+  Phone:
+  = @enquiry.phone_number
+
+Message:
+= simple_format @enquiry.body

@@ -1,0 +1,20 @@
+.wrap.wrap--padded.account
+  .wrap.wrap__narrow
+    .gs--m
+      .g-3--m.g-gutter--right
+        = render 'c/main_application/account_menu'
+      .g-9--m.g-gutter
+        .account__content
+          %h2 Addresses
+
+          .links
+            = link_to 'Add address', new_front_address_path
+          %br
+
+          - @addresses.each do |address|
+            .address
+              = presenter(address).block
+              .links
+                - if !address.new_record? && C::Order::Sale.where(shipping_address_id: address.id).empty? && C::Order::Sale.where(billing_address_id: address.id).empty?
+                  = link_to fa_icon('trash'), front_address_path(address), method: :delete, confirm: 'Are you sure?'
+            %br

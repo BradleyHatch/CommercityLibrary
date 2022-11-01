@@ -1,0 +1,7 @@
+.bread_crumbs
+  %span You are here:
+  - nav.each_with_index do |crumb, i|
+    - next if i == 0
+    = link_to crumb[:title], crumb[:url]
+    = fa_icon 'chevron-right'
+  = link_to yield(:title), request.path, class: 'no_link'

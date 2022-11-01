@@ -1,0 +1,16 @@
+.form-page--narrow
+  .form-page__form
+    = form_for @provider do |f|
+      = f.error_messages
+      .field
+        = f.label :name
+        = f.text_field :name
+      .field
+        = f.label :tracking_link
+        = f.text_field :tracking_link
+        .field__help
+          %p
+            Optionally provide a link to the provider's tracking page to sent to customers with their dispatch notifications
+      .actions
+        = f.submit class: 'btn'
+        = link_to_delete 'Delete', @provider, class: 'btn btn--secondary', redirection: delivery_providers_path unless @provider.new_record?

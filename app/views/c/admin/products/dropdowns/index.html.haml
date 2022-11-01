@@ -1,0 +1,26 @@
+- provide :title, 'Product Dropdowns'
+
+.index-header.gs
+  .g-3.g-gutter--right
+    %h1= pluralize(@dropdowns.count, 'Product Dropdown')
+    = link_to '+ Create Product Dropdown', new_product_dropdown_path, class: 'btn btn--small'
+
+.index-table
+  .index-table__content
+    .index-table__wrapper
+      %table.index_table
+        %thead
+          %tr
+            %th Name
+            %th Options Count
+            %th Enabled Categories
+            %th Active?
+            %th Delete
+        %tbody
+          - @dropdowns.each do |dropdown|
+            %tr
+              %td= link_to dropdown.name, [:edit, dropdown]
+              %td= dropdown.dropdown_options.size
+              %td= dropdown.categories.pluck(:name).join(", ")
+              %td= dropdown.active?
+              %td= link_to 'Delete', [dropdown], method: :delete

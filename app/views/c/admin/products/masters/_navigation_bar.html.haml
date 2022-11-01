@@ -1,0 +1,49 @@
+
+.nav-bar
+  .nav-bar__section
+    = link_to 'All', product_masters_path
+
+  .nav-bar__section
+    = render "c/admin/navigation_bar_link", new_param: { q: { main_variant_status_eq: "0" } }, name: "Active", selected_condition: params[:q] && params[:q][:main_variant_status_eq] == "0"
+    = render "c/admin/navigation_bar_link", new_param: { q: { main_variant_status_eq: "1" } }, name: "Inactive", selected_condition: params[:q] && params[:q][:main_variant_status_eq] == "1"
+    = render "c/admin/navigation_bar_link", new_param: { q: { main_variant_featured_true: "1" } }, name: "Featured", selected_condition: params[:q] && params[:q][:main_variant_featured_true] == "1"
+    = render "c/admin/navigation_bar_link", new_param: { q: { main_variant_discontinued_true: "1" } }, name: "Archived", selected_condition: params[:q] && params[:q][:main_variant_discontinued_true] == "1"
+
+  .nav-bar__section
+    = link_to 'Published Amazon', product_masters_path(q: {main_variant_published_amazon_true: "1"})
+    = link_to 'Published eBay', product_masters_path(q: {main_variant_published_ebay_true: "1"})
+
+  .nav-bar__section
+    - %w(50 100 200 500).each do |per_page|
+      - if params[:q]
+        -if params[:per_page] == per_page
+          = link_to per_page, request.query_parameters.merge({per_page: per_page}), class: ('selected')
+        -else
+          = link_to per_page, request.query_parameters.merge({per_page: per_page, page: "1"}), class: ('selected' if params[:per_page] == per_page)
+      - else
+        = link_to per_page, url_for({:per_page => per_page}), class: ('selected' if params[:per_page] == per_page)
+
+
+    - if @masters && @masters.any?
+      - if params[:q]
+        = link_to 'Show All', request.query_parameters.merge({per_page: @masters.count, page: "1", reduced_index: true}), class: ('selected' if params[:per_page] ==  @masters.count)
+      - else
+        = link_to 'Show All', url_for({:per_page => @masters.count, page: "1", reduced_index: true}), class: ('selected' if params[:per_page] == @masters.count)
+  
+
+  .nav-bar__section
+    = link_to 'Amazon Successful', product_masters_path(q: {main_variant_amazon_last_push_success_true: "1", main_variant_published_amazon_true: "1"})
+    = link_to 'Amazon Unsuccessful', product_masters_path(q: {main_variant_amazon_last_push_success_true: "0", main_variant_published_amazon_true: "1"})
+    = link_to 'eBay Successful', product_masters_path(q: {main_variant_ebay_last_push_success_true: "1", ebay_channel_ended_true: "0"})
+    = link_to 'eBay Unsuccessful', product_masters_path(q: {main_variant_ebay_last_push_success_true: "0", ebay_channel_ended_true: "0"})
+
+-# - if params[:q]
+-#   - attr_map = { "main_variant_status_eq" => "Active", "main_variant_featured_true" => "Featured", "main_variant_discontinued_true" => "Discontinued", "main_variant_published_amazon_true" => "Published Amazon", "main_variant_published_ebay_true", "eBay" }
+-#   - value_map = { "1" => 'true', "0" => 'false' }
+-#   .nav-bar.nav-bar--sub
+-#     %strong= link_to 'Clear', product_masters_path
+
+-#     - params[:q].each do |attr, value|
+-#       - a = attr_map[attr] ? attr_map[attr] : attr.gsub('main_variant', '').gsub('_eq', '').gsub('true', '').humanize
+-#       %span= attr.gsub('main_variant', '').gsub('_eq', '').gsub('true', '').humanize
+-#       = value_map[value] ? value_map[value] : value

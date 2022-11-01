@@ -1,0 +1,5 @@
+- object.custom_fields.each do |custom_field|
+  .field
+    = hidden_field_tag "[#{model_name}][custom_values][#{custom_field.id-1}][custom_field_id]", custom_field.id
+    = label_tag custom_field.name
+    = text_field_tag "[#{model_name}][custom_values][#{custom_field.id-1}][custom_value]", object.custom_value_for(custom_field.name)

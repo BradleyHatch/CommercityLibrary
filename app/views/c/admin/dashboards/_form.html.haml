@@ -1,0 +1,30 @@
+:css
+  .select2-selection {
+    padding-top: 4px !important
+  }
+
+= form_tag dashboards_list_path, method: :post do
+  .field
+    = label_tag :variant_ids, "Product"
+    = select_tag :variant_ids, options_for_select(C::Product::Variant.select("CONCAT(sku, ': ', name) AS sku_name", :id).order('sku_name ASC').pluck("CONCAT(sku, ': ', name) AS sku_name", :id), @variant_ids), prompt: '-- Select product --', multiple: true
+  
+  .field
+    = label_tag :channel, "Channel"
+    = select_tag :channel, options_for_select([["Web", "web"], ["Amazon", "amazon"], ["eBay", "ebay"]], @channel), prompt: '-- Select channel --'
+  
+  .field
+    .gs
+      .g-1
+        = label_tag :date_from, "From"
+        = datetime_field_tag :date_from, @from
+
+      .g-1.g-gutter
+        = label_tag :date_to, "To"
+        = datetime_field_tag :date_to, @to
+
+  .field
+    = label_tag :frequency, "Frequency"
+    = select_tag :frequency, options_for_select([["Days", "days"], ["Weeks", "weeks"], ["Months", "months"]], @frequency), prompt: '-- Select frequency --'
+
+  .field
+    = submit_tag 'Submit', class: :btn

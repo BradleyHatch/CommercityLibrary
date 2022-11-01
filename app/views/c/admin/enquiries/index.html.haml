@@ -1,0 +1,14 @@
+- provide :title, 'Enquiries'
+
+.index-header.gs
+  .g-3.g-gutter--right
+    %h1= pluralize(@enquiries.count, 'Enquiry')
+    %p
+      All the enquiries made through the contact form on your site.
+  .g-1.g-gutter
+    = search_form_for @q do |f|
+      .gs
+        .g-3= f.search_field :name_or_email_cont, placeholder: 'Search'
+        .g-1.g-gutter--narrow= submit_tag 'Search', class: 'btn btn--system'
+
+= index_table @enquiries, C::Enquiry::INDEX_TABLE

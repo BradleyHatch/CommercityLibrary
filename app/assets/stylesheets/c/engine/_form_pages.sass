@@ -1,0 +1,400 @@
+.form-page
+  &--narrow
+    background: white
+    width: 100%
+    max-width: 600px
+    border: 1px solid #dae4ed
+    border-radius: 5px
+    box-shadow: 0 5px 15px -5px rgba(0,0,0,.1)
+    margin: 60px auto
+  // width to render tiny mce text area propery
+  &--mce
+    max-width: 824px
+  &__form
+    padding: 30px
+
+  &--wide
+    background-color: white
+
+  &__inner-intro
+    line-height: 24px
+    padding: 20px 30px
+    border-bottom: 1px solid #dae4ed
+    h1
+      font-size: 18px
+      margin: 0
+      font-weight: 600
+    p
+      font-size: 14px
+      margin: 0
+
+  &__intro
+    padding: 40px
+    background-color: #fbfbfb
+    position: relative
+    z-index: 1
+    border-bottom: 1px solid #eee
+    h1, h2, h3, a
+      display: inline-block
+      margin: 0
+      vertical-align: middle
+    h1
+      margin-right: 10px
+      font-size: 1.4rem
+      margin-bottom: 0
+    p
+      margin-bottom: 0
+    a
+      margin-left: 5px
+    p, li
+      opacity: 0.6
+      max-width: 800px
+    ul
+      padding-left: 20px
+  &__actions
+    padding: 10px 20px
+    background: white
+    border-bottom: 1px solid #ddd
+    border-top: 1px solid #eee
+    input
+      margin-bottom: 0
+
+  &__right-actions
+    float: right
+
+.fixed-form-panel
+  +flex(0 0 350px)
+  padding: 15px 10px 0
+  background: white
+  position: relative
+  z-index: 2
+  border-radius: 3px
+  box-shadow: none
+  border: 1px solid #e5e5e5
+
+  @media (min-width: $xxl)
+    margin-right: 10px
+    left: 10px
+    top: -10px
+
+  &--wide
+    +flex(0 0 300px)
+
+    @media (min-width: $xxl)
+
+      +flex(0 0 375px)
+
+.collapsing-form-panel
+  transition: max-width 0.3s
+  max-width: 10000px
+
+  .field_group
+    overflow: hidden
+
+  &.collapsing-form-panel--collapsed
+    max-width: 0px
+
+.collapsing-form-panel__toggle
+  // @extend .shadow-1dp
+  position: absolute
+  right: -22px
+  top: calc(50% - 18.5px)
+  background-color: #f5f5f5
+  padding: 5px 4px
+  width: 20px
+  height: 37px
+  border-top-right-radius: 50%
+  border-bottom-right-radius: 50%
+  font-size: 1.3rem
+  cursor: pointer
+  opacity: 0.75
+
+  i
+    transition: transform 0.2s
+    transform: rotate(0deg)
+
+  .collapsing-form-panel--collapsed &
+    padding: 5px 6px
+
+    i
+      transform: rotate(180deg)
+
+fieldset
+  margin-bottom: 10px
+  padding: 8px 6px
+  border-radius: 3px
+  background-color: #fcfcfc
+  border: 1px solid #e5e5e5
+  .btn
+    margin-bottom: 0
+
+.fieldset-title
+  font-size: 11px
+  color: #666
+  display: block
+  margin-bottom: 6px
+
+label.ebay
+  background-image: image_url('c/ebay.png')
+  background-size: contain
+  background-repeat: no-repeat
+  background-position: 50% 22px
+  color: rgba(0,0,0,0)!important
+  width: 65px
+  .ebay_push_issue &
+    background-color: rgba(red, 0.15)
+
+label.amazon
+  background-image: image_url('c/amazon.png')
+  background-size: contain
+  background-repeat: no-repeat
+  background-position: 50% 31px
+  color: transparent !important
+  width: 80px
+
+label.web
+  background-image: image_url('c/logo--dark.svg')
+  background-size: contain
+  background-repeat: no-repeat
+  background-position: 50% 24px
+  color: transparent !important
+  width: 80px
+
+.tight-tabs
+  .tab_heads_container
+    padding: 0
+  .tab_heads_container label
+    padding: 28px 0 16px
+    margin: 0 9px
+    font-size: 13px
+    font-weight: 600
+
+.sub_tabs_container .tab_heads_container
+  background-color: $primary_color
+  label
+    padding: 10px 0!important
+
+.tabs_container
+  input[type='radio'].tab_controller
+    @for $i from 1 through 10
+      &:nth-child(#{$i}):checked ~
+        .tab_heads_container
+          label:nth-child(#{$i})
+            border-bottom: 2px solid $primary_color!important
+
+.channel_toggle_check_box
+  padding: 10px 20px
+  background-color: $dark_primary_color
+  margin-bottom: 0
+  label
+    color: white
+
+.dropzone
+  height: 100px
+  background: #f1f1f1
+  border: 2px dashed #ddd
+  border-radius: 4px
+  cursor: pointer
+  label
+    pointer-events: none
+    text-align: center
+    padding: 40px
+
+.split_selector a
+  color: white
+
+ul.quick_actions
+  position: absolute
+  background: $primary_color
+  right: 20px
+  border-radius: 4px
+  list-style: none
+  padding: 12px
+  text-align: right
+  input
+    background-color: transparent
+    border: none
+
+.image-container
+  border: 1px solid #ddd
+  border-radius: 3px
+  padding: 10px
+  font-size: 0.8rem
+  text-align: center
+  display: inline-block
+  margin: 5px
+  margin-left: 0
+  vertical-align: top
+  max-width: 180px
+
+.shop-wrap-input
+  textarea
+    height: 650px
+
+.shop-wrap-preview
+  padding: 16px
+  width: 100%
+  border: 0
+  height: 650px
+  overflow: scroll
+
+.image_field
+  img
+    max-width: 200px
+
+.image_container
+  border: 1px solid #dae4ed
+  border-radius: 3px
+  overflow: hidden
+  box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.1)
+  padding: 5px
+  max-width: 200px
+  margin-bottom: 10px
+  text-align: center
+
+  &--flex
+    +flex(1)
+    margin-bottom: 0
+    max-width: 100%
+    border: 0
+    text-align: initial
+    word-break: break-word
+
+    img
+      max-width: 200px
+      display: block
+      margin: 0 auto
+
+
+  .unselected-images &
+    display: inline-block
+
+.image_table .ui-sortable-placeholder
+  height: 222px
+
+.name
+  word-break: break-all
+
+.dropzone
+  .dz-processing, .dz-preview
+    display: none
+
+  .dz-loading-svg
+    display: none
+    text-align: center
+    span
+      display: block
+
+  &.dz-uploading
+    .dz-loading-svg
+      display: block
+      img
+        height: 22px
+        width: 22px
+    .panel_description
+      display: none
+
+
+// hiding dropzone preview on content page
+.dropzone[data-model-type='contents'], .dropzone[data-model-type='blocks']
+  .image_container
+    overflow: visible
+    z-index: 1000
+
+  .dz-processing, .dz-preview
+    display: none
+
+[data-preview-target='true']
+  position: relative
+  min-height: 100px
+  border: 1px solid whitesmoke
+  border-radius: 4px
+  padding: 16px
+  margin-bottom: 16px
+
+  img
+    display: block
+    margin: 0 auto
+
+[data-preview-overlay='true']
+  position: absolute
+  transition: 0.3s
+  opacity: 0
+  background-color: green
+  top: 0
+  left: 0
+
+  .hovering &
+    opacity: 0.5
+
+.product-status__container
+  background-color: #2c3135
+  color: white
+  padding: 12px 25px
+  a
+    color: inherit
+.product-status
+  margin-right: 30px
+.product-status--success
+  color: #71a230
+
+.sync-error__panel
+  border: 1px solid red
+  box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.1)
+  border-radius: 3px
+  margin-bottom: 20px
+  padding: 10px
+  h4
+    margin: 0
+
+.sync__panel
+  border: 1px solid #e0e0e0
+  box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.1)
+  border-radius: 3px
+  margin-bottom: 20px
+  padding: 10px
+  h4
+    margin: 0
+
+.image_table
+  img
+    width: 60px
+
+.image-variant-info
+  position: relative
+  cursor: pointer
+
+  i
+    font-size: 1.5rem
+    color: rgba(black, 0.75)
+
+  &:hover
+    .image-variant-info__name
+      max-height: 300px
+      padding: 8px
+
+  &--green
+    i
+      color: rgba(#8cc63f, 0.75)
+
+  &--small
+    i
+      font-size: 1rem
+
+    .image-variant-info__name
+      min-width: 180px
+      left: calc(50% - 90px)
+
+.image-variant-info__name
+  @extend .shadow-2dp
+  position: absolute
+  max-height: 0
+  overflow: hidden
+  transition: 0.2s
+  background-color: whitesmoke
+  border-radius: 4px
+  min-width: 300px
+  left: calc(50% - 150px)
+  z-index: 100000
+
+.collection_checkboxes

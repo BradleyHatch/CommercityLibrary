@@ -1,0 +1,18 @@
+@import 'generic_classes';
+@import 'transitions';
+
+
+.sliding-panels {
+  @extend .relative, .width-100, .overflow-hidden;
+}
+
+.sliding-panels__panels-container {
+  @extend .absolute, .flex-width-100;
+  left: 0%;
+  transition: left $sliding-panels-transition;
+}
+
+.sliding-panels__panel {
+  @extend .flex-center, .height-100;
+  background-color: white;
+}

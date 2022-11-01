@@ -1,0 +1,40 @@
+= field_set_tag 'Billing Address' do
+  %div
+    = f.label :same_as_shipping_same do
+      = check_box :order_sale_same_as_shipping, :same, checked: true
+      %span Use shipping address?
+
+  #billing_address_section
+    = f.fields_for :billing_address, address do |ff|
+      .field
+        = ff.label :name
+        = ff.text_field :name
+      .field
+        = ff.label :address_one
+        = ff.text_field :address_one
+      .field
+        = ff.label :address_two
+        = ff.text_field :address_two
+      .field
+        = ff.label :address_three
+        = ff.text_field :address_three
+      .field
+        = ff.label :city
+        = ff.text_field :city
+      .field
+        = ff.label :region, 'County'
+        = ff.text_field :region
+      .fields
+        .field.field--2.field--left
+          = ff.label :postcode
+          = ff.text_field :postcode
+        .field.field--2.field--right
+          = ff.label :country_id
+          = ff.select :country_id, C::Country.active.pluck(:name, :id)
+      .field
+        = ff.label :phone
+        = ff.text_field :phone
+      .field
+        = ff.label :mobile
+        = ff.text_field :mobile
+

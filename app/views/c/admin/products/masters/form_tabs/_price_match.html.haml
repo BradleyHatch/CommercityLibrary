@@ -1,0 +1,25 @@
+= tabs do
+  = tab "Watching #{pluralize(master.main_variant.price_matches.count - 1, 'Competitor Product')}" do
+    #main_form.two_panel_form
+      .right_form_buttons
+        = f.submit  'Update Price Matches', class: 'btn'
+      %p Competitor's Listings for this Product:
+      = f.fields_for :main_variant do |ff|
+        = ff.nested_fields_for :price_matches, wrapper_tag: :div, wrapper_options: { class: 'fields' }  do |fff|
+          .gs
+            .g-1.field.field--shrink.with_text_field
+              = fff.select :competitor, C::Product::PriceMatch.competitors.keys, include_blank: '-- Select Competitor --'
+            .g-1.g-gutter.field.field--grow
+              = fff.text_field :url, placeholder: 'Url'
+            .g-1.g-gutter.field
+              = raw fff.object.display_price
+              = raw fff.object.display_last_updated
+            .g-1.g-gutter.field
+              = raw fff.object.display_price
+              = raw fff.object.display_last_updated
+            .g-1.g-gutter.field
+              .gs.gs--centered
+                = link_to 'Save price', save_price_match_product_master_path(id: master.id, price_match_id: fff.object.id), method: :post, class: 'btn btn--secondary btn--small'
+                .g-gutter
+                .red_x_button= fff.remove_nested_fields_link fa_icon('trash')
+        = ff.add_nested_fields_link :price_matches, 'Add a Price Match', class: 'btn btn--small'

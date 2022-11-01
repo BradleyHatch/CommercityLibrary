@@ -1,0 +1,9 @@
+- cache product do
+  %a{:href => front_end_product_path(product), title: product.name, class: 'product-grid__preview'}
+    %div
+    %figure= image_tag(product.cache_image&.image&.square || 'placeholder.png')
+    .product-grid__info
+      %h3.product-grid__title
+        = "#{product.name}: #{product.web_channel.sub_title}"
+      %h3.product-grid__price
+        = humanized_money_with_symbol product.cache_web_price

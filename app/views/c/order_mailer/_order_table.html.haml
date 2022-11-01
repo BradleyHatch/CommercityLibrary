@@ -1,0 +1,30 @@
+- store ||= false
+
+%div
+  - @order.items.each do |item|
+    %div
+      %div{ style: "padding: 4px; display: inline-block; vertical-align: top;"}
+        = image_tag item.product.primary_web_image(:grid_square).url, { width: 50, height: 50 } unless item.product.blank? rescue nil
+
+      %div{ style: "padding: 4px; display: inline-block; vertical-align: top; line-height: 1.6"}
+        %b= item.name
+
+        - if item&.product&.sku&.present?
+          %br
+          = render "c/order_mailer/notify_customer_sku", item: item
+
+        - if item.gift_wrapping?
+          %br
+          %b Item will be gift wrapped
+
+        %br
+        %span= "Quantity: #{item.quantity}"
+
+        %br
+
+        %b
+          - price = C.default_tax == :with_tax ? item.price  : item.price_without_tax
+          = ActionController::Base.helpers.humanized_money_with_symbol price
+
+%br
+%br

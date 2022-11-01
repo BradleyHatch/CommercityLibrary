@@ -1,0 +1,29 @@
+.gs
+  .g-2
+    = form_for @group do |f|
+      = f.error_messages
+      .gs
+        .fixed-form-panel
+          .field
+            = f.label :name
+            = f.text_field :name
+
+        .g-1
+          = tabs do
+            = tab :regions, class: 'table_tab' do
+              - if @group.new_record?
+                .padded
+                  Your regions will appear here
+              - else
+                = index_table @group.regions.ordered, C::Template::Region::INDEX_TABLE, sortable: sort_template_group_template_regions_path(@group)
+                .padded
+                  = link_to 'Add Region', [:new, @group, :template_region], class: 'button' unless @group.new_record?
+
+        .actions.form-page__actions.g-full
+          = f.submit class: 'btn'
+          = link_to 'Delete', @group, method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn--secondary' unless @group.new_record?
+
+  .g-2.form-page__intro.regions-preview
+    %label Group Preview
+    %fieldset
+      = template_regions(@group, '--m')

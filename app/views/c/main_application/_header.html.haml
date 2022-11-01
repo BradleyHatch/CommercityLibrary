@@ -1,0 +1,49 @@
+%header.header
+
+  .wrap.gs.row.row--colored-dark.header__bar
+    .g-2
+      = link_to 'Home', '/'
+
+    .g-2.align-right
+      = front_customer_account_signed_in? ? link_to('Log Out', c.destroy_front_customer_account_session_path) : link_to('Log In', c.new_front_customer_account_session_path	)
+
+
+  .wrap.header__wrap.gs.gs--centered
+
+    .g-gutter--narrow.g-gutter--m.g-gutter--bottom.g-full.g-4--m.header__section.gs.gs--centered
+
+      .g-3
+        = link_to '/' do
+          .logo.header__logo
+
+      #js-header__toggle.header__toggle.g-1.align-center
+        = fa_icon('bars')
+
+    .g-gutter--narrow.g-gutter--m.g-2.g-7--m
+      .header__menu.g-gutter--bottom.m_only
+        = menu 'header'
+
+      .header__search
+        = site_search do
+          = fa_icon "search"
+
+    .g-gutter--narrow.g-gutter--m.g-1.g-2--m
+      .header__basket.header__basket--rounded
+        = link_to cart_path do
+          = fa_icon('shopping-basket')
+          %span= "(#{cart.cart_items.count})"
+          %p= link_to 'View basket', cart_path
+
+
+  .wrap.row--colored
+    %nav.main-menu.main-menu--centered
+      - C::Category.hash_tree.each do |category|
+        %li#js-main-menu__item--root.main-menu__item--root
+          = link_to category.first.name, front_end_category_path(category.first)
+          %ul.main-menu__item--child
+            - category.second.each do |category_2|
+              %li
+                = link_to category_2.first.name, front_end_category_path(category_2.first)
+                %ul
+                  - category_2.second.each do |category_3|
+                    %li= link_to category_3.first.name, front_end_category_path(category_3.first)

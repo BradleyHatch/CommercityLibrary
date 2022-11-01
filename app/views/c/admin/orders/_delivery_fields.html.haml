@@ -1,0 +1,17 @@
+= field_set_tag '' do
+  %span.fieldset-title Delivery Details
+  = f.fields_for :delivery do |ff|
+
+    .field.field--inner-label
+      = ff.label :price
+      = ff.number_field :price, step: 0.01, min: 0
+
+    .field.field--inner-label
+      = ff.label :tax_rate
+      = ff.number_field :tax_rate, step: 0.1, min: 0
+
+    - if @order.awaiting_dispatch? || @order.dispatched?
+      - if order.awaiting_dispatch?
+        = link_to 'Dispatch order', new_dispatch_order_order_sale_path(order), class: 'btn btn--secondary'
+      - else
+        = order.tracking_code

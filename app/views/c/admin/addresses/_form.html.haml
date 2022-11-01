@@ -1,0 +1,46 @@
+.form-page--narrow
+  .form-page__form
+    = form_for [@parent_resource, @address] do |f|
+      = f.error_messages
+      .field
+        = f.label :name
+        = f.text_field :name
+      .field
+        = f.label :address_one
+        = f.text_field :address_one
+      .field
+        = f.label :address_two
+        = f.text_field :address_two
+      .field
+        = f.label :address_three
+        = f.text_field :address_three
+      .field
+        = f.label :city
+        = f.text_field :city
+      .field
+        = f.label :region, 'County'
+        = f.text_field :region
+      .field
+        = f.label :postcode
+        = f.text_field :postcode
+      .field
+        = f.label :country_id
+        = f.collection_select :country_id, C::Country.pick_ordered, :id, :name, prompt: '-- Choose Country --'
+      .field
+        = f.label :phone
+        = f.text_field :phone
+      .field
+        = f.label :fax
+        = f.text_field :fax
+      .field
+        = f.label :mobile
+        = f.text_field :mobile
+
+      - if @address_type
+        = f.hidden_field :address_type, value: @address_type
+      - else
+        = f.hidden_field :address_type
+      .actions
+        = f.submit class: 'btn'
+        - if !@address.new_record? && C::Order::Sale.where(shipping_address_id: @address.id).empty? && C::Order::Sale.where(billing_address_id: @address.id).empty?
+          = link_to_delete 'Delete', @address, redirection: url_for(@parent_resource), class: 'btn btn--secondary'

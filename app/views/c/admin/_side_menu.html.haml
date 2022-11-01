@@ -1,0 +1,68 @@
+.sidebar
+
+  .sidebar__group
+    = link_to raw("Dashboard #{fa_icon('pie-chart')}"), c.root_path
+    = link_to raw("Homepage #{fa_icon('home')}"), front_end_root_path
+
+  - if C.commerce
+    .sidebar__group
+      %p.sidebar_heading Store
+      = link_to 'Products', c.product_masters_path(q: {main_variant_status_eq: 'active'})
+      = link_to 'Properties', c.product_property_keys_path
+      = link_to 'Features', c.product_features_path
+      = link_to 'Vouchers', c.product_vouchers_path
+      = link_to 'Brands', c.brands_path
+      = link_to 'Categories', c.categories_path
+      = link_to 'Collections', c.collections_path
+      = render 'c/admin/_custom_sidemenu_links/store'
+
+    .sidebar__group
+      %p.sidebar_heading Sales
+      = link_to 'Orders', c.order_sales_path
+      = link_to 'Customers', c.customers_path(q: { s: 'name_case_insensitive asc'})
+      = link_to 'Contact', c.notifications_path
+      = link_to 'Reservations', c.product_reservations_path
+      = link_to 'Delivery', c.delivery_services_path
+      = render 'c/admin/_custom_sidemenu_links/sales'
+
+  .sidebar__group
+    %p.sidebar_heading Content
+    - C.content_sections.each do |content|
+      = link_to content.to_s.titleize, "/#{C.admin_mount}/contents/#{content}"
+    = link_to 'Testimonials', c.testimonials_path if C.content_sections.include?(:testimonials)
+    = link_to 'Slideshows', c.slideshows_path
+    = link_to 'Meet The Team', c.team_members_path if C.content_sections.include?(:team)
+    = link_to 'Sales Highlights', c.sales_highlights_path if C.commerce
+    = link_to 'Navigation', c.menu_items_path
+    = link_to 'Templates', c.template_groups_path
+    = render 'c/admin/_custom_sidemenu_links/content'
+
+  .sidebar__group
+    %p.sidebar_heading Resources
+    = link_to 'Documents', c.documents_path
+    = render 'c/admin/_custom_sidemenu_links/resources'
+
+  .sidebar__group
+    = link_to 'Settings', c.setting_groups_path
+
+  - if current_user.id == 1
+    .sidebar__group
+      %p.sidebar_heading Debug
+      = link_to 'Amazon Queue', c.amazon_processing_queues_path
+      = link_to 'Assets/C vars debug', c.admin_debug_path
+      = link_to 'All Products w/ 0 Images', c.admin_no_images_csv_path, method: :post
+      = link_to 'In-Stock Products w/ 0 Images', c.admin_no_images_csv_path(in_stock: true), method: :post
+      = link_to 'Products w/ No Desc', c.admin_no_desc_csv_path, method: :post
+      = link_to 'Active Weights', c.admin_active_weights_csv_path, method: :post
+      = link_to 'All Weights', c.admin_all_weights_csv_path, method: :post
+      = render 'c/admin/_custom_sidemenu_links/misc'
+
+  - elsif C.show_product_csv_reports
+    .sidebar__group
+      %p.sidebar_heading Reports
+      = link_to 'All Products w/ 0 Images', c.admin_no_images_csv_path, method: :post
+      = link_to 'In-Stock Products w/ 0 Images', c.admin_no_images_csv_path(in_stock: true), method: :post
+      = link_to 'Products w/ No Desc', c.admin_no_desc_csv_path, method: :post
+      = link_to 'Active Weights', c.admin_active_weights_csv_path, method: :post
+      = link_to 'All Weights', c.admin_all_weights_csv_path, method: :post
+      = render 'c/admin/_custom_sidemenu_links/misc'

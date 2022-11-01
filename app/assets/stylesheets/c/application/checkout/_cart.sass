@@ -1,0 +1,101 @@
+.cart
+  padding: 40px
+  background-color: white
+  h1
+    margin-top: 0
+    font-size: 1.5rem
+
+.cart-items
+  width: 100%
+  text-align: center
+  border-spacing: 0
+  margin: 20px 0
+  @media (max-width: 700px)
+    display: block
+    text-align: left
+    tbody
+      display: block
+
+.cart-items__heading
+  padding: 20px 0
+  font-weight: normal
+  border-top: 1px solid rgba(black, 0.25)
+  border-bottom: 1px solid rgba(black, 0.25)
+  @media (max-width: 700px)
+    display: none
+  &--align-left
+    text-align: left
+  &--align-right
+    text-align: right
+
+.cart-items__row
+  @media (max-width: 700px)
+    display: block
+    + .cart-items__row
+      margin-top: 10px
+
+.cart-items__cell
+  padding: 10px 0
+  border-bottom: 1px solid rgba(black, 0.1)
+  img
+    max-width: 120px
+  input[type="number"]
+    width: 50px
+    border: 1px solid rgba(black, 0.1)
+    margin-bottom: 0
+    display: inline-block
+  b
+    font-size: 1.4rem
+  i
+    color: $error
+    margin-right: 15px
+    font-size: 1rem
+  @media (max-width: 700px)
+    display: inline-block
+    border-bottom: 0
+    h3
+      font-size: 1rem
+  &--align-left
+    text-align: left
+  &--align-right
+    text-align: right
+    @media (max-width: 700px)
+      width: 100%
+      border-bottom: 1px solid rgba(black, 0.1)
+  &--last
+    padding: 10px 0 20px
+    border-bottom: 0
+    @media (max-width: 700px)
+
+.stock_notice
+  &--alert
+    display: block
+    color: $error
+    font-weight: bold
+    margin-top: 4px
+
+.cart__order-summary
+  width: 100%
+  table
+    max-width: 320px
+    margin-left: auto
+
+.order-summary__cell
+  span
+    font-size: 1rem
+  b
+    font-size: 1.4rem
+  &--first
+    padding-right: 15px
+
+.cart__actions
+  padding-top: 20px
+
+.checkout-disabled
+  margin-top: 8px
+
+  span
+    display: inline-block
+    max-width: 300px
+    color: $error
+    font-weight: bold

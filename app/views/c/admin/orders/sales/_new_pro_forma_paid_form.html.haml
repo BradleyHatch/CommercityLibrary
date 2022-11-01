@@ -1,0 +1,9 @@
+%h3 Update order
+
+= form_for @order, url: update_pro_forma_paid_order_order_sale_path(@order) do |f|
+  = f.error_messages
+
+  .field
+    %p This order has a pro forma payment attached for a trade customer. Do you want to mark it as paid to enable dispatch controls?
+
+  = f.submit 'Mark as paid', class: 'btn'

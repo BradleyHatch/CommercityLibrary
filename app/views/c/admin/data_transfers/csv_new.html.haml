@@ -1,0 +1,13 @@
+
+#page_information
+  .action_links
+    = link_to 'Download template csv', asset_path('import_test.csv'), download: ''
+
+  = form_for @data_transfer, url: confirm_csv_import_transfers_path do |f|
+    = f.label :name
+    = f.text_field :name
+
+    = f.label :file
+    = f.file_field :file
+
+    = f.submit 'Import from CSV', class: 'btn'

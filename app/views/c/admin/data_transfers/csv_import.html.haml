@@ -1,0 +1,14 @@
+%h4 CSV Imported!
+%section
+  -# make this better e.g. include links to products and print erroneous rows
+  %h4= "Products imported: #{@csv_import[:imported].count}"
+  - if @csv_import[:imported].present?
+    %h5 Imported Products
+    - @csv_import[:imported].each do |k, v|
+      %p= link_to "#{k}. #{v.main_variant.name}", v
+
+  %h4= "Products updated: #{@csv_import[:updated].count}"
+  - if @csv_import[:updated].present?
+    %h5 Updated Products
+    - @csv_import[:updated].each do |k, v|
+      %p= link_to "#{k}. #{v.main_variant.name}", v

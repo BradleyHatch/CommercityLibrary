@@ -1,0 +1,10 @@
+- provide :title, 'Barcodes'
+
+.index-header
+  %h1= pluralize(@barcodes.count, 'Unassigned Barcode')
+  = link_to '+ Create Barcode', new_product_barcode_path, class: 'btn btn--small'
+  = link_to 'CSV Import', upload_import_product_barcodes_path, class: 'btn btn--small btn--secondary'
+  %p
+    Your unassigned barcodes ready to be assigned to new products.
+
+= index_table @barcodes, C::Product::Barcode::INDEX_TABLE

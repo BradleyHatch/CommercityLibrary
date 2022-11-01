@@ -1,0 +1,21 @@
+= @text_body
+
+You had in your cart: 
+
+- @cart.cart_items.each do |item|
+
+  \--------------------------
+
+  = item.name
+
+  = "Name: #{item.name}"
+
+  - price = C.default_tax == :with_tax ? item.price  : item.price_without_tax
+  = "Price: #{price}"
+
+  = "Quantity: #{item.quantity}"
+
+  \--------------------------
+
+- if @voucher
+  = "Use voucher code: #{@voucher.code} for #{@voucher.breakdown}"

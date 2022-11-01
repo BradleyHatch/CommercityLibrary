@@ -1,0 +1,10 @@
+#page_wrapper.wrap.row
+  #page
+    #content_wrapper
+
+      #main_content
+        - if @products.any?
+          = render 'c/front_end/products/_grids/standard', block: 2, products: @products, show_controls: false
+        - else
+          .no_results
+            %h3 The search returned no results

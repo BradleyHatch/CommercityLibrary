@@ -1,0 +1,17 @@
+.gs
+  .g-2
+    = form_for [@dropdown, @dropdown_option] do |f|
+      = f.error_messages
+      .gs
+        .fixed-form-panel
+          .field
+            = f.label :name
+            = f.text_field :name
+
+          .field
+            = f.label :value
+            = f.text_field :value
+
+        .actions.form-page__actions.g-full
+          = f.submit class: 'btn'
+          = link_to 'Delete', [@dropdown, @dropdown_option], method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn--secondary' unless @dropdown_option.new_record?

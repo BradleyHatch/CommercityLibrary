@@ -1,0 +1,35 @@
+- provide :title, 'Jobs'
+
+.index-header
+  %h1= pluralize(@amazon_processing_queues.count, 'Job')
+  %p
+    All jobs
+
+= will_paginate @amazon_processing_queues
+
+.panel
+  %table.index_table
+    %thead
+      %tr
+        %th.narrow_column= check_box_tag :select_all
+        %th Job
+        %th Submitted At
+        %th Products
+        %th Type
+        %th Status
+
+    %tbody
+      - @amazon_processing_queues.each do |apq|
+        %tr
+          %td.check_box_column= check_box_tag 'amazon_processing_queue[]', apq.id
+          %td= link_to apq.feed_id, apq
+          %td{title: apq.submitted_at}= time_ago_in_words apq.submitted_at
+          - products = apq.products.limit(10)
+          - total_products = apq.products.count
+          %td
+            = products.map {|p| "(#{p.sku})"}.join(', ')
+            - difference = total_products - products.count
+            - if difference > 0
+              and #{difference} more
+          %td= apq.feed_type
+          %td= apq.job_status

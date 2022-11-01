@@ -1,0 +1,155 @@
+= f.fields_for :main_variant do |ff|
+  .field.channel_toggle_check_box
+    .gs
+      .g-1
+        = ff.label :published_web do
+          = ff.check_box :published_web
+          %span.checkbox-span-label
+            Publish on website
+
+= tabs do
+  = f.fields_for :web_channel do |ff|
+    = tab "Details" do
+      .field.field--inner-label
+        = ff.label :name
+        = ff.text_field :name, placeholder: ff.object.name
+        .field__help
+          %p This is the name as it appears on the website. Leaving this blank will cause the site to show the main product name.
+
+      .field.field--inner-label
+        = ff.label :sub_title
+        = ff.text_field :sub_title
+
+      = f.fields_for :main_variant do |fff|
+        .field
+          = fff.label :click_and_collect do
+            = fff.check_box :click_and_collect
+            %span.checkbox-span-label
+              Eligible for click and collect?
+
+        = fff.price_field :web_price
+        .field__help
+          %p
+            Override the default retail price - leaving this field blank will mean product uses
+            %b retail price
+
+        .field.field--inner-label
+          = ff.label :discount_price, 'Previous Price (£)'
+          = ff.number_field :discount_price, step: 0.01, min: 0
+          .field__help
+            %p
+              This will show on your front site product page as the previous price. This
+              %b does not
+              affect the price your product is selling for.
+
+        .field.field--inner-label
+          = fff.label :product_tag
+          = fff.select :product_tag, C::Product::Variant.product_tags.keys
+          .field__help
+            %p Highlight aspects of your products with tags
+
+        .field.field--inner-label
+          = fff.label :order
+          = fff.number_field :order
+          .field__help
+            %p Set the order that this product will appear in category listings.
+
+        - if C.product_info_fields.any?
+          = fff.fields_for :info do |info_form|
+            - C.product_info_fields.each do |key, config|
+              .field.field--inner-label
+                = info_form.label key, config[:name]
+                - if config[:type] == :boolean
+                  = info_form.check_box key, checked: !!fff.object.info[key.to_s]
+                - else
+                  = info_form.text_field key, value: fff.object.info[key.to_s]
+                - if config[:help].present?
+                  .field__help
+                    %p= config[:help]
+
+
+    = tab "Description" do
+      .field
+        = ff.label :description
+        = ff.tiny_mce_text_area :description
+      .field
+        = ff.label :specification
+        = ff.tiny_mce_text_area :specification
+      .field
+        = ff.label :features
+        = ff.tiny_mce_text_area :features
+      .field
+        = ff.hidden_field :id
+
+    = tab "Images" do
+      - unless @master.images.empty?
+        .gs
+          .g-1
+            %h4 Unselected Images
+            .field_help
+              %p These are images currently not displayed in the shop for this product
+            #web_images_container
+              = render 'select_image', channel_type: :web, master: @master
+          .g-1
+            %h4 Selected Images
+            .field_help
+              %p These are images currently displayed in the shop for this product that appear in order. Drag to reorder them
+            #web_channel_images_container.reorderable
+              = render 'channel_image', channel_type: :web, master: @master
+      - else
+        %h3 Currently no images uploaded!
+
+
+    = tab "Related products" do
+      %h4 Related Products
+      .panel_description
+        Add any products which are related to
+        %em= @master.name
+
+      .field
+        = f.select :related_product_ids, C::Product::Master.published.where.not(id: f.object.id).pluck("CONCAT_WS(' ', name, sku )", :id), {include_blank: '-- Choose Related --'}, multiple: true, data: {pagination: '/admin/products/variants_json'}
+
+      - if C.related_product_csv
+        .field
+          .field_help
+            %p
+              Alternatively, enter comma-separated SKUs to set related products. To delete a product, remove the SKU and delete it from the above select field.
+              %em Case sensitive.
+
+          = text_field_tag :related_product_csv, @master.generate_related_csv
+
+      %h4 Alternative Products
+      .panel_description
+        Add any products which are considered alternative or additonal products to
+        %em= @master.name
+
+      .field.with_select.padding
+        = f.select :add_on_ids, C::Product::Master.published.where.not(id: f.object.id).pluck("CONCAT_WS(' ', name, sku )", :id), {include_blank: '-- Choose Add Ons --'}, multiple: true, data: {pagination: '/admin/products/variants_json'}
+
+      - if C.related_product_csv
+        .field
+          .field_help
+            %p
+              Alternatively, enter comma-separated SKUs to set add-on products. To delete a product, remove the SKU and delete it from the above select field.
+              %em Case sensitive.
+
+          = text_field_tag :add_on_product_csv, @master.generate_related_csv('add_on_products', 'add_on')
+
+    = tab "SEO" do
+      = f.fields_for :main_variant do |ff|
+        = render 'c/admin/seo', f: ff
+
+    - if C.manual_delivery
+      = tab :delivery do
+        = f.fields_for :main_variant do |ff|
+          = field_set_tag '' do
+            .field
+              .field_help
+                %p
+                  %em Select all delivery services that are applicable to this product
+
+              .collection_checkboxes
+                = ff.collection_check_boxes :service_ids, C::Delivery::Service.web, :id, :service_name do |b|
+                  = b.label(:"data-value" => b.value) do
+                    = b.check_box
+                    = b.text

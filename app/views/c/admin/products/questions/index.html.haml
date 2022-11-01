@@ -1,0 +1,28 @@
+- provide :title, 'Product Questions'
+
+.index-header
+  %h1= pluralize(@questions.count, 'Product Question')
+  %p
+    These are questions that potential customers have asked about your listed products.
+
+.index-table
+  .index-table__content
+    .index-table__wrapper
+      %table.index_table
+        %thead
+          %tr
+            %th Sender
+            %th Product
+            %th Subject
+            %th Recieved
+            %th Answered
+            %th Source
+        %tbody
+          - @questions.each do |question|
+            %tr
+              %td= question.sender_email
+              %td= link_to question.variant.sku, [:edit, question.variant.master]
+              %td= link_to question.display_subject, question
+              %td= question.created_at
+              %td= fa_icon 'check' if question.answered
+              %td= question.source.titleize

@@ -1,0 +1,13 @@
+.nav-bar
+  .nav-bar__section
+    = link_to 'Pending', pending_order_sales_path
+    = link_to 'Awaiting Payment', awaiting_payment_order_sales_path
+    = link_to 'Awaiting Dispatch', awaiting_dispatch_order_sales_path
+    = link_to 'Dispatched', dispatched_order_sales_path
+    = link_to 'All', all_order_sales_path
+
+  .nav-bar__section
+    = link_to 'Carts', carts_order_sales_path
+    = link_to 'Flagged',  flagged_order_sales_path
+    = link_to 'Archived',  archived_order_sales_path
+    = link_to 'Cancelled',  cancelled_order_sales_path

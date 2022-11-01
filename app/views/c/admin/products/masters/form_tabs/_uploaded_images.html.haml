@@ -1,0 +1,35 @@
+- f ||= nil
+
+- if f
+  = f.fields_for :images, @master.images.ordered.each do |ff|
+    - image = ff.object
+    .image-container
+      %label.fields_for.image_preview
+        .image_container
+          = image_tag (image.image.thumbnail)
+          %span= File.basename(image.image.path)
+        %div
+          .field.field--inner-label
+            = ff.label :alt
+            = ff.text_field :alt
+
+          = link_to 'Delete image?', destroy_image_product_master_path(image_id: image.id), method: :post, remote: true, data: { confirm: 'Are you sure you want to delete this image?' }
+          %br
+          = link_to 'View Image', image.image.url, target: :blank
+
+- else
+  - @master.images.ordered.each do |image|
+    .image-container
+      %label.fields_for.image_preview
+        .image_container
+          = image_tag (image.image.thumbnail)
+          %span= File.basename(image.image.path)
+        %div
+          -# .field.field--inner-label
+          -#   = ff.label :alt
+          -#   = ff.text_field :alt
+
+          = link_to 'Delete image?', destroy_image_product_master_path(image_id: image.id), method: :post, remote: true, data: { confirm: 'Are you sure you want to delete this image?' }
+          %br
+          = link_to 'View Image', image.image.url, target: :blank
+

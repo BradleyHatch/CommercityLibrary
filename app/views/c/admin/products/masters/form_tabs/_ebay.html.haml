@@ -1,0 +1,418 @@
+= f.fields_for :main_variant do |ff|
+  .field.channel_toggle_check_box
+    .gs
+      .g-1
+        = ff.label :published_ebay do
+          = ff.check_box :published_ebay
+          %span.checkbox-span-label
+            Sync with Ebay
+            - unless C::Setting.get(:ebay_sync)
+              (Sync disabled)
+      .g-1.g-gutter--left.align-right
+        %label= ff.object.item_id
+
+
+= tabs do
+  = f.fields_for :ebay_channel do |ff|
+    = tab :item_details do
+      - if ENV['USE_EBAY_PRODUCT_PIPELINE'] 
+        - status = @master.main_variant.ebay_product_pipeline_data["status"]
+        - product_status = @master.main_variant.ebay_product_pipeline_data["product_status"]
+        - status_changed_at = @master.main_variant.ebay_product_pipeline_data["status_changed_at"]
+        - warnings = @master.main_variant.ebay_product_pipeline_data["warnings"]
+        - message = @master.main_variant.ebay_product_pipeline_data["message"]
+
+        - if @master.ebay_local_errors.size > 0
+          .sync-error__panel
+            .validation_errors
+              %h4 Cannot push to ebay
+              %p The following errors are preventing your product from being pushed to eBay. Please correct the errors and try pushing again.
+              %ul
+                - @master.ebay_local_errors.each do |error|
+                  %li= error
+
+        - if !@master.main_variant.published_ebay
+          .sync-error__panel
+            .validation_errors
+              %h4 Unpublished
+              %p 
+                Your product is currently marked as unpublished for eBay so no updates will be pushed to the listing. 
+                Flag it as published on eBay to enable pushing updates.
+
+        - if status === "failed"
+
+          .sync-error__panel
+            .validation_errors
+              %h4 
+                Failure - 
+                = status_changed_at
+              %p 
+                The latest  
+                = product_status.downcase.include?('push') ? 'push' : 'pull'
+                errored becaused of the following:
+              %ul
+                %li= message
+
+        - if status === "complete"
+          .sync__panel
+            .validation_errors
+              %h4 
+                Completed - 
+                = status_changed_at
+              %p= message
+
+              - if warnings.present?
+                %p The following warnings were returned from eBay (warnings means the last update was successful but certain aspects were not changed) :
+                %ul
+                  - warnings.split("\n").each do |warning|
+                    %li= warning
+
+        - if status === "pending"
+          .sync__panel
+            .validation_errors
+              %h4 
+                Pending - 
+                = status_changed_at
+              %p= message
+
+        - if status === "syncing"
+          .sync__panel
+            .validation_errors
+              %h4 
+                Syncing - 
+                = status_changed_at
+              %p= message
+
+      - else 
+        - if (body = @master.main_variant.ebay_last_push_body).present?
+          - if body['errors']&.any?
+            .sync-error__panel
+              %h4 Errors with the listing prevent the sync to Ebay
+              %ul
+                - body['errors'].each do |error|
+                  - if !error['error_parameters'].nil? && error['error_parameters'].length == 1
+                    %li= "#{error['long_message']} #{error['error_parameters']['value']}"
+                  - else
+                    %li= "#{error['long_message']}"
+
+      = ff.hidden_field :id
+
+      .field.field--inner-label
+        = ff.label :name
+        = ff.text_field :name, maxlength: 80
+        .field__help
+          %p This will be the title of your listing. State exactly what you're selling and include words that buyers might use to search, such as the item brand, color, size, and model number.
+
+      .field.field--inner-label
+        = ff.label :sub_title
+        = ff.text_field :sub_title, maxlength: 55
+        .field__help
+          %p Display more information below your title to capture the interest of buyers when they view search results.
+
+      .field.field--inner-label
+        = ff.label :classifier_property_key_id
+        = ff.select :classifier_property_key_id, C::Product::PropertyKey.pluck(:key, :id), include_blank: '-- Select Property --'
+        .field__help
+          %p Choose a property to group variation images by
+
+      = f.fields_for :main_variant do |fff|
+        .field.field--inner-label
+          = fff.label :ebay_sku
+          = fff.text_field :ebay_sku
+
+      .field.field--inner-label
+        = ff.label :max_stock
+        = ff.number_field :max_stock
+        .field__help
+          %p Set a limit for max stock to be pushed to eBay. 0 will default to current stock.
+      
+      .field
+        = ff.label :uses_ebay_catalogue do
+          = ff.check_box :uses_ebay_catalogue
+          %span.checkbox-span-label
+            Use eBay catalogue information?
+
+      #ebay_categories{data: {'save-name': 'product_master[ebay_channel_attributes][ebay_category_id]', 'req-url': "#{product_master_path}"} }
+        = ff.label :category_id
+        .field__help
+          %p This is the eBay category or categories where your listing will appear. To change the category or add a second category, click the "Change category" link.
+
+        -#################################################################~
+        -# fields get added here from on load ajax request in ebay_cats.js
+        -#################################################################~
+
+      .field.field--inner-label
+        = ff.label :country
+        = ff.select :country, C::Country.pluck(:name, :iso2), selected: @master.ebay_channel.country || :GB
+
+      .field.field--inner-label
+        = ff.label :postcode
+        = ff.text_field :postcode, maxlength: 7, value: ff.object.default_postcode
+
+      .field.field--inner-label
+        = ff.label :condition_description
+        = ff.text_area :condition_description, rows: 2
+
+      .field.field--inner-label
+        = ff.label :condition
+        = ff.select :condition, C::Product::Channel::Ebay::CONDITIONS
+
+      .field
+        = ff.label :description
+        = ff.tiny_mce_text_area :description
+
+    - if C.ebay_additional_details_tab
+      = tab :additional_details do
+        .field
+          = ff.label :wrap_text_1, 'Technical Specifications'
+          = ff.tiny_mce_text_area :wrap_text_1
+
+        .field
+          = ff.label :wrap_text_2, 'Technical Dimensions'
+          = ff.tiny_mce_text_area :wrap_text_2
+
+        .field
+          = field_set_tag '' do
+            %span.fieldset-title Wrap Features & Images
+            .gs
+              %p.g-1.fieldset-title
+                Tick each of the features/images that you would like to appear as part the eBay description.
+                After ticking a box, hit the reload button the to enable drag & drop reordering.
+                %br
+                You can only reorder selected features/images.
+                Reordering is disabled if you deselect/relect
+                features/images until the reload button is hit again.
+              .align-right
+                = link_to 'Save & Reload', reload_toggle_product_master_path(@master, target: '.features-reload'), method: :post, remote: true, class: 'btn btn--small'
+            .features-reload
+              = render 'c/admin/products/masters/features_table', master: @master
+
+
+    = tab :images do
+      .gs
+        .g-1
+          %h4 Unselected Images
+          .field_help
+            %p These are images currently not displayed on eBay for this product
+          #ebay_images_container
+            = render 'select_image', channel_type: :ebay, master: @master
+        .g-1
+          %h4 Selected Images
+          .field_help
+            %p These are images currently displayed on eBay for this product that appear in order. Drag to reorder them
+          #ebay_channel_images_container.reorderable
+            = render 'channel_image', channel_type: :ebay, master: @master
+
+    = tab :pricing do
+      = f.fields_for :main_variant do |fff|
+        = fff.price_field :ebay_price
+
+      .field
+        = ff.label :duration, 'Duration'
+        = ff.select :duration, @master.ebay_channel.durations.map { |s| [s.to_s.titleize, s.to_s] }, selected: ff.object.default_duration
+      .field.check_box_group
+        = ff.label :payment_methods
+        = ff.label :payment_method_paypal do
+          = ff.check_box :payment_method_paypal, checked: ff.object.default_payment_paypal
+          %span PayPal
+        = ff.label :payment_method_money_order do
+          = ff.check_box :payment_method_money_order
+          %span Postal Order/Banker's Draft
+        = ff.label :payment_method_cheque do
+          = ff.check_box :payment_method_cheque
+          %span Personal cheque
+        = ff.label :pickup_in_store do
+          = ff.check_box :pickup_in_store, checked: ff.object.default_shipping_collect
+          %span Receive payment on collection
+        = ff.label :payment_method_other do
+          = ff.check_box :payment_method_other
+          %span Other/See Item Description
+        = ff.label :payment_method_cc do
+          = ff.check_box :payment_method_cc
+          %span Credit Cards
+        = ff.label :payment_method_escrow do
+          = ff.check_box :payment_method_escrow
+          %span Escrow
+        -# = ff.label :payment_method_postal do
+        -#   = ff.check_box :payment_method_postal
+        -#   %span Postal Transfer
+
+
+    = tab :shipping do
+
+      .field
+        = field_set_tag '' do
+          %span.fieldset-title Shipping Details
+          .field.field--inner-label
+            = ff.label :dispatch_time, 'Dispatch Time (business days)'
+            = ff.number_field :dispatch_time, min: 0, max: 20, value: ff.object.default_dispatch_days
+          .field.field--inner-label
+            = ff.label :domestic_shipping_type, 'Shipping Type'
+            = ff.select :domestic_shipping_type, @master.ebay_channel.domestic_types.map { |s| [s.to_s.titleize, s] }, selected: ff.object.default_shipping_type
+
+          .field
+            = ff.label :click_collect_collection_available do
+              = ff.check_box :click_collect_collection_available
+              %span.checkbox-span-label Buyers can collect the item at Argos with Click & Collect
+
+          .field
+            = ff.label :global_shipping do
+              = ff.check_box :global_shipping
+              %span.checkbox-span-label Part of the eBay global shipping program
+
+          .field
+            = ff.label :no_shipping_options do
+              = ff.check_box :no_shipping_options
+              %span.checkbox-span-label Only collection in person
+
+          .field
+            = ff.label :package_type, 'Package Type'
+            = ff.select :package_type,[["Letter", "Letter"], ["Large Envelope", "LargeEnvelope"], ["Package (or thick envelope)", "PackageThickEnvelope"], ["Large Package", "USPSLargePack"]], selected: ff.object.package_type || "USPSLargePack"
+
+          = field_set_tag '' do
+            %span.fieldset-title Domestic Shipping Services
+            %table#ebay-domestic-services
+              %thead
+                %th Service Name
+                %th Shipping Cost (£)
+                %th Additional Cost (£)
+                %th
+              = ff.nested_fields_for :shipping_services, ff.object.get_domestic_services, wrapper_tag: :tr do |fff|
+                %td= fff.select :delivery_service_id, C::Delivery::Service.ebay.pluck(:name, :id), selected: fff.object.default_service, include_blank: '--Choose Provider--'
+                %td= fff.number_field :cost, step: 0.01, min: 0, value: fff.object.default_cost
+                %td= fff.number_field :additional_cost, step: 0.01, min: 0, value: fff.object.default_additional_cost
+                %td= fff.remove_nested_fields_link fa_icon('trash')
+            .field.g-gutter--top= ff.add_nested_fields_link :shipping_services, 'Add new Domestic Shipping Service', class: 'btn btn--small btn--secondary', data: { insert_into: 'ebay-domestic-services' }
+
+          = field_set_tag '' do
+            %span.fieldset-title International Shipping Services
+            %table#ebay-international-services
+              %thead
+                %th Service Name
+                %th Shipping Cost (£)
+                %th Additional Cost (£)
+                %th
+              = ff.nested_fields_for :shipping_services, ff.object.get_international_services, wrapper_tag: :tr do |fff|
+                %td= fff.select :delivery_service_id, C::Delivery::Service.ebay.pluck(:name, :id), selected: fff.object.default_service('ebay_shipping_international'), include_blank: '--Choose Provider--'
+                %td= fff.number_field :cost, step: 0.01, min: 0, value: fff.object.default_cost
+                %td= fff.number_field :additional_cost, step: 0.01, min: 0, value: fff.object.default_additional_cost
+                %td= fff.remove_nested_fields_link fa_icon('trash')
+                = fff.hidden_field :international
+            .field.g-gutter--top= ff.add_nested_fields_link :shipping_services, 'Add new International Shipping Service', class: 'btn btn--small btn--secondary', data: { insert_into: 'ebay-international-services' }
+
+          = field_set_tag '' do
+            %span.fieldset-title Ship To Locations
+            = ff.nested_fields_for :ship_to_locations, ff.object.get_ship_to_locations, wrapper_tag: :div, wrapper_options: { class: 'fields' }  do |fff|
+              .field.gs
+                .g-1= fff.select :location, C::Product::Channel::Ebay::ShipToLocation.locations.keys, selected: fff.object.default_location, include_blank: '-- Select Location --'
+                .field__destroy-nested= fff.remove_nested_fields_link fa_icon('trash')
+            = ff.add_nested_fields_link :ship_to_locations, 'Add a Location', class: 'btn btn--small btn--secondary'
+
+    = tab :returns do
+      .field
+        = field_set_tag '' do
+          %span.fieldset-title Returns
+          .field
+            = ff.label :returns_accepted do
+              = ff.check_box :returns_accepted, checked: ff.object.default_returns_accepted
+              %span.checkbox-span-label Returns accepted
+          .field.field--inner-label
+            = ff.label :refund_option
+            = ff.select :refund_option, ['MoneyBack', 'MoneyBackOrExchange', 'MoneyBackOrReplacement'].map { |s| [s.to_s.titleize, s] }
+          .field.field--inner-label
+            = ff.label :restocking_fee_value_option
+            = ff.select :restocking_fee_value_option, ['NoRestockingFee', 'Percent_10', 'Percent_15', 'Percent_20'].map { |s| [s.to_s.titleize, s] }
+          .field.field--inner-label
+            = ff.label :returns_description
+            = ff.text_area :returns_description
+          .field.field--inner-label
+            = ff.label :returns_within
+            = ff.select :returns_within, ['Days_14', 'Days_30', 'Days_60', 'Months_1'].map { |s| [s.to_s.titleize, s] }
+          .field.field--inner-label
+            = ff.label :returns_cost_paid_by
+            = ff.select :returns_cost_paid_by, ['Buyer', 'Seller']
+      .field
+        = field_set_tag '' do
+          %span.fieldset-title Warranty
+          .field
+            = ff.label :warranty_offered do
+              = ff.check_box :warranty_offered
+              %span.checkbox-span-label Warranty Offered
+          .field.field--inner-label
+            = ff.label :warranty_duration
+            = ff.select :warranty_duration, ['Months_1', 'Months_3', 'Months_6', 'Years_1', 'Years_2', 'Years_3'].map { |s| [s.to_s.titleize, s] }
+          .field.field--inner-label
+            = ff.label :warranty_type
+            = ff.select :warranty_type, ['DealerWarranty', 'ManufacturerWarranty', 'ReplacementWarranty']
+
+    = tab :publish do
+      .field
+        = field_set_tag 'eBay' do
+          #ebay_buttons
+            - if @master.main_variant.item_id.nil?
+              .field
+                .field_help
+                  %p= "#{@master.ebay_channel.name} is currently not on eBay."
+                = button_tag 'Upload to eBay', name: :ebay_upload, value: :upload, class: 'btn'
+            - else
+              - if !@master.ebay_channel.ended
+                .field
+                  .field_help
+                    %p= "#{@master.ebay_channel.name} is currently active on eBay."
+                  = link_to 'View listing on eBay', "http://cgi.ebay.co.uk/ws/eBayISAPI.dll?ViewItem&item=#{@master.main_variant.item_id}", :target => '_blank', class: 'button primary'
+                .field
+                  .field_help
+                    %p= "Need to update? 'Revise' updates the active eBay listing and 'Sync' updates the local listing from eBay."
+                  = button_tag 'Revise', name: :ebay_revise, value: :revise, class: 'btn'
+                .field
+                  = link_to 'Sync', ebay_methods_product_master_path(val: 'sync_product'), class: 'btn btn--secondary'
+              - else
+                .field
+                  .field_help
+                    %p= "#{@master.ebay_channel.name} listing has ended"
+                  = link_to 'View listing on eBay', "http://cgi.ebay.co.uk/ws/eBayISAPI.dll?ViewItem&item=#{@master.main_variant.item_id}", :target => '_blank'
+
+                - if C.ebay_relist
+                  .field
+                    = button_tag 'Relist', name: :ebay_relist, value: :relist, class: 'btn'
+
+                - if C.clear_ebay_item_id
+                  .field
+                    = button_tag 'Clear Item ID', name: :ebay_clear, value: :clear,  class: 'btn btn--secondary'
+
+    - if @master.main_variant.ebay_last_push_body
+      = tab :activity do
+        .field
+          = field_set_tag 'Last push response' do
+            - if @master.main_variant.ebay_last_push_body['errors']
+              %h4 Errors with the listing
+              %ul
+                - @master.main_variant.ebay_last_push_body['errors'].each do |error|
+                  - if !error['error_parameters'].nil? && error['error_parameters'].length == 1
+                    %li= "#{error['long_message']} #{error['error_parameters']['value']}"
+                  - else
+                    %li= "#{error['long_message']}"
+
+    = tab :shop_wrap do
+      .field.shop-wrap-input
+        .field__help
+          %p
+            This is the optional wrap to display around your eBay listing's description.
+            Paste in your HTML in 'Source Code' and place the tags for the corresponding data
+            where you want them to go. Current accepted tags:
+            %br
+            %br
+            [{PRODUCT_DESCRIPTION}]
+            %i = eBay product description,
+            [{PRODUCT_LISTING_TITLE}]
+            %i = eBay product name,
+            [{PRODUCT_IMAGE_1/2/3/4}]
+            %i = eBay channel images
+
+        -# = ff.tiny_mce_text_area :shop_wrap
+        = ff.text_area :shop_wrap
+
+    = tab :shop_wrap_preview do
+      .field
+        = field_set_tag 'eBay description preview' do
+          %iframe.shop-wrap-preview{src: render_ebay_wrap_product_master_path}

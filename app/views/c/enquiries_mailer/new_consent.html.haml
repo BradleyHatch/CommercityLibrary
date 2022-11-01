@@ -1,0 +1,47 @@
+
+%b Email:
+%br
+= @email
+%br
+%br
+
+Consented to the following:
+
+%br
+%br
+
+%b Inform me of the progress of my order/repair:
+%br
+= @data['consent_order'] ? 'Yes' : 'No'
+%br
+%br
+    
+%b Inform me of/invite me to promotions/events:
+%br
+= @data['consent_promotion'] ? 'Yes' : 'No'
+%br
+%br
+    
+%b Inform me of items which might interest me:
+%br
+= @data['consent_products'] ? 'Yes' : 'No'
+%br
+%br
+    
+%b I consent to being contacted by post:
+%br
+= @data['consent_contact_post'] ? 'Yes' : 'No'
+%br
+%br
+
+%b I consent to being contacted by phone:
+%br
+= @data['consent_contact_phone'] ? 'Yes' : 'No'
+%br
+%br
+
+%b I consent to being contacted by email:
+%br
+= @data['consent_contact_email'] ? 'Yes' : 'No'
+%br
+%br

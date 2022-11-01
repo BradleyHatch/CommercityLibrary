@@ -1,0 +1,84 @@
+- provide :title, @master.name
+.product-status__container.gs
+  .product-status
+    %b Web:
+    - if @master.main_variant.published_web? && @master.main_variant.display_in_lists
+      %span.product-status--success
+        Published
+    - else
+      Not Published
+    - if (count = @master.variants.for_display.count - 1) > 0
+      (+ #{pluralize(count, 'Variant')})
+
+  - if C.master_tabs.keys.include?(:amazon)
+    .product-status
+      %b Amazon:
+      - if @master.main_variant.published_amazon?
+        - if @master.main_variant.amazon_last_push_success.nil?
+          Published but not yet synced
+        - elsif !@master.main_variant.amazon_last_push_success
+          %span.product-status--success
+            Live and syncing
+        - else
+          Can't sync due to errors (See Tab)
+      - else
+        Not Published
+
+  - if C.master_tabs.keys.include?(:ebay)
+    .product-status
+      %b Ebay:
+      - if @master.main_variant.published_ebay?
+        - if @master.main_variant.ebay_last_push_success
+          %span.product-status--success
+            Live and syncing:
+          = link_to(@master.main_variant.item_id, "http://cgi.#{Rails.env === "development" ? "sandbox." : ""}ebay.co.uk/ws/eBayISAPI.dll?ViewItem&item=#{@master.main_variant.item_id}", target: 'blank')
+        - elsif @master.main_variant.ebay_last_push_success.nil?
+          Published but not yet synced
+        - else
+          - if @master.main_variant.item_id
+            Published and Live on Ebay (#{link_to(@master.main_variant.item_id, "http://cgi.ebay.co.uk/ws/eBayISAPI.dll?ViewItem&item=#{@master.main_variant.item_id}", target: 'blank')})
+            but cannot sync due to errors
+          - else
+            Published but cannot sync due to errors (See Ebay tab)
+
+
+
+      - else
+        Not Published
+        - if @master.main_variant.item_id
+          (Was previously on Ebay: #{link_to(@master.main_variant.item_id, "http://cgi.ebay.co.uk/ws/eBayISAPI.dll?ViewItem&item=#{@master.main_variant.item_id}", target: 'blank')})
+
+
+
+.form-page
+  = form_for @master do |f|
+    = f.error_messages
+
+    .form-page__intro
+      %h1= "#{@master.sku}: #{truncate(@master.name, length: 50)}"
+      .form-page__right-actions
+        = render 'product_save_buttons', f: f
+
+    .gs.gs--nowrap.clear.form-page--wide.shadow-2dp
+      .fixed-form-panel.fixed-form-panel--wide.shadow-2dp.collapsing-form-panel
+
+        -# General product fields
+        = render 'main_fields', f: f
+
+        - if C.collapse_main_form
+          .collapsing-form-panel__toggle
+            = fa_icon 'caret-left'
+
+      .g-1.tight-tabs
+        = tabs do
+          - C.master_tabs.each do |tab, name|
+            = tab tab, name.to_s.titleize, class: 'sub_tabs_container', klass: 'cookies_tab' do
+              = render "c/admin/products/masters/form_tabs/#{tab}", f: f, master: @master
+
+  .actions.form-page__actions
+    = link_to_delete 'Delete', @master, redirection: product_masters_path, class: 'btn btn--secondary' unless @master.new_record?
+
+
+
+
+.change_waiter

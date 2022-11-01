@@ -1,0 +1,49 @@
+%h3 Review your order
+
+%p.warning
+  The order will be confirmed on the Worldpay website
+
+.checkout__content-summary
+  .gs
+    .g-2
+      %h4 Shipping Address
+    .g-2.align-right
+      = link_to 'Edit', new_address_checkout_path
+  = presenter(@cart.shipping_address).block
+
+
+.checkout__content-summary
+  %h4 Delivery
+  %p
+    = "#{@cart.delivery.name}"
+    %br
+    %b= humanized_money_with_symbol @cart.delivery.price
+
+.checkout__content-summary
+  %h4 Payment
+
+  %p
+    Sub total
+    %br
+    %b= humanized_money_with_symbol @cart.item_subtotal
+
+  %p
+    Shipping Cost
+    %br
+    %b= humanized_money_with_symbol @cart.delivery.price
+
+  %p
+    Total
+    %br
+    %b= humanized_money_with_symbol @cart.price
+
+= button_tag('Pay with Worldpay', id: 'worldpay_bg_button', class: 'btn')
+
+= raw @wp_request.to_form
+
+:javascript
+
+  $('#worldpay_bg_button').on('click', function() {
+    console.log('Submitting');
+    $('#worldpay_bg_form').submit();
+  });

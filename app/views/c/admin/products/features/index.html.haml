@@ -1,0 +1,24 @@
+- provide :title, 'Product features'
+
+.index-header.gs
+  .g-3.g-gutter--right
+    %h1= pluralize(@features.count, 'Product Feature')
+    = link_to '+ Create Product Feature', new_product_feature_path, class: 'btn btn--small'
+    %p
+      These are featured purchases available alongside products, such as warranty or insurance.
+
+.index-table
+  .index-table__content
+    .index-table__wrapper
+      %table.index_table
+        %thead
+          %tr
+            %th Name
+            %th Image
+            %th Delete
+        %tbody
+          - @features.each do |feature|
+            %tr
+              %td= link_to feature.name, [:edit, feature]
+              %td= feature.image
+              %td= link_to 'Delete', [feature], method: :delete

@@ -1,0 +1,30 @@
+- provide :title, 'Product Offers'
+
+.index-header
+  %h1= pluralize(@offers.count, 'Product Offers')
+  %p
+    These are offers you've recieved on your listed products.
+
+.index-table
+  .index-table__content
+    .index-table__wrapper
+      %table.index_table
+        %thead
+          %tr
+            %th View
+            %th Sender
+            %th Product
+            %th Offer
+            %th Recieved
+            %th Resolved
+            %th Source
+        %tbody
+          - @offers.each do |offer|
+            %tr
+              %td= link_to "View on #{offer.source.titleize}", "https://ofr.ebay.co.uk/offerapp/bo/showOffers/#{offer.variant.item_id}"
+              %td= offer.sender_email
+              %td= link_to offer.variant.sku, [:edit, offer.variant.master]
+              %td= humanized_money_with_symbol offer.price
+              %td= offer.created_at
+              %td= offer.resolved? ? (fa_icon 'check') : (link_to "Respond Now", "https://ofr.ebay.co.uk/offerapp/bo/showOffers/#{offer.variant.item_id}")
+              %td= offer.source.titleize

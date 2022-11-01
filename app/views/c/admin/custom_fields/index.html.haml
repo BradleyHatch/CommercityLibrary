@@ -1,0 +1,10 @@
+- provide :title, 'Custom Fields'
+
+
+.index-header.gs
+  .g-3.g-gutter--right
+    %h1= pluralize(@custom_fields.count, 'Custom Field')
+    = link_to '+ Create a new Field', new_custom_field_path, class: 'btn btn--small'
+    %p
+
+= index_table @custom_fields, C::CustomField::INDEX_TABLE

@@ -1,0 +1,17 @@
+- provide :title, 'Consent'
+
+.wrap
+  .row
+    .gs--l
+      .g-2
+        %h3 Data Consent
+        - if @content
+          = raw @content.body
+        - else
+          %p 
+            Please complete the following options to confirm that #{C.store_name} can retain your
+            information and contact you in regards to the following:
+
+        = render "c/front_end/customers/consent_form"
+        
+      .g-1

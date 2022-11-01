@@ -1,0 +1,29 @@
+.gs
+  .g-2
+    = form_for [@group, @region] do |f|
+      = f.error_messages
+      .gs
+        .fixed-form-panel
+          .field
+            = f.label :name
+            = f.text_field :name
+
+        .g-1
+          = tabs do
+            = tab :blocks, class: 'table_tab' do
+              - if @region.new_record?
+                .padded
+                  Your blocks will appear here
+              - else
+                = index_table @region.blocks.ordered, C::Template::Block::INDEX_TABLE, sortable: sort_template_group_template_region_template_blocks_path(@group, @region)
+                .padded
+                  = link_to 'Add Block', [:new, @group, @region, :template_block], class: 'button' unless @region.new_record?
+
+        .actions.form-page__actions.g-full
+          = f.submit class: 'btn'
+          = link_to 'Delete', [@group, @region], method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn--secondary' unless @region.new_record?
+
+  .g-2.form-page__intro.regions-preview
+    %label Region Preview
+    %fieldset
+      = template_blocks(@region, '--m')

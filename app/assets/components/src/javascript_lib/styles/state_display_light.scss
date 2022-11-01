@@ -1,0 +1,32 @@
+@import 'generic_classes';
+@import 'box_shadows';
+@import 'colors';
+
+
+.state-display-light {
+  display: inline-flex;
+  width: 12px;
+  height: 12px;
+}
+
+.state-display-light__light {
+  @extend .flex, .width-height-100;
+  border-radius: 50%;
+  box-shadow: $shadow2;
+
+  &--processing {
+    background-color: $displayBlue;
+  }
+
+  &--positive {
+    background-color: $displayGreen;
+  }
+
+  &--warning {
+    background-color: $displayAmber;
+  }
+
+  &--negative {
+    background-color: $displayRed;
+  }
+}

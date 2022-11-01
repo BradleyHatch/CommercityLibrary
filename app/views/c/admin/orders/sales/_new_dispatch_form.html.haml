@@ -1,0 +1,20 @@
+%h3 Dispatch Order
+
+= form_for @order, url: update_dispatch_order_order_sale_path(@order) do |f|
+  = f.error_messages
+
+  = f.fields_for :delivery do |ff|
+
+    %table
+      %thead
+        %th Tracking Number
+        %th Delivery Provider
+        %th Delete?
+      = ff.nested_fields_for :trackings, ff.object.trackings, wrapper_tag: :tr do |fff|
+        %td= fff.text_field :number, placeholder: 'Tracking Code', value: fff.object&.number
+        %td= fff.select :provider, C::Delivery::Provider.where.not(name: 'eBay Provider').order(name: :asc).map{ |p| p.name.upcase }, prompt: '-- Select --', selected: fff.object&.provider
+        %td= fff.remove_nested_fields_link fa_icon('trash')
+
+    .field.g-gutter--top= ff.add_nested_fields_link :trackings, 'Add new Tracking Information', class: 'btn btn--secondary'
+
+  = f.submit 'Dispatch', class: 'btn'

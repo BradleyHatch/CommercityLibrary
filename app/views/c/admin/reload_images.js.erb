@@ -1,0 +1,4 @@
+$("#images_container").html("<%= escape_javascript(render 'c/admin/dropzone_images', obj: @obj, model_name: @model_name) %>")
+$(".dz-complete").remove()
+previewEvent();
+featuredImage($('.dropzone').data('model-type'));

@@ -1,0 +1,43 @@
+.footer
+  color: white
+  a
+    color: inherit
+  &__inner
+    background-color: $accent_color
+    margin: 0 auto
+    max-width: $site_width
+    padding: 40px
+
+  &__links
+    display: inline-block
+    width: 16%
+    min-width: 200px
+    vertical-align: top
+    ul
+      margin: 0
+      padding: 0
+    li
+      list-style: none
+      margin-bottom: 10px
+    h4
+      margin: 0 0 12px
+      font-size: 0.75rem
+      text-transform: uppercase
+      opacity: 0.6
+    i
+      font-size: 1.5rem
+    @media (max-width: 900px)
+      display: block
+      width: 100%
+      text-align: center
+      + .footer__links
+        margin-top: 30px
+
+  &__copyright_bar
+    background-color: $primary_color
+    margin: 0 auto
+    max-width: $site_width
+    padding: 20px
+    text-align: center
+    span
+      color: rgba(white, 0.75)

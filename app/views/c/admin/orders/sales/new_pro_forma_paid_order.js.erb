@@ -1,0 +1,9 @@
+if ($('.ajax_row').length) {
+  $('.ajax_row').remove()
+}
+
+$("tr.object_<%=params[:id]%>").after('<tr class="ajax_row"><td colspan="'+ ($("tr.object_<%=params[:id]%>").data( "columns" ) + 1) +'"><div class="quick_edit_panel__wrapper"><div class="quick_edit_panel"><%= escape_javascript(render 'new_pro_forma_paid_form') %></div></div></tr>');
+
+readyFunctions()
+
+$('.quick_edit_panel__wrapper').css('height', $('.quick_edit_panel').outerHeight())

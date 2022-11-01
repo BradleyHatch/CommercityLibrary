@@ -1,0 +1,21 @@
+.form-page__intro
+  %h1 New Data Transfer
+.form-page--narrow
+  .form-page__form
+    = form_for @data_transfer do |f|
+      = f.error_messages
+      .field
+        = f.label :name
+        = f.text_field :name
+      .field
+        = f.label :import_type
+        = f.select :import_type, C::DataTransfer.import_types.keys.map{ |key| [key.humanize,key]}
+      .field
+        = f.label :file
+        = f.file_field :file
+      .field
+        = f.label :replace_images do
+          = f.check_box :replace_images
+          %span.checkbox-span-label Replace all images currently on products with imported images?
+      .actions
+        = f.submit class: 'btn'

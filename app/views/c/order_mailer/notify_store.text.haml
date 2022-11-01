@@ -1,0 +1,42 @@
+- if @order.is_pro_forma?
+  This is a pro forma order completed by a trade customer
+
+
+- if @order.click_and_collect?
+  This is a click and collect order
+
+
+- if @order.is_gift_wrapping?
+  Customer has requested gift wrapping
+
+
+The following item(s) has been purchased:
+
+
+- @order.items.each do |item|
+
+  \--------------------------
+
+  = item.name
+
+  = "SKU: #{item.sku}"
+
+  - if C.default_tax == :with_tax
+    = "Price: #{item.price}"
+  - else
+    = "Price: #{item.price_without_tax} (ex VAT)"
+
+  = "Quantity: #{item.quantity}"
+
+  \--------------------------
+
+The Purchase was made by:
+
+= ['name', 'address_one', 'address_two', 'address_three', 'city', 'region', 'postcode', 'country_name'].map{|call| @order.shipping_address.send(call)}.compact.join(', ')
+
+
+= "#{@order.customer.email} is a #{@order.customer.orders.size > 1 ? 'returning' : 'new'} customer."
+
+= render "c/order_mailer/notify_store_extra_text", order: @order
+
+To view the order, sign in to your store and go to orders.

@@ -1,0 +1,111 @@
+= tabs do
+  = tab pluralize(master.variants_for_table.count, 'Variant') do
+    .panel_buttons
+      .btn.btn--secondary
+        = link_to 'Add new variant', new_product_master_product_variant_path(f.object)
+    %br
+    .panel
+      %table.index_table
+        %tr
+          %th.side_th Active Variants
+          %td= master.variants_for_table.count
+        %tr
+          %th Property
+          %th.inner_th Values
+        - master.property_values.each do |value|
+          %tr
+            %td= value.key.titleize
+            %td= value.value
+
+    .panel
+      %table.index_table
+        %thead
+          %tr
+            %th
+            %th Images
+            %th
+            %th Name
+            %th SKU
+            %th Stock
+            %th Properties
+            %th Retail Price
+            %th Flags
+            %th Actions
+        %tbody
+          - if master.variants_for_table.count.positive?
+            = f.fields_for :variants, master.variants_for_table do |ff|
+              - variant = ff.object
+              %tr
+                %td.align-center
+                  - if variant.main_variant
+                    .image-variant-info.image-variant-info--green.image-variant-info--small
+                      = fa_icon 'certificate'
+                      .image-variant-info__name
+                        %span This is the main variant
+                %td.image_table
+                  = variant.image_collection(:web).map{|im| image_tag(im.thumbnail, style: "height: 32px; width: 32px" )}.join.html_safe
+                %td.align-center
+                  - if variant.displaying_image_variant_images?
+                    .image-variant-info
+                      = fa_icon 'info-circle'
+                      .image-variant-info__name
+                        %span= "Displaying images from: #{variant.image_variant.name_with_value(C.variant_property_key_concat)}"
+                %td
+                  - if variant.main_variant
+                    = variant.name
+                  - else
+                    = ff.text_field :name
+                %td
+                  - if variant.main_variant
+                    = variant.sku
+                  - else
+                    = ff.text_field :sku
+                %td
+                  - if variant.main_variant
+                    = variant.current_stock
+                  - else
+                    = ff.number_field :current_stock
+                %td= raw variant.property_values.collect{|v| "#{h v.key.titleize}: #{h v.value}"}.join('<br />')
+                %td
+                  - if variant.main_variant
+                    %div{ style: "padding-left: 12px;"}
+                      = variant.retail_price.with_tax
+                  - elsif variant.retail_price.present?
+                    = ff.fields_for :retail_price do |fff|
+                      = fff.number_field :with_tax, step: 0.01, min: 0
+                      = fff.hidden_field :without_tax
+                  - else
+                    Not set
+                  %small
+                    %i Displayed price: £  
+                    = variant.price(channel: :web)
+                %td
+                  = ff.label :status do
+                    = ff.check_box :status, {}, 'active', 'inactive'
+                    Active
+                  = ff.label :featured do
+                    = ff.check_box :featured
+                    Featured
+                  = ff.label :display_in_lists do
+                    = ff.check_box :display_in_lists
+                    Display In Lists
+                  = ff.label :published_amazon do
+                    = ff.check_box :published_amazon
+                    Published Amazon
+                  = ff.label :published_ebay do
+                    = ff.check_box :published_ebay
+                    Published eBay
+                  = ff.label :published_web do
+                    = ff.check_box :published_web
+                    Published Web
+                    
+                %td
+                  = link_to 'Edit', edit_product_master_product_variant_path(master, variant)
+                  %br
+                  = link_to 'Duplicate', new_duplicate_product_master_product_variant_path(master, variant)
+                  %br
+                  = link_to_delete 'Delete', variant, nested: master
+          - else
+            %tr
+              %td
+                %i No variants currently

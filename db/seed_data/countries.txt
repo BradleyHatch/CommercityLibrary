@@ -1,0 +1,227 @@
+AD	AND	Andorra	EU	.ad	EUR	4	020
+AE	ARE	United Arab Emirates	AS	.ae	AED	8	784
+AF	AFG	Afghanistan	AS	.af	AFN	10	004
+AG	ATG	Antigua and Barbuda	NA	.ag	XCD	10	028
+AI	AIA	Anguilla	NA	.ai	XCD	10	660
+AL	ALB	Albania	EU	.al	ALL	5	008
+AM	ARM	Armenia	AS	.am	AMD	10	051
+AO	AGO	Angola	AF	.ao	AOA	10	024
+AR	ARG	Argentina	SA	.ar	ARS	10	032
+AS	ASM	American Samoa	OC	.as	USD	10	016
+AT	AUT	Austria	EU	.at	EUR	3	040
+AU	AUS	Australia	OC	.au	AUD	8	036
+AW	ABW	Aruba	NA	.aw	AWG	10	533
+AZ	AZE	Azerbaijan	AS	.az	AZN	10	031
+BA	BIH	Bosnia and Herzegovina	EU	.ba	BAM	5	070
+BB	BRB	Barbados	NA	.bb	BBD	10	052
+BD	BGD	Bangladesh	AS	.bd	BDT	10	050
+BE	BEL	Belgium	EU	.be	EUR	1	056
+BF	BFA	Burkina Faso	AF	.bf	XOF	10	854
+BG	BGR	Bulgaria	EU	.bg	BGN	4	100
+BH	BHR	Bahrain	AS	.bh	BHD	9	048
+BI	BDI	Burundi	AF	.bi	BIF	10	108
+BJ	BEN	Benin	AF	.bj	XOF	10	204
+BL	BLM	Saint Barthelemy	NA	.gp	EUR	10	652
+BM	BMU	Bermuda	NA	.bm	BMD	10	060
+BN	BRN	Brunei	AS	.bn	BND	9	096
+BO	BOL	Bolivia	SA	.bo	BOB	10	068
+BQ	BES	Bonaire, Saint Eustatius and Saba	NA	.bq	USD	10	535
+BR	BRA	Brazil	SA	.br	BRL	10	076
+BS	BHS	Bahamas	NA	.bs	BSD	10	044
+BT	BTN	Bhutan	AS	.bt	BTN	10	064
+BW	BWA	Botswana	AF	.bw	BWP	10	072
+BY	BLR	Belarus	EU	.by	BYR	5	112
+BZ	BLZ	Belize	NA	.bz	BZD	10	084
+CA	CAN	Canada	NA	.ca	CAD	7	124
+CD	COD	Democratic Republic of the Congo	AF	.cd	CDF	10	180
+CF	CAF	Central African Republic	AF	.cf	XAF	10	140
+CG	COG	Republic of the Congo	AF	.cg	XAF	10	178
+CH	CHE	Switzerland	EU	.ch	CHF	5	756
+CI	CIV	Ivory Coast	AF	.ci	XOF	10	384
+CK	COK	Cook Islands	OC	.ck	NZD	10	184
+CL	CHL	Chile	SA	.cl	CLP	10	152
+CM	CMR	Cameroon	AF	.cm	XAF	10	120
+CN	CHN	China	AS	.cn	CNY	8	156
+CO	COL	Colombia	SA	.co	COP	10	170
+CR	CRI	Costa Rica	NA	.cr	CRC	10	188
+CU	CUB	Cuba	NA	.cu	CUP	10	192
+CV	CPV	Cape Verde	AF	.cv	CVE	10	132
+CW	CUW	Curacao	NA	.cw	ANG	10	531
+CY	CYP	Cyprus	EU	.cy	EUR	4	196
+CZ	CZE	Czech Republic	EU	.cz	CZK	4	203
+DE	DEU	Germany	EU	.de	EUR	1	276
+DJ	DJI	Djibouti	AF	.dj	DJF	10	262
+DK	DNK	Denmark	EU	.dk	DKK	3	208
+DM	DMA	Dominica	NA	.dm	XCD	10	212
+DO	DOM	Dominican Republic	NA	.do	DOP	10	214
+DZ	DZA	Algeria	AF	.dz	DZD	10	012
+EC	ECU	Ecuador	SA	.ec	USD	10	218
+EE	EST	Estonia	EU	.ee	EUR	4	233
+EG	EGY	Egypt	AF	.eg	EGP	10	818
+ER	ERI	Eritrea	AF	.er	ERN	10	232
+ES	ESP	Spain	EU	.es	EUR	3	724
+ET	ETH	Ethiopia	AF	.et	ETB	10	231
+FI	FIN	Finland	EU	.fi	EUR	3	246
+FJ	FJI	Fiji	OC	.fj	FJD	10	242
+FK	FLK	Falkland Islands	SA	.fk	FKP	10	238
+FM	FSM	Micronesia	OC	.fm	USD	10	583
+FO	FRO	Faroe Islands	EU	.fo	DKK	5	234
+FR	FRA	France	EU	.fr	EUR	2	250
+GA	GAB	Gabon	AF	.ga	XAF	10	266
+GB	GBR	United Kingdom	EU	.uk	GBP	0	826
+GD	GRD	Grenada	NA	.gd	XCD	10	308
+GE	GEO	Georgia	AS	.ge	GEL	10	268
+GF	GUF	French Guiana	SA	.gf	EUR	10	254
+GH	GHA	Ghana	AF	.gh	GHS	10	288
+GI	GIB	Gibraltar	EU	.gi	GIP	5	292
+GL	GRL	Greenland	NA	.gl	DKK	5	304
+GM	GMB	Gambia	AF	.gm	GMD	10	270
+GN	GIN	Guinea	AF	.gn	GNF	10	324
+GP	GLP	Guadeloupe	NA	.gp	EUR	10	312
+GQ	GNQ	Equatorial Guinea	AF	.gq	XAF	10	226
+GR	GRC	Greece	EU	.gr	EUR	4	300
+GT	GTM	Guatemala	NA	.gt	GTQ	10	320
+GU	GUM	Guam	OC	.gu	USD	10	316
+GW	GNB	Guinea-Bissau	AF	.gw	XOF	10	624
+GY	GUY	Guyana	SA	.gy	GYD	10	328
+HK	HKG	Hong Kong	AS	.hk	HKD	8	344
+HN	HND	Honduras	NA	.hn	HNL	10	340
+HR	HRV	Croatia	EU	.hr	HRK	4	191
+HT	HTI	Haiti	NA	.ht	HTG	10	332
+HU	HUN	Hungary	EU	.hu	HUF	4	348
+ID	IDN	Indonesia	AS	.id	IDR	8	360
+IE	IRL	Ireland	EU	.ie	EUR	1	372
+IL	ISR	Israel	AS	.il	ILS	10	376
+IN	IND	India	AS	.in	INR	8	356
+IQ	IRQ	Iraq	AS	.iq	IQD	10	368
+IR	IRN	Iran	AS	.ir	IRR	10	364
+IS	ISL	Iceland	EU	.is	ISK	5	352
+IT	ITA	Italy	EU	.it	EUR	3	380
+JM	JAM	Jamaica	NA	.jm	JMD	10	388
+JO	JOR	Jordan	AS	.jo	JOD	9	400
+JP	JPN	Japan	AS	.jp	JPY	8	392
+KE	KEN	Kenya	AF	.ke	KES	10	404
+KG	KGZ	Kyrgyzstan	AS	.kg	KGS	10	417
+KH	KHM	Cambodia	AS	.kh	KHR	10	116
+KI	KIR	Kiribati	OC	.ki	AUD	10	296
+KM	COM	Comoros	AF	.km	KMF	10	174
+KN	KNA	Saint Kitts and Nevis	NA	.kn	XCD	10	659
+KP	PRK	North Korea	AS	.kp	KPW	10	408
+KR	KOR	South Korea	AS	.kr	KRW	8	410
+XK	XKX	Kosovo	EU		EUR	5	000
+KW	KWT	Kuwait	AS	.kw	KWD	9	414
+KY	CYM	Cayman Islands	NA	.ky	KYD	5	136
+KZ	KAZ	Kazakhstan	AS	.kz	KZT	10	398
+LA	LAO	Laos	AS	.la	LAK	10	418
+LB	LBN	Lebanon	AS	.lb	LBP	10	422
+LC	LCA	Saint Lucia	NA	.lc	XCD	10	662
+LI	LIE	Liechtenstein	EU	.li	CHF	5	438
+LK	LKA	Sri Lanka	AS	.lk	LKR	10	144
+LR	LBR	Liberia	AF	.lr	LRD	10	430
+LS	LSO	Lesotho	AF	.ls	LSL	10	426
+LT	LTU	Lithuania	EU	.lt	LTL	4	440
+LU	LUX	Luxembourg	EU	.lu	EUR	1	442
+LV	LVA	Latvia	EU	.lv	LVL	4	428
+LY	LBY	Libya	AF	.ly	LYD	10	434
+MA	MAR	Morocco	AF	.ma	MAD	10	504
+MC	MCO	Monaco	EU	.mc	EUR	2	492
+MD	MDA	Moldova	EU	.md	MDL	5	498
+ME	MNE	Montenegro	EU	.me	EUR	5	499
+MF	MAF	Saint Martin	NA	.gp	EUR	10	663
+MG	MDG	Madagascar	AF	.mg	MGA	10	450
+MH	MHL	Marshall Islands	OC	.mh	USD	10	584
+MK	MKD	Macedonia	EU	.mk	MKD	5	807
+ML	MLI	Mali	AF	.ml	XOF	10	466
+MM	MMR	Myanmar	AS	.mm	MMK	10	104
+MN	MNG	Mongolia	AS	.mn	MNT	10	496
+MO	MAC	Macao	AS	.mo	MOP	10	446
+MQ	MTQ	Martinique	NA	.mq	EUR	10	474
+MR	MRT	Mauritania	AF	.mr	MRO	10	478
+MS	MSR	Montserrat	NA	.ms	XCD	10	500
+MT	MLT	Malta	EU	.mt	EUR	4	470
+MU	MUS	Mauritius	AF	.mu	MUR	10	480
+MV	MDV	Maldives	AS	.mv	MVR	10	462
+MW	MWI	Malawi	AF	.mw	MWK	10	454
+MX	MEX	Mexico	NA	.mx	MXN	7	484
+MY	MYS	Malaysia	AS	.my	MYR	8	458
+MZ	MOZ	Mozambique	AF	.mz	MZN	10	508
+NA	NAM	Namibia	AF	.na	NAD	10	516
+NC	NCL	New Caledonia	OC	.nc	XPF	10	540
+NE	NER	Niger	AF	.ne	XOF	10	562
+NG	NGA	Nigeria	AF	.ng	NGN	10	566
+NI	NIC	Nicaragua	NA	.ni	NIO	10	558
+NL	NLD	Netherlands	EU	.nl	EUR	1	528
+NO	NOR	Norway	EU	.no	NOK	5	578
+NP	NPL	Nepal	AS	.np	NPR	10	524
+NR	NRU	Nauru	OC	.nr	AUD	10	520
+NU	NIU	Niue	OC	.nu	NZD	10	570
+NZ	NZL	New Zealand	OC	.nz	NZD	9	554
+OM	OMN	Oman	AS	.om	OMR	9	512
+PA	PAN	Panama	NA	.pa	PAB	10	591
+PE	PER	Peru	SA	.pe	PEN	10	604
+PG	PNG	Papua New Guinea	OC	.pg	PGK	10	598
+PH	PHL	Philippines	AS	.ph	PHP	8	608
+PK	PAK	Pakistan	AS	.pk	PKR	10	586
+PL	POL	Poland	EU	.pl	PLN	4	616
+PR	PRI	Puerto Rico	NA	.pr	USD	10	630
+PT	PRT	Portugal	EU	.pt	EUR	3	620
+PW	PLW	Palau	OC	.pw	USD	10	585
+PY	PRY	Paraguay	SA	.py	PYG	10	600
+QA	QAT	Qatar	AS	.qa	QAR	9	634
+RE	REU	Reunion	AF	.re	EUR	10	638
+RO	ROU	Romania	EU	.ro	RON	4	642
+RS	SRB	Serbia	EU	.rs	RSD	5	688
+RU	RUS	Russia	EU	.ru	RUB	5	643
+RW	RWA	Rwanda	AF	.rw	RWF	10	646
+SA	SAU	Saudi Arabia	AS	.sa	SAR	9	682
+SB	SLB	Solomon Islands	OC	.sb	SBD	9	090
+SC	SYC	Seychelles	AF	.sc	SCR	10	690
+SD	SDN	Sudan	AF	.sd	SDG	10	729
+SS	SSD	South Sudan	AF		SSP	10	728
+SE	SWE	Sweden	EU	.se	SEK	3	752
+SG	SGP	Singapore	AS	.sg	SGD	8	702
+SH	SHN	Saint Helena	AF	.sh	SHP	10	654
+SI	SVN	Slovenia	EU	.si	EUR	4	705
+SK	SVK	Slovakia	EU	.sk	EUR	4	703
+SL	SLE	Sierra Leone	AF	.sl	SLL	10	694
+SM	SMR	San Marino	EU	.sm	EUR	3	674
+SN	SEN	Senegal	AF	.sn	XOF	10	686
+SO	SOM	Somalia	AF	.so	SOS	10	706
+SR	SUR	Suriname	SA	.sr	SRD	10	740
+ST	STP	Sao Tome and Principe	AF	.st	STD	10	678
+SV	SLV	El Salvador	NA	.sv	USD	10	222
+SX	SXM	Sint Maarten	NA	.sx	ANG	10	534
+SY	SYR	Syria	AS	.sy	SYP	10	760
+SZ	SWZ	Swaziland	AF	.sz	SZL	10	748
+TC	TCA	Turks and Caicos Islands	NA	.tc	USD	10	796
+TD	TCD	Chad	AF	.td	XAF	10	148
+TG	TGO	Togo	AF	.tg	XOF	10	768
+TH	THA	Thailand	AS	.th	THB	8	764
+TJ	TJK	Tajikistan	AS	.tj	TJS	10	762
+TL	TLS	East Timor	OC	.tl	USD	10	626
+TN	TUN	Tunisia	AF	.tn	TND	10	788
+TO	TON	Tonga	OC	.to	TOP	10	776
+TR	TUR	Turkey	AS	.tr	TRY	5	792
+TT	TTO	Trinidad and Tobago	NA	.tt	TTD	10	780
+TV	TUV	Tuvalu	OC	.tv	AUD	10	798
+TW	TWN	Taiwan	AS	.tw	TWD	8	158
+TZ	TZA	Tanzania	AF	.tz	TZS	10	834
+UA	UKR	Ukraine	EU	.ua	UAH	5	804
+UG	UGA	Uganda	AF	.ug	UGX	10	800
+US	USA	United States	NA	.us	USD	6	840
+UY	URY	Uruguay	SA	.uy	UYU	10	858
+UZ	UZB	Uzbekistan	AS	.uz	UZS	10	860
+VC	VCT	Saint Vincent and the Grenadines	NA	.vc	XCD	10	670
+VE	VEN	Venezuela	SA	.ve	VEF	10	862
+VG	VGB	British Virgin Islands	NA	.vg	USD	10	092
+VI	VIR	U.S. Virgin Islands	NA	.vi	USD	10	850
+VN	VNM	Vietnam	AS	.vn	VND	8	704
+VU	VUT	Vanuatu	OC	.vu	VUV	10	548
+WS	WSM	Samoa	OC	.ws	WST	10	882
+YE	YEM	Yemen	AS	.ye	YER	9	887
+YT	MYT	Mayotte	AF	.yt	EUR	10	175
+ZA	ZAF	South Africa	AF	.za	ZAR	9	710
+ZM	ZMB	Zambia	AF	.zm	ZMK	10	894
+ZW	ZWE	Zimbabwe	AF	.zw	ZWL	10	716
+CS	SCG	Serbia and Montenegro	EU	.cs	RSD	5	000
+AN	ANT	Netherlands Antilles	NA	.an	ANG	10	000

@@ -1,0 +1,7 @@
+- provide :title, "New #{controller_name.gsub('_', ' ').singularize.titleize}"
+
+.form-page
+  .form-page__intro
+    %h1= "New #{controller_name.gsub('_', ' ').singularize.titleize}"
+
+  = render 'form'

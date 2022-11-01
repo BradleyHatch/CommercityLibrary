@@ -1,0 +1,53 @@
+.form-page
+  .form-page__intro
+    - if params[:bulk] == 'category'
+      %h2 This will update the categories of the following products:
+    - if params[:bulk] == 'collection'
+      %h2 This will update the collections of the following products:
+    - if params[:bulk] == 'brand'
+      %h2 This will update the brand of the following products:
+    - if params[:bulk] == 'shipping'
+      %h2 This will update the delivery override rate of the following products:
+    - if params[:bulk] == 'country'
+      %h2 This will update the country of manufacture of the following products:
+    - if params[:bulk] == 'product_voucher'
+      %h2 This will set a product voucher for the following products:
+    %ul
+      - @objects.each do |object|
+        %li= object.name
+
+    %p
+.form-page--narrow
+  .form-page__inner-intro
+    %p Choose the #{params[:bulk]} to assign to the above products
+  .form-page__form
+    = form_tag mass_assign_update_product_masters_path do
+
+      .field
+        = hidden_field_tag :ids, params[:ids]
+        = hidden_field_tag :bulk, params[:bulk]
+
+        - if params[:bulk] == 'category'
+          = select_tag :val, options_from_collection_for_select(C::Category.all, :id, :name)
+
+        - if params[:bulk] == 'collection'
+          = select_tag :val, options_from_collection_for_select(C::Collection.all, :id, :name)
+
+        - if params[:bulk] == 'brand'
+          = select_tag :val, options_from_collection_for_select(C::Brand.ordered.all, :id, :name)
+
+        - if params[:bulk] == 'manufacturer'
+          = select_tag :val, options_from_collection_for_select(C::Brand.ordered.all, :id, :name)
+
+        - if params[:bulk] == 'shipping'
+          = text_field_tag :val
+
+        - if params[:bulk] == 'country'
+          = select_tag :val, options_from_collection_for_select(C::Country.all, :id, :name)
+
+        - if params[:bulk] == 'product_voucher'
+          = select_tag :val, options_from_collection_for_select(C::Product::Voucher.all, :id, :name)
+
+      = submit_tag 'Update', class: 'btn'
+      or
+      = link_to 'cancel', action: :index

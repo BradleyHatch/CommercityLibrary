@@ -1,0 +1,71 @@
+
+= form_for @brand do |f|
+  = f.error_messages
+  .gs.clear.form-page--wide.shadow-2dp
+    .fixed-form-panel.shadow-2dp
+      .field.field--inner-label
+        = f.label :name
+        = f.text_field :name
+
+      .field.field--inner-label
+        = f.label :url, 'Extenal supplier URL'
+        = f.text_field :url
+
+      .field
+        = f.image_field :image
+
+      .field
+        = f.label :featured do
+          = f.check_box :featured
+          %span.checkbox-span-label Featured Brand
+
+      .field
+        = f.label :supplier do
+          = f.check_box :supplier
+          %span.checkbox-span-label This brand is a supplier
+
+      .field
+        = f.label :in_menu do
+          = f.check_box :in_menu
+          %span.checkbox-span-label Display in menu
+
+    .g-3
+
+      = tabs do
+        = tab :description do
+          .field
+            = f.label :body
+            = f.tiny_mce_text_area :body
+        = tab :products do
+          - if !@brand.new_record? && @brand.products.any?
+            .panel
+              %table.index_table
+                %thead
+                  %tr
+                    %th Name
+                    %th Edit
+                %tbody
+                  - @brand.products.joins(:main_variant).pluck('c_product_masters.id', 'c_product_variants.name').each do |id, name|
+                    %tr
+                      %td= name
+                      %td= link_to 'edit', edit_product_master_path(id)
+          - else
+            This is where this brand's products will show
+
+
+
+        = tab :SEO, 'SEO' do
+          = render 'c/admin/seo', f: f
+        = tab '?' do
+          %h3 Manage brand
+          From here you can edit and update this brand
+          %ul
+            %li
+              %b Name
+              \- Change the name of the brand
+
+  .actions.form-page__actions
+    = f.submit class: 'btn'
+    = link_to_delete 'Delete', @brand, class: 'btn btn--secondary', redirection: brands_path unless @brand.new_record?
+    = link_to 'Delete and remove products', confirm_destroy_brand_path(@brand, destroy_products: true), class: 'btn btn--secondary', redirection: brands_path unless @brand.new_record?
+ 

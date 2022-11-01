@@ -1,0 +1,87 @@
+
+= form_for @category do |f|
+  = f.error_messages
+  .gs.gs--nowrap.clear.form-page--wide.shadow-2dp
+    .fixed-form-panel.shadow-2dp
+
+      .field.field--inner-label
+        = f.label :name
+        = f.text_field :name
+
+      .field.field--inner-label
+        = f.label :parent_id
+        = f.select :parent_id, depth_select_options(@category), include_blank: '-- Select Category --'
+
+      .field
+        = f.label :featured do
+          = f.check_box :featured
+          %span.checkbox-span-label Featured Category
+
+      .field
+        = f.label :in_menu do
+          = f.check_box :in_menu
+          %span.checkbox-span-label Display In Menu
+
+      - unless C::GoogleCategory.all.empty?
+        .field.field--inner-label
+          = f.label :google_category_id
+          = f.select :google_category_id, depth_select_options(C::GoogleCategory.first), include_blank: '-- Select Category --'
+
+      .field
+        = f.label :amazon_product_type_id
+        = f.select :amazon_product_type_id, C::AmazonProductType.all.map { |t| ["#{t.amazon_category.name.titlecase}/#{t.name.titlecase}", t.id] }, include_blank: '-- Select Category --'
+
+      #ebay_categories{data: {'save-name': 'category[ebay_category_id]', 'req-url': "/admin/categories/#{@category.id}"} }
+        = f.label :ebay_category_id
+        .field__help
+          %p This is the alternate eBay category for this category. Products without a specific eBay category saved will be listed in this category as a default
+
+      .field
+        = f.label :template_group_id
+        = f.select :template_group_id, C::Template::Group.pluck(:name, :id), include_blank: '-- Select Template Group --'
+
+    .g-1
+
+      = tabs do
+
+        = tab :content do
+          .field
+            = f.label :body, 'Description'
+            = f.tiny_mce_text_area :body
+
+          .field
+            = f.image_field :image
+
+            = f.label :remove_image do
+              = f.check_box :remove_image
+              %span.checkbox-span-label Remove image?
+
+          .field
+            = f.image_field :image_alt
+
+            = f.label :remove_image_alt do
+              = f.check_box :remove_image_alt
+              %span.checkbox-span-label Remove image?
+
+          .field.field--inner-label
+            = f.label :banner_url, 'Banner Image URL'
+            = f.text_field :banner_url
+
+          .field.field--inner-label
+            = f.label :alt_tag, 'Banner Image Alt Tag'
+            = f.text_field :alt_tag
+
+
+        = tab :property_keys, 'Available Keys' do
+          .collection_checkboxes
+            = f.collection_check_boxes(:property_key_ids, C::Product::PropertyKey.all.order(key: :asc), :id, :key) do |b|
+              = b.label(:"data-value" => b.value)  do 
+                = b.check_box
+                = b.text
+
+        = tab :seo, 'SEO' do
+          = render 'c/admin/seo', f: f
+          
+  .actions.form-page__actions
+    = f.submit class: 'btn'
+    = link_to_delete 'Delete', @category, redirection: categories_path, class: 'btn btn--secondary' unless @category.new_record?

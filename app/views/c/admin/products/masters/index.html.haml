@@ -1,0 +1,59 @@
+- provide :title, 'Products'
+
+.index-header.gs
+  .g-3.g-gutter--right
+    %h1= pluralize(@masters.count, 'Product')
+    = link_to '+ Create product', new_product_master_path, class: 'btn btn--small'
+    = link_to 'Price match summary', price_match_product_masters_path, class: 'btn btn--small btn--secondary' if C.master_tabs.keys.include?(:price_match)
+    = link_to 'Import CSV', data_transfers_path, class: 'btn btn--small btn--secondary'
+    = link_to 'Product Options', c.product_options_path, class: 'btn btn--small btn--secondary'
+    = link_to 'eBay Wraps', c.product_wraps_path, class: 'btn btn--small btn--secondary' if C.master_tabs.keys.include?(:ebay)
+    = link_to 'Import from eBay', create_from_ebay_product_masters_path, class: 'btn btn--small btn--secondary' if C.master_tabs.keys.include?(:ebay)
+
+    %p The products available in your store. Use the search on the right or the filter buttons #{fa_icon('filter')} to narrow down your product selection. Conduct mass operations on your products using the checkboxes on the left.
+
+    %p{ style: "margin-bottom: 0; opacity: 1;" }
+      %span.index_key--toggle.btn.btn--small.btn--secondary Table key
+
+    %div.index_key
+      %p Table row colours
+      %ul
+        %li.out_of_stock Out of stock
+        %li.discontinued Discontinued
+        %li.display_only Display only
+
+      %p Web channel price colours
+      %ul
+        %li.success Published
+        %li.error_key Unpublished
+
+      %p Amazon/eBay channel price colours
+      %ul
+        %li.success Published
+        %li.error_key Last push unsuccessful
+        %li.nil Unpublished
+
+  .g-1.g-gutter
+    = search_form_for @q do |f|
+      - C.product_index_search_fields.each do |search|
+        .field
+          = f.search_field "#{C.product_index_search_all_variants ? "variants" : "main_variant"}_#{search.downcase}_cont", placeholder: search
+
+      .gs
+        .g-1.field
+          = f.date_field :main_variant_created_at_gteq
+
+        .g-1.g-gutter--narrow.field
+          = f.date_field :main_variant_created_at_lteq
+
+      .gs
+        .g-1.field
+          = f.select :main_variant_status_eq, [['Active', '0'], ['Inactive', '1']], include_blank: '-- Status --'
+
+        .g-1.g-gutter--narrow.align-right
+          = submit_tag 'Search', class: 'btn btn--system'
+
+
+
+- table_const = params[:reduced_index] ? C::Product::Master::REDUCED_REDUCED_INDEX : params[:per_page] ? C::Product::Master::REDUCED_INDEX : C::Product::Master::INDEX_TABLE
+= index_table @masters, table_const, bulk_actions: C::Product::Master::BULK_ACTIONS

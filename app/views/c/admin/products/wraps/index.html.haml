@@ -1,0 +1,8 @@
+- provide :title, 'eBay Wraps'
+
+.index-header
+  %h1= pluralize(@wraps.count, 'Wraps')
+  = link_to '+ Create eBay Wrap', new_product_wrap_path, class: 'btn btn--small'
+  %p
+
+= index_table @wraps, C::Product::Wrap::INDEX_TABLE

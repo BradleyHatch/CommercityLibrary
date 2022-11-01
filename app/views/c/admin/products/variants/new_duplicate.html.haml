@@ -1,0 +1,11 @@
+-# things to dupe
+-# name, sku, mpn, oe, retail price, properties, flags
+
+
+- provide :title, "Duplicate #{controller_name.classify}"
+
+.form-page
+  .form-page__intro
+    %h1= "Duplicating: #{@original_variant.sku}"
+
+  = render 'form', duplicate_id: @original_variant.id

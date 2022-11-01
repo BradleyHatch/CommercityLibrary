@@ -1,0 +1,20 @@
+= form_for [:front_end, @reservation] do |f|
+  %h1 Reserve Product
+  .field
+    = f.label "Name*"
+    = f.text_field :name
+  .field
+    = f.label "Phone*"
+    = f.text_field :phone
+  .field
+    = f.label "Email*"
+    = f.text_field :email
+  .field
+    = f.label :product_variant_id, 'Product'
+    = f.select :product_variant_id, C::Product::Variant.active.pluck(:name, :id)
+
+  - if C.recaptcha
+    = recaptcha_tags 
+
+  .field
+    = f.submit 'Reserve Product'

@@ -1,0 +1,12 @@
+- provide :title, 'Users'
+
+.index-header
+  %h1= pluralize(@users.count, 'User')
+  = link_to '+ Create User', new_user_path, class: 'btn btn--small'
+  %p
+    This is the list of users who can administer your store. You can create unlimited additional users by clicking the
+    create user button. You can also manage the permissions and roles of different users in you store through the manage
+    roles and permissions links.
+
+= index_table @users, C::User::INDEX_TABLE
+

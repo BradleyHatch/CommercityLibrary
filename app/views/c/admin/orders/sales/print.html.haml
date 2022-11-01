@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+%html
+  %head
+    = stylesheet_link_tag 'c/print_application', media: 'all'
+    = javascript_include_tag 'c/application'
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    %title Print Order
+
+  %body
+    - @orders.each do |order|
+      - C.invoice_print_copies.times do
+        #print_page
+          = render 'print_part', order: order
+
+      = render 'c/admin/orders/sales/extra_print_page_1', order: order
+      = render 'c/admin/orders/sales/extra_print_page_2', order: order
+
+
+  :javascript
+    <!--
+    window.print();
+    //-->

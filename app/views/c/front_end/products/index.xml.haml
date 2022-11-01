@@ -1,0 +1,92 @@
+- key_colour = C::Product::PropertyKey.find_by(key: 'Colour')
+- key_color = C::Product::PropertyKey.find_by(key: 'Color')
+- key_size = C::Product::PropertyKey.find_by(key: 'Size')
+- google_age_groups = %w[newborn infant toddler kids]
+- male_strings =  %w[men's mens gents gent's male]
+- female_strings = %w[ women's womens female lady's ladies lady]
+- gender_strings = male_strings + female_strings
+
+!!! XML
+%rss{ 'xmlns:g' => 'http://base.google.com/ns/1.0', 'version' => '2.0'}
+	%channel
+		%title= store_page_title nil
+		%link= main_app.root_url rescue '/'
+		%description Google Shopping Feed
+		- feed_masters = C::Product::Master.where(id: C::Product::Variant.where('c_product_variants.status = 0').where("c_product_variants.published_google = 't'").pluck(:master_id).uniq)
+		- feed_masters = feed_masters.paginate(page: (params[:page].to_i > 0 ? params[:page] : 1), per_page: (params[:per_page] || 500))
+		- feed_masters.each do |master|
+			- categories = master.categories
+			- categories_hierarchy = master.categories.map { |c| c.self_and_ancestors }.flatten.uniq
+			- categories_strings = categories_hierarchy.map { |c| c.name.downcase }
+			- values = master.main_variant.property_values
+			- values_strings = values.map { |v| v.value.downcase }
+			%item
+				%g:id= master.sku
+				%g:title
+					:cdata
+						#{master.name}
+				%g:description
+					:cdata
+						#{master.web_channel.description}
+				%g:link
+					:cdata
+						#{front_end_product_url(master.main_variant)}
+				%g:google_product_category= master.get_google_category_id
+				%g:image_link
+					:cdata
+						#{master.has_main_image? ? master.main_image.url : ''}
+				- master.images.offset(1).each do |image|
+					%g:additional_image_link
+						:cdata
+							#{image.image.url}
+				%g:availability= master.main_variant.current_stock > 0 ? 'in stock' : 'out of stock'
+				%g:price
+					- product_price = master.price(channel: :web)
+					= product_price.to_f
+					= product_price.currency.to_s rescue 'GBP'
+
+				- C::Delivery::Service.web.find_each do |service|
+					- begin
+						- delivery_price = service.price_for_cart_total(product_price.fractional)&.with_tax
+
+						%g:shipping
+							%g:service= service.name
+							%g:price
+								= delivery_price.to_f
+								= delivery_price.currency.to_s rescue 'GBP'
+
+					- rescue C::Delivery::Service::NoPriceFound
+						- next
+
+				%g:condition= master.condition
+				%g:adult no
+
+				- if barcode = master.main_variant.barcode(symbology: :GTIN) || barcode = master.main_variant.barcode(symbology: :EAN) || barcode = master.main_variant.barcode(symbology: :UPC)
+					%g:gtin= barcode.value
+
+				- if brand = master.brand
+					%g:brand= brand.name
+
+				- if mpn = master.main_variant.mpn
+					%g:mpn= mpn
+
+				- if (key_colour || key_color) && (colours = values.where(property_key_id: key_colour&.id) + values.where(property_key_id: key_color&.id))
+					- colours.each do |colour|
+						%g:colour= colour.value
+
+				- if key_size && (size = values.find_by(property_key_id: key_size.id))
+					%g:size= size.value
+
+				- if (age_intersection = values_strings & google_age_groups) && age_intersection.length > 0
+					%g:age_group= age_intersection.first
+				- else
+					%g:age_group adult
+
+				- if (gender_intersection = categories_strings & gender_strings) && gender_intersection.length > 0 || (gender_intersection = values_strings & gender_strings) && gender_intersection.length > 0
+					- gender = gender_intersection.first
+					- if male_strings.include?(gender)
+						%g:gender male
+					- elsif female_strings.include?(gender)
+						%g:gender female
+				- else
+					%g:gender unisex

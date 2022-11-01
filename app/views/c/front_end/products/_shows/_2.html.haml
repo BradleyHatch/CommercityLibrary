@@ -1,0 +1,88 @@
+-# This is the show paged that is used on leather shop
+
+.product-show__images.product-show__column.g-4
+  = product_images(product, :left, :no_pad)
+
+.product-show__details.product-show__column.g-3
+  %h1.product-show__brand= safe_raw product.name
+  %h2.product-show__brand= safe_raw product.web_channel.sub_title
+
+  %p.product-show__name= product.brand.name if product&.brand
+
+  %p.product-show__price= humanized_money_with_symbol product.cache_web_price
+
+  .product-show__properties.gs
+    - if @tree.except(:slug).any?
+      .g-2
+        Colour
+        - val = @product.property('Colour')&.value
+        = select_tag :colours, options_for_select(@tree.keys.sort, val), { data: { opts: @tree.to_json } }
+      - unless @tree[val].include?(:slug)
+        .g-1
+          Size
+          = select_tag :sizes, options_for_select(@tree[val].map { |k, v| [k, v[:slug]] }.sort, @product.slug), include_blank: 'Select Size'
+    .g-1
+      QTY
+      = select_tag :quantities, options_for_select((1..5).to_a)
+
+  - unless product.discontinued?
+    %section.align-right
+      - if product.in_stock?
+        = link_to_add_to_cart 'foobar', product do
+          .btn
+            %span Add to bag
+      - else
+        %span.btn.product-show__stock.product-show__stock--out out of stock
+
+  .product-show__tabs
+    = tabs do
+      - unless product.web_channel.description.blank?
+        = tab :description do
+          = simple_format product.web_channel.description
+      = tab :sizes, 'Size guide' do
+        Size: #{@product.property('Size')&.value}
+      - unless product.web_channel.features.blank?
+        = tab :specification do
+          = simple_format product.web_channel.specification
+      - unless product.web_channel.features.blank?
+        = tab :features do
+          = simple_format product.web_channel.features
+
+
+:javascript
+  var $colours = $('select#colours');
+  var $sizes = $('select#sizes');
+
+  function goToProduct(slug) {
+    window.location.href = '/products/' + slug;
+  };
+
+  function findSlug(keys, vals, currentSize) {
+    if (keys.length == 1) {
+      var key = keys[0];
+      var slug = (key == "slug") ? vals.slug : vals[key].slug;
+      return slug;
+    } else if (vals[currentSize]) {
+      return vals[currentSize].slug;
+    } else {
+      return vals[keys[0]].slug;
+    }
+  };
+
+  $colours.on('change', function() {
+    $this = $(this);
+    var vals = $this.data('opts')[$this.val()];
+    var keys = Object.keys(vals);
+    var current_size = $sizes.find("option:selected").text();
+
+    var slug = findSlug(keys, vals, current_size);
+    goToProduct(slug);
+    return;
+  });
+
+  $sizes.on('change', function() {
+    slug = $(this).val();
+    if (slug != "") {
+      goToProduct(slug);
+    }
+  });

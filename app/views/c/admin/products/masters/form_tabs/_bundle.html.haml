@@ -1,0 +1,31 @@
+= f.fields_for :main_variant do |ff|
+  .field.channel_toggle_check_box
+    .gs
+      .g-1
+        = ff.label :bundle do
+          = ff.check_box :bundle
+          %span.checkbox-span-label
+            Product is a bundle
+  = tabs do
+    = tab :bundle_items do
+      - if ff.object.bundle
+        = ff.nested_fields_for :bundle_items, wrapper_tag: :div, wrapper_options: { class: 'fields' }  do |fff|
+          .gs
+            .g-1.field.field--inner-label
+              = fff.label :bundled_variant_id, 'Product'
+              = fff.select :bundled_variant_id, C::Product::Variant.order(sku: :asc).active.pluck(:sku, :id), {include_blank: '-- Select --'}, {class: 'select2', 'data-searchable-select' => true}
+            .g-1.field.field--inner-label.g-gutter--narrow--xxl
+              = fff.label :web_price
+              = fff.number_field :web_price, step: 0.01, min: 0
+            .g-1.field.field--inner-label.g-gutter--narrow--xxl
+              = fff.label :ebay_price
+              = fff.number_field :ebay_price, step: 0.01, min: 0
+            .g-1.field.field--inner-label.g-gutter--narrow--xxl
+              = fff.label :amazon_price
+              = fff.number_field :amazon_price, step: 0.01, min: 0
+            .g-1.field.field--inner-label.g-gutter--narrow--xxl
+              = fff.label :quantity
+              = fff.number_field :quantity, step: 1, min: 1
+            .field__destroy-nested= fff.remove_nested_fields_link fa_icon('trash')
+
+        = ff.add_nested_fields_link :bundle_items, 'Add a Bundle Item', class: 'btn btn--small btn--secondary'

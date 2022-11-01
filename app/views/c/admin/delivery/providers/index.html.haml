@@ -1,0 +1,10 @@
+- provide :title, 'Delivery Providers'
+
+.index-header
+  %h1= pluralize(@providers.count, 'Delivery Providers')
+  = link_to '+ Create Provider', new_delivery_provider_path, class: 'btn btn--small'
+  = link_to 'Delivery Services', c.delivery_services_path, class: 'btn btn--small btn--secondary'
+  %p
+    Your delivery providers
+
+= index_table @providers, C::Delivery::Provider::INDEX_TABLE

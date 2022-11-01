@@ -1,0 +1,204 @@
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+textarea
+  line-height: 28px
+  padding: 8px 12px
+  -webkit-transition: border-color 0.1s, box-shadow 0.1s
+  transition: border-color 0.1s, box-shadow 0.1s
+  resize: vertical
+  background: white
+  cursor: pointer
+  width: 100%
+  display: block
+  height: 40px
+  margin: 0
+  border: 1px solid #e0e0e0
+  position: relative
+  -webkit-appearance: none
+  -moz-appearance: none
+  border-radius: 4px
+  &:focus
+    outline: none
+    border: 1px solid #666
+  &.error
+    border: 1px solid $error
+
+textarea
+  height: auto
+
+select,
+.select2-container--default .select2-selection--multiple,
+.select2-container--default .select2-selection--single
+  color: #0d0d0d
+  height: 40px
+  background-color: white
+  font-family: inherit
+  line-height: 125%
+  border-radius: 6px
+  padding: 0 12px
+  position: relative
+  background-position: right 8px center
+  background-repeat: no-repeat
+  background-size: 20px
+  cursor: pointer
+  background-image: image_url('c/select_arrow_down_blk.png')
+  -webkit-appearance: none
+  -moz-appearance: none
+  width: 100%
+  outline: none
+  border: 1px solid #e0e0e0
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice
+  margin-top: 8px
+
+.select2-selection__choice
+  white-space: pre-wrap
+
+.select2-search--inline
+  height: 26px
+  input
+    height: 26px!important
+
+.field
+  margin-bottom: 10px
+  &__help
+    margin-top: -10px
+    font-size: 12px
+    color: #787878
+    padding-left: 4px
+    font-style: italic
+  &__destroy-nested
+    line-height: 40px
+    padding: 0 10px
+  &__with-post-checkbox
+    label
+      font-size: 12px
+      float: left
+      margin-right: 6px
+      margin-bottom: 0
+    input[type="checkbox"]
+      position: relative
+      bottom: 2px
+  &__with-collection-check-box
+    input[type="checkbox"]
+      position: relative
+      bottom: -4px
+      float: left
+      margin-right: 6px
+  &--highlighted
+    input
+      background-color: #ffffd8
+  &--inner-label
+    position: relative
+    label
+      position: absolute
+      z-index: 10
+      top: 3px
+      left: 13px
+      font-size: 11px
+      color: #666
+    &.g-gutter--narrow--xxl
+      label
+        left: 21px
+
+    input[type="text"],
+    input[type="password"],
+    input[type="date"],
+    input[type="datetime"],
+    input[type="datetime-local"],
+    input[type="month"],
+    input[type="week"],
+    input[type="email"],
+    input[type="number"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="time"],
+    input[type="url"]
+      padding: 16px 10px 0
+      height: 44px
+    select
+      padding: 12px 35px 2px 13px
+      height: 44px
+
+.select2-container--default .select2-selection--multiple, .select2-container--default .select2-selection--single
+  padding: 14px 35px 0px 6px
+  min-height: 44px
+  height: auto
+
+.field--float-label
+  position: relative
+  label
+    color: #919293
+    box-sizing: border-box
+    display: block
+    font-size: .8125em
+    line-height: 1
+    opacity: 0
+    overflow: hidden
+    padding: .5em 1em
+    pointer-events: none
+    position: absolute
+    text-overflow: ellipsis
+    top: 0
+    text-align: left
+    transform: translateY(3px)
+    transition: all .2s ease-out
+    user-select: none
+    white-space: nowrap
+    width: 100%
+    z-index: 1
+.field--float-label.field--not-empty
+  label
+    opacity: 1
+    transform: none
+  input
+    padding-bottom: 2px
+    padding-top: 18px
+
+
+.field__error
+  font-size: 12px
+  color: $error
+
+label
+  display: block
+  margin-bottom: 2.5px
+  &.error
+    color: $error
+
+.select2-container
+  width: 100%!important
+
+// Autocomplete
+.ui-autocomplete
+  max-width: 500px
+  background: white
+  list-style: none
+  padding: 4px 0 0 0
+  border-radius: 0 0 3px 3px
+  border: 1px solid #ddd
+
+  .ui-menu-item
+    color: $primary_text_color
+    padding: 4px 16px 2px
+
+  .ui-menu-item:nth-child(2n)
+    background: $dark_primary_color
+
+  .ui-menu-item:last
+    border-radius: 0 0 3px 3px
+
+  .ui-menu-item:hover
+    background: $light_primary_color

@@ -1,0 +1,24 @@
+-# this partial renders a dropzone upload bucket and a preview image/body form
+.gs
+  .g-2
+    .dropzone{data: {'model-type': "#{model_type}", "#{model_type}-id": "#{obj.id}"}}
+      %label.panel_description
+        Drag + Drop or click here to upload all of your images here!
+      %label.dz-loading-svg
+        %span Uploading images!
+        %div{ style: "height: 2px" }
+        = image_tag "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48c3ZnIHdpZHRoPSczNnB4JyBoZWlnaHQ9JzM2cHgnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIiBjbGFzcz0idWlsLXdoZWVsIj48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0ibm9uZSIgY2xhc3M9ImJrIj48L3JlY3Q+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNDAiIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMjAiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLWRhc2hhcnJheT0iMTRweCI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0ic3Ryb2tlLWRhc2hvZmZzZXQiIGZyb209IjAiIHRvPSIxMTAiIGJlZ2luPSIwIiBkdXI9IjFzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgZmlsbD0iZnJlZXplIj48L2FuaW1hdGU+PC9jaXJjbGU+PC9zdmc+"
+
+    #images_container.reorderable.row{data: {'model-type': "#{model_type}"}}
+      = render 'dropzone_images', obj: obj, model_name: model_name
+
+  - unless defined? no_preview
+    .g-1.g-gutter
+      %h4 Set Preview image
+      %p Drag an image into the box
+      #preview_image__wrapper
+        #preview_drag__target{data: {'preview-target': 'true'}}
+          = render 'preview_image', obj: obj
+      #preview_body_container
+        = f.label :summary
+        = f.text_area :summary

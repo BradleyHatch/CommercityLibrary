@@ -1,0 +1,39 @@
+
+= form_for @option do |f|
+  = f.error_messages
+  .gs.gs--nowrap.clear.form-page--wide.shadow-2dp
+    .fixed-form-panel.shadow-2dp
+      .field
+        = f.label :name
+        = f.text_field :name
+
+      .field
+        = f.label :price
+        = f.price_field :price
+
+      .field
+        = f.label :compulsory do
+          = f.check_box :compulsory
+          %span Compulsory?
+
+    .g-1
+
+      = tabs do
+        = tab :products, 'Available on' do
+          %table.form_table
+            %tbody
+              %tr
+                %th Sku
+                %th Name
+              - variants = @option.variants.pluck(:master_id, :sku, :name)
+              - variants.each do |master_id, sku, name|
+                %tr
+                  %td.padded_td= sku
+                  %td.padded_td= link_to name, edit_product_master_path(master_id)
+              - if variants.empty?
+                %tr
+                  %td{colspan: 2}= "Not currently available on any products"
+
+  .actions.form-page__actions
+    = f.submit class: 'btn'
+    = link_to 'Delete', [@option], method: :delete, class: 'btn btn--secondary' unless @option.new_record?

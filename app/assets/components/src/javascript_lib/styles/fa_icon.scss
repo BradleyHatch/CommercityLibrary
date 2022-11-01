@@ -1,0 +1,24 @@
+@import 'font_sizes';
+
+
+.fa-icon {
+  &--x-large {
+    font-size: $icon-x-large-font-size;
+  }
+
+  &--large {
+    font-size: $icon-large-font-size;
+  }
+
+  &--medium {
+    font-size: $icon-medium-font-size;
+  }
+
+  &--small {
+    font-size: $icon-small-font-size;
+  }
+
+  &--x-small {
+    font-size: $icon-x-small-font-size;
+  }
+}

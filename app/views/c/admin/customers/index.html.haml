@@ -1,0 +1,18 @@
+- provide :title, 'Customers'
+
+
+.index-header.gs
+  .g-3.g-gutter--right
+    %h1= pluralize(@customers.count, 'Customer')
+    = link_to '+ Create Customer', new_customer_path, class: 'btn btn--small'
+    = link_to '+ Create A New Field', new_custom_field_path, class: 'btn btn--small'
+    %p
+      This is a list of your customers. Everybody who makes a purchase through any selling channel will be added here as a customer. You can edit details here, send emails and manage account configurations.
+  .g-1.g-gutter
+    = search_form_for @q do |f|
+      .gs
+        .g-3= f.search_field :name_or_email_cont, placeholder: 'Search'
+        .g-1.g-gutter--narrow= submit_tag 'Search', class: 'btn btn--system'
+
+
+= index_table @customers, C::Customer::INDEX_TABLE, bulk_actions: C::Customer::BULK_ACTIONS

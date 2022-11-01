@@ -1,0 +1,47 @@
+.product-preview
+  display: inline-block
+  vertical-align: top
+  margin-bottom: 24px
+  text-align: center
+  a:hover
+    text-decoration: none
+    figure
+      background-color: #f5f1ed
+
+  @media (min-width: 1001px)
+    width: 24.21939%
+    margin-right: 1.0408163265%
+    &:nth-child(4n)
+      margin-right: 0
+  @media (max-width: 1000px) and (min-width: 701px)
+    width: 32.2210424899%
+    margin-right: 1.1684362651%
+    &:nth-child(3n)
+      margin-right: 0
+  @media (max-width: 700px) and (min-width: 401px)
+    width: 49%
+    margin-right: 2%
+    &:nth-child(2n)
+      margin-right: 0
+  @media (max-width: 400px)
+    width: 100%
+  figure
+    background-color: #f5f5f5
+    transition: 0.4s
+    margin: 10px
+    img
+      width: 100%
+      padding: 20%
+.product-preview__info
+  h3
+    text-transform: uppercase
+    font-size: 0.9rem
+    margin-bottom: 0
+    letter-spacing: 1px
+    font-weight: 300
+    color: $primary_text_color
+
+.product-preview__price
+  color: #1b1b1b
+  font-size: 1.1rem
+  font-weight: bold

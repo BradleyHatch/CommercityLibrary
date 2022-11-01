@@ -1,0 +1,11 @@
+= category_breadcrumb(@category)
+%h1= @category.name
+.row.wrap.page
+  = render 'c/front_end/products/_results_bars/1', products: @products, search_object: @q
+  = render 'c/front_end/products/_results_bars/2', products: @products, search_object: @q
+  .gs--l
+    .g-1.category-list
+      = category_list(@category)
+
+    .g-gutter--l.g-3
+      = render 'c/front_end/products/_grids/standard', block: 4, products: @products

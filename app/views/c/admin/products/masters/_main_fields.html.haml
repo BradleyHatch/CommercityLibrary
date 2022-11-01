@@ -1,0 +1,153 @@
+= f.fields_for :main_variant do |ff|
+
+  .field_group
+    .field.field--inner-label
+      = ff.label :sku, 'SKU'
+      = ff.text_field :sku, placeholder: true
+
+    .field.field--inner-label
+      = ff.label :name
+      = ff.text_field :name
+    .field.field--inner-label
+      = f.label :category_ids, 'Categories'
+      = f.select :category_ids, C::Category.alphabetical.map{|c| [c.name_with_parent, c.id]}, {include_blank: '-- Choose Category --'}, multiple: true
+    .gs--xxl
+      .g-1.field.field--inner-label
+        = f.label :brand_id
+        = f.select :brand_id, C::Brand.ordered.pluck(:name, :id), include_blank: '-- Select --'
+      .g-1.g-gutter--narrow--xxl.field.field--inner-label
+        = f.label :manufacturer_id
+        = f.select :manufacturer_id, C::Brand.ordered.pluck(:name, :id), include_blank: '-- Select --'
+
+    .field.field--inner-label
+      = ff.label :mpn
+      = ff.text_field :mpn
+
+    .field.field--inner-label
+      = ff.label :oe_number
+      = ff.text_field :oe_number
+
+    .field.field--inner-label
+      = f.label :condition
+      = f.select :condition, C::Product::Master.conditions.keys
+
+    = field_set_tag '' do
+      .gs
+        .g-1.fieldset-title
+          Barcodes
+        .g-1.fieldset-title.align-right
+          = ff.label :no_barcodes do
+            = ff.check_box :no_barcodes
+            Does Not Apply
+
+      = ff.nested_fields_for :barcodes, wrapper_tag: :div, wrapper_options: { class: 'fields' }  do |fff|
+        .gs--xxl
+          .g-3.field
+            = fff.text_field :value, placeholder: 'Barcode'
+          .g-2.g-gutter--narrow--xxl.field
+            = fff.select :symbology, C::Product::Barcode.symbology_array, include_blank: '-- Select --'
+          .field__destroy-nested= fff.remove_nested_fields_link fa_icon('trash')
+
+      = ff.add_nested_fields_link :barcodes, 'Add another barcode', class: 'btn btn--small btn--secondary'
+      - if ff.object.barcodes.reject(&:new_record?).empty? && C::Product::Barcode.unassigned.any?
+        .field.field--grow{ style: "margin-top: 8px" }
+          = ff.submit 'Auto assign new Barcode', class: 'btn'
+
+    .field.field--inner-label
+      = ff.label :current_stock
+      = ff.number_field :current_stock
+
+    - if C.multiple_package_dimensions
+      .field.field--inner-label.field--highlighted
+        = label_tag :total_weight
+        = number_field_tag :total_weight, ff.object.weight, disabled: true
+
+      = ff.nested_fields_for :variant_dimensions, wrapper_tag: :div, wrapper_options: { class: 'fields' }  do |fff|
+        %fieldset
+          %span.fieldset-title Package Dimensions
+
+          .gs
+            .g-1
+              .field.field--inner-label
+                = fff.label :weight, 'Weight (kg)'
+                = fff.number_field :weight, step: 0.01, min: 0
+            %div
+              .field__destroy-nested= fff.remove_nested_fields_link fa_icon('trash')
+
+
+          .gs--xxl
+            .g-1.field.field--inner-label
+              = fff.label :x_dimension, 'Width'
+              = fff.number_field :x_dimension, min: 0, step: 0.01
+
+            .g-1.g-gutter--narrow--xxl.field.field--inner-label
+              = fff.label :y_dimension, 'Height'
+              = fff.number_field :y_dimension, min: 0, step: 0.01
+
+            .g-1.g-gutter--narrow--xxl.field.field--inner-label
+              = fff.label :z_dimension, 'Depth'
+              = fff.number_field :z_dimension, min: 0, step: 0.01
+
+            .g-1.g-gutter--narrow--xxl.field.field--inner-label
+              = fff.label :dimension_unit, 'Unit'
+              = fff.text_field :dimension_unit
+          
+          .field.field--inner-label
+            = fff.label :notes
+            = fff.text_area :notes
+
+      .field
+        = ff.add_nested_fields_link :variant_dimensions, 'Add another dimensions set', class: 'btn btn--small btn--secondary'
+
+    - else
+      .field.field--inner-label
+        = ff.label :weight, 'Weight'
+        = ff.number_field :weight, step: 0.01, min: 0
+
+      %fieldset
+        %span.fieldset-title Dimensions
+        .gs--xxl
+          .g-1.field.field--inner-label
+            = ff.label :x_dimension, 'Width'
+            = ff.number_field :x_dimension, min: 0, step: 0.01
+          .g-1.g-gutter--narrow--xxl.field.field--inner-label
+            = ff.label :y_dimension, 'Height'
+            = ff.number_field :y_dimension, min: 0, step: 0.01
+          .g-1.g-gutter--narrow--xxl.field.field--inner-label
+            = ff.label :z_dimension, 'Depth'
+            = ff.number_field :z_dimension, min: 0, step: 0.01
+          .g-1.g-gutter--narrow--xxl.field.field--inner-label
+            = ff.label :dimension_unit, 'Unit'
+            = ff.text_field :dimension_unit
+
+
+    .gs--xxl
+      .field.field--inner-label.g-1
+        = ff.label :country_of_manufacture_id
+        = ff.select :country_of_manufacture_id, C::Country.ordered.pluck(:name, :id), { include_blank: 'Select Country' }
+
+      .field.field--inner-label.g-1.g-gutter--narrow--xxl
+        = ff.label :manufacturer_product_url
+        = ff.text_field :manufacturer_product_url
+
+    .gs--xxl
+      .field.field--inner-label.g-1
+        = ff.label :cost_price, 'Cost Price'
+        = ff.number_field :cost_price, step: 0.01, min: 0
+      .field.field--inner-label.g-1.g-gutter--narrow--xxl
+        = ff.label :rrp, 'RRP'
+        = ff.number_field :rrp, step: 0.01, min: 0
+
+    = ff.price_field :retail_price
+
+    .field.field__with-post-checkbox
+      = ff.label :has_delivery_override, 'Override the delivery rate with a flat cost'
+      = ff.check_box :has_delivery_override, class: 'conditional_checkbox'
+      .field.field--inner-label.checkbox-hidden
+        = ff.label :delivery_override
+        = ff.number_field :delivery_override, step: 0.01, min: 0
+
+    - if C.edit_created_at
+      .field.field--inner-label
+        = ff.label :created_at
+        = ff.date_field :created_at

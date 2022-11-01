@@ -1,0 +1,53 @@
+// .categories__menu
+
+.categories-menu__section
+  line-height: 1.5rem
+  input[type="checkbox"]
+    display: none
+  label:after
+    content: "-"
+    display: block
+    cursor: pointer
+    font-size: 1.2rem
+  input[type="checkbox"]:checked ~ label:after
+    content: "+"
+  input[type="checkbox"]:checked ~ .categories-menu__list
+    display: none
+  h4, h2
+    border-bottom: 2px solid grey
+    padding-bottom: 3px
+    font-size: 1rem
+  h2
+    font-size: 1.3rem
+
+.categories-menu__expand
+  float: right
+  color: lighten($primary_text_color, 10%)
+  font-weight: bold
+
+.categories-menu__list
+  ul
+    list-style: none
+    padding-top: 0
+    padding-left: 0
+  li
+    font-size: 0.85rem
+    a
+      text-decoration: none
+      color: $accent_color
+      &.sidebar_more_link
+        color: $primary_color
+        font-size: 0.8rem
+        font-style: italic
+
+  img
+    width: 100%
+    margin: 0
+    display: block
+
+  &--sub
+    padding-left: 10px
+    li
+      font-size: 0.85rem
+    a
+      display: block

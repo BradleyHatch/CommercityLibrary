@@ -1,0 +1,4 @@
+
+- if @variant_select.count > 1
+  #product_switcher
+    = select_tag(:product_switcher_select, options_for_select(@variant_select, @product.id))

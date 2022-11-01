@@ -1,0 +1,32 @@
+.right_form_buttons
+  - unless @master.main_variant.myriad_updated_at.blank?
+    %span= 'Last Myriad Update: ' + @master.main_variant.myriad_updated_at.strftime("%H:%M.%S %d/%m/%Y")
+
+  - unless @master.main_variant.slug.blank?
+    = link_to 'View on site',
+              front_end_product_path(@master.main_variant.to_param(:front)),
+              class: 'btn btn--secondary'
+
+  - if @master.main_variant.inactive?
+    .btn.btn--disabled
+      Product Disabled
+
+  - if @master.main_variant.discontinued?
+    .btn.btn--disabled
+      Product Discontinued
+
+  = f.submit 'Save', class: 'btn'
+  .btn.btn--split-second
+    .split_selector
+      = link_to fa_icon('caret-down'), 'javascript:void(0)', class: 'button right_split_button quick_actions_toggle'
+      %ul.hidden.quick_actions.shadow-6dp
+        - unless @master.main_variant.discontinued
+          %li= f.submit (@master.main_variant.status == 'active' ?  'Disable Product' : 'Enable Product')
+          %li= f.submit (@master.main_variant.featured ?  'Remove from Featured Products' : 'Feature Product')
+          %li= f.submit (@master.main_variant.published_web ?  'Stop selling on Website' : 'Sell on Web')
+          %li= f.submit (@master.main_variant.published_amazon ?  'Stop selling on Amazon' : 'Sell on Amazon')
+          %li= f.submit (@master.main_variant.published_ebay ?  'Stop selling on eBay' : 'Sell on eBay')
+          %li= f.submit (@master.main_variant.published_google ?  'Stop selling on Google' : 'Sell on Google')
+          %li= f.submit (@master.main_variant.display_only ?  'Remove from Display Only' : 'Display Only')
+          %li= f.submit 'Duplicate'
+        %li= f.submit (!@master.main_variant.discontinued ?  'Discontinue Product' : 'Activate Product')

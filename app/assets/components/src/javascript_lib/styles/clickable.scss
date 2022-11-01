@@ -1,0 +1,14 @@
+@import 'generic_classes';
+
+
+.clickable {
+  @extend .flex-center, .pointer;
+
+  &:hover {
+    filter: invert(10%);
+  }
+
+  &:active {
+    filter: invert(20%);
+  }
+}

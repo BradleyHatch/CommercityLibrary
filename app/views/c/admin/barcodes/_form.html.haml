@@ -1,0 +1,13 @@
+.form-page--narrow
+  .form-page__form
+    = form_for @barcode do |f|
+      = f.error_messages
+      .fields
+        .field.field--grow.with_select
+          = f.text_field :value, placeholder: 'Barcode'
+        .field.field--shrink.with_text_field
+          = f.select :symbology, C::Product::Barcode.symbology_array, include_blank: '-- Select Type --'
+
+      .actions
+        = f.submit class: 'btn'
+        = link_to_delete 'Delete', @barcode, redirection: product_barcodes_path, class: 'btn btn--secondary' unless @barcode.new_record?

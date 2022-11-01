@@ -1,0 +1,28 @@
+.form-page--narrow
+  .form-page__form
+    - url = @item.new_record? ? order_sale_order_items_path(@order) : order_sale_order_item_path(@order, @item)
+    = form_for @item, url: url do |f|
+      = f.error_messages
+      .field.order_item_picker.field--inner-label
+        = f.label :product_id
+        = f.select :product_id, C::Product::Variant.order(sku: :asc).active.pluck(:sku, :id), {include_blank: '-- Select --'}, {class: 'select2', 'data-searchable-select' => true}
+      .field.field--inner-label
+        = f.label :name
+        = f.text_field :name
+      .field.field--inner-label
+        = f.label :sku
+        = f.text_field :sku
+      .field.field--inner-label
+        = f.label :tax_rate
+        = f.number_field :tax_rate
+      .field.field--inner-label
+        = f.label :price
+        = f.number_field :price, step: 0.01, min: 0
+      .field.field--inner-label
+        = f.label :quantity
+        = f.number_field :quantity, value: @item.new_record? ? '1' : @item.quantity
+
+      .actions
+        = f.submit class: 'btn'
+        = link_to_delete 'Delete', @item, nested: [@order], url: order_sale_order_item_path(@order, @item),
+          class: 'btn btn--secondary', redirection: order_sale_path(@order) unless @item.new_record?

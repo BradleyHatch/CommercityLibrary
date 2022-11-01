@@ -1,0 +1,11 @@
+- provide :title, 'Categories'
+
+.index-header
+  %h1= pluralize(C::Category.count, 'Category')
+  = link_to '+ Create Category', new_category_path, class: 'btn btn--small'
+  %p
+    This is the list of all the categories on your store. You can reorder them by dragging and dropping in the list. Click on a category to edit the details, enable or disable.
+
+.index-table
+  .draggable_tree_list_container.draggable_tree_children{data: {reorder_url: update_order_categories_path}}
+    = render 'category_list_item', categories: @categories

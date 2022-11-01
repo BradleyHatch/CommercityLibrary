@@ -1,0 +1,10 @@
+- categories.each do |category, children|
+  .draggable_tree_container{data: {draggable: '.draggable_tree_move_handle:first', draggable_tree_id_field: 'category-id', category_id: category.id}}
+    = check_box_tag "hide_children_#{category.id}", nil, false, class: 'hide_children hidden'
+    .draggable_tree_row
+      .draggable_tree_move_handle
+      .draggable_tree_collapse_handle= label_tag "hide_children_#{category.id}", fa_icon('chevron-down')
+      = link_to category.name, [:edit, category], class: 'draggable_tree_link'
+
+    .draggable_tree_children
+      = render 'category_list_item', categories: children

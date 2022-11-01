@@ -1,0 +1,17 @@
+en:
+  cart:
+    add_named_item: 'Add %{item_name} to cart.'
+    add_item: 'Add Item to cart.'
+    remove_item: 'Remove Item from cart.'
+
+    item_count_plural: '%{count} items in cart'
+    item_count_single: '1 item in cart'
+    item_count_zero: 'Sorry, no items in your cart.'
+
+  date:
+    formats:
+      default: "%d/%m/%Y"
+
+  time:
+    formats:
+      default: "%d/%m/%Y %H:%M"

@@ -1,0 +1,16 @@
+
+= "Your order (#{@order.order_number}) has been dispatched using the following shipping service: #{@order.delivery&.delivery_service&.name}"
+
+
+Tracking information:
+
+
+- @order.delivery.trackings.each do |tracking|
+  = "#{tracking.provider} "
+  = tracking.number
+
+
+The order has been dispatched to:
+
+
+= ['name', 'address_one', 'address_two', 'address_three', 'city', 'region', 'postcode', 'country_name'].map{|call| @order.shipping_address.send(call)}.compact.join(', ')

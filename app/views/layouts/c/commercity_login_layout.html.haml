@@ -1,0 +1,18 @@
+!!!
+%html
+  %head
+    %title Login
+    = stylesheet_link_tag    'c/application', media: 'all'
+    = javascript_include_tag 'c/application'
+    = csrf_meta_tags
+  %body
+    .commercity-signin.gs--m
+      .g-1--m.commercity-signin__decor
+        .commercity-signin__decor-overlay
+      .g-1--m.commercity-signin__form-panel
+        .commercity-signin__form
+          .commercity-signin__header.wrap.wrap__narrow-ultra
+            .logo.logo--dark.logo--no-container
+            = render 'c/admin/flash_messages'
+          = yield
+          .commercity-signin__powered-by

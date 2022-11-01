@@ -1,0 +1,45 @@
+- provide :title, "Question from #{@question.display_sender}"
+
+.index-header
+  %h1= "Question from #{@question.display_sender}"
+  %p
+    = 'Concerning product:'
+    = "'#{@question.variant.name}'"
+    = raw "( #{link_to @question.variant.sku, [:edit, @question.variant.master]} )"
+
+.question-table
+  .index-table__content
+    %table.index_table
+      %thead
+        %tr
+          %th= @question.sender_email
+          %th.align-right= @question.created_at
+      %tbody
+        %tr
+          %td{colspan: 2}= @question.body
+
+- @question.answers.each do |answer|
+  .answer-table
+    .index-table__content
+      %table.index_table
+        - if answer.external
+          %thead
+            %tr
+              %th{colspan: 2}= "You replied on #{@question.source}"
+        - else
+          %thead
+            %tr
+              %th You
+              %th.align-right= answer.created_at
+          %tbody
+            %tr
+              - if answer.new_record?
+                %td.no_hover{colspan: 2}
+                  = form_for answer, url: [:reply, @question] do |f|
+                    = f.error_messages
+                    .field
+                      = f.text_area :body
+                    .actions
+                      = f.submit 'Answer', class: 'btn'
+              - else
+                %td{colspan: 2}= answer.body

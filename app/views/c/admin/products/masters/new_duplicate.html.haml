@@ -1,0 +1,15 @@
+- provide :title, 'New Product'
+
+.row
+  = form_for [:create_duplicate, @product], url: create_duplicate_product_master_path do |f|
+    = f.error_messages
+    = f.fields_for :main_variant do |ff|
+      .field
+        = ff.label :name
+        = ff.text_field :name
+
+      .field
+        = ff.label :sku
+        = ff.text_field :sku, placeholder: true
+
+      = f.submit class: 'btn'

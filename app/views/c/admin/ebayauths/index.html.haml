@@ -1,0 +1,30 @@
+- provide :title, 'eBay auth'
+
+.index-header
+  %h1 eBay auth
+  = link_to '+ Create token', new_auth_ebayauths_path, class: 'btn btn--small', method: :post
+  %p
+    This is the list of eBay auth
+
+- if defined?(@success)
+  .row{ style: "padding: 20px 20px 0;" }
+    - if @success
+      %p{ style: "margin: 0;" } Last token saved successfully
+    - else
+      %p{ style: "margin: 0 0 8px;" } Last token failed:
+      - if defined?(@error)
+        %p{ style: "margin: 0; color: red; font-weight: bold;" }= @error
+
+.index-table
+  .index-table__content
+    .index-table__wrapper
+      %table.index_table
+        %thead
+          %tr
+            %th Expires at
+            %th Token
+        %tbody
+          - @ebayauths.each do |ebayauth|
+            %tr
+              %td= ebayauth.expires_at
+              %td= "***"

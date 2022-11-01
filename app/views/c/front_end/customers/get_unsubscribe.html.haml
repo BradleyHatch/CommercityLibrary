@@ -1,0 +1,16 @@
+- provide :title, 'Consent'
+
+.wrap
+  .row
+    .gs--l
+      .g-2
+        %h3= "Unsubscribe #{@email}"
+        %p 
+          Are you sure you want to remove your information from our system?
+
+        = form_tag front_end_unsubscribe_path(email: @email) do
+
+          .field
+            = submit_tag 'Unsubscribe', class: :btn
+        
+      .g-1

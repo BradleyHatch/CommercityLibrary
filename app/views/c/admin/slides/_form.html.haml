@@ -1,0 +1,23 @@
+.form-page--narrow
+  .form-page__form
+    = form_for [@slideshow, @slide] do |f|
+      = f.error_messages
+
+      .field
+        = f.label :name, placeholder: 'Slide name'
+        = f.text_field :name
+
+      .field
+        = f.label :url, placeholder: 'Link for slideshow'
+        = f.text_field :url
+
+      .field
+        = f.label :body
+        = f.text_area :body
+
+      .field
+        = f.image_field :image
+
+      .actions
+        = f.submit class: 'btn'
+        = link_to_delete 'Delete', @slide, nested: @slideshow, redirection: edit_slideshow_path(@slideshow), class: 'btn btn--secondary' unless @slide.new_record?

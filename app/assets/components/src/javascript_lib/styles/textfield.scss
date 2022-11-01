@@ -1,0 +1,17 @@
+@import 'box_shadows';
+@import 'colors';
+@import 'generic_classes';
+
+
+input[type="text"].textfield {
+  display: flex;
+  margin: 10px;
+  border: 1px $midGrey solid;
+  transition: box-shadow 0.3s;
+  flex: 1;
+
+  &:focus {
+    border: 1px $midGrey solid;
+    box-shadow: $activeShadow;
+  }
+}

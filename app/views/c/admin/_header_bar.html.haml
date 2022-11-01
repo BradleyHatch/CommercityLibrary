@@ -1,0 +1,28 @@
+.header-bar.no-wrap.gs
+
+  .g-1.gs
+    .g-1.header-bar__logo
+      .logo.logo--light
+    .g-3= admin_breadcrumb
+
+  = C::Product::Offer.pending.count if C::Product::Offer.pending.any?
+
+  - if C.commerce
+    = render 'layouts/c/react_component',
+              componentId: 'background-jobs',
+              componentType: 'BackgroundJobsContainer',
+              params: 'null'
+
+  .g-1.header-bar__version-info.align-right.g-gutter--right
+    = 'Commercity' if C.commerce
+    = Gem.loaded_specs['c'].version.to_s
+    - if Rails.env.development?
+      ="(#{`git log --pretty=format:'%h' -n 1`})"
+
+  .header-bar__user
+    .user_info
+      %span
+        Signed in as
+        = current_user.name
+      \-
+      %b= link_to 'Log out', destroy_user_session_path, method: :delete

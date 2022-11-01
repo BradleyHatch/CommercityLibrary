@@ -1,0 +1,5 @@
+%ul.account__menu
+  %li= link_to 'Account', front_customer_root_path, class: "account__menu-item #{'active' if request.path == '/account'}"
+  %li= link_to 'Information', edit_front_customer_account_registration_path, class: "account__menu-item #{'active' if request.path == '/account/edit'}"
+  %li= link_to 'Orders', front_orders_path, class: "account__menu-item #{'active' if request.path == '/account/orders'}"
+  %li= link_to 'Addresses', front_addresses_path, class: "account__menu-item #{'active' if request.path == '/account/addresses'}"

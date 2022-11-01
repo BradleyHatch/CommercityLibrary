@@ -1,0 +1,2 @@
+$("div#<%= @channel_type %>_images_container").html("<%= escape_javascript(render 'select_image', channel_type: @channel_type, master: @master ) %>");
+$("div#<%= @channel_type %>_channel_images_container").html("<%= escape_javascript(render 'channel_image', channel_type: @channel_type, channel_image: @image, master: @master ) %>");

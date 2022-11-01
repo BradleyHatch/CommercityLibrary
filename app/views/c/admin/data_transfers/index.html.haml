@@ -1,0 +1,10 @@
+- provide :title, 'Data Imports'
+
+.index-header.gs
+  .g-3.g-gutter--right
+    %h1= pluralize(@data_transfers.count, 'Pending Data Import')
+    = link_to '+ New Import', new_data_transfer_path, class: 'btn btn--small'
+    %p.explainer
+      Data transfers
+
+= index_table @data_transfers, C::DataTransfer::INDEX_TABLE

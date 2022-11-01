@@ -1,0 +1,10 @@
+.checkout__breadcrumb
+  = link_to 'Cart', cart_path
+  >
+  = link_to 'Account', account_checkout_path
+  >
+  = @cart.has_shipping_address? ? link_to('Address', new_address_checkout_path) : 'Address'
+  >
+  = @cart.has_delivery? ? link_to('Delivery', delivery_checkout_path) : 'Delivery'
+  >
+  = @cart.payment? ? link_to('Payment', payment_checkout_path) : 'Payment'

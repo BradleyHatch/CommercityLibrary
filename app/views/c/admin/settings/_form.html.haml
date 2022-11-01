@@ -1,0 +1,12 @@
+.form-page--narrow
+  .form-page__form
+    = form_for @setting do |f|
+      = f.error_messages
+
+      .field
+        = f.label :value, @setting.key
+        = f.send(@setting.form_helper, :value)
+
+      .actions
+        = f.submit class: 'btn'
+

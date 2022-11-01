@@ -1,0 +1,41 @@
+.account
+  background-color: #fbfbfb
+
+.account__menu
+  padding-left: 0
+  margin: 0
+  li
+    list-style: none
+    &:first-child a
+      border-top: 1px solid #e0e0e0
+      border-radius: 6px 6px 0 0
+    &:last-child a
+      border-radius: 0 0 6px 6px
+
+.account__menu-item
+  border: 1px solid #e0e0e0
+  color: #1f1f1f
+  background-color: #fff
+  height: auto
+  font-weight: 500
+  position: relative
+  -webkit-transition: .24s background-color ease-out
+  transition: .24s background-color ease-out
+  border-top: none
+  padding: 8px 15px
+  font-size: 100%
+  display: block
+  &:hover
+    background-color: rgba(black, 0.04)
+  &.active
+    background-color: $primary_color
+    color: white
+
+.account__content
+  background-color: white
+  padding: 30px 40px
+  border: 1px solid #e0e0e0
+  border-radius: 6px
+  overflow: hidden
+  h2
+    margin-top: 0

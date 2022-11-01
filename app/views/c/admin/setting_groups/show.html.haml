@@ -1,0 +1,6 @@
+.index-header
+  %h1= @setting_group.name
+  %p
+    = @setting_group.body
+
+= index_table @setting_group.settings, C::Setting::INDEX_TABLE

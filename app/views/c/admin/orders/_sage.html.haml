@@ -1,0 +1,17 @@
+This order
+- case order.export_status
+  - when nil
+    has not yet been exported to Sage.
+  - when 'succeeded'
+    was successfully exported to Sage.
+  - when 'failed'
+    encountered an error when exporting to Sage:
+
+- if order.export_status == 'failed' && order.export_error_log
+  %br
+  %br
+  %fieldset
+    - if order.export_error_log.starts_with?('Unable to find product')
+      = order.export_error_log.split("\n").first
+    - else
+      Internal Error

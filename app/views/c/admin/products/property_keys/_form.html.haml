@@ -1,0 +1,38 @@
+.form-page--narrow
+  .form-page__form
+    = form_for @property_key  do |f|
+      = tabs do
+        = tab 'Key' do
+          = f.error_messages
+
+          .field
+            = f.label :key
+            = f.text_field :key
+
+          .field
+            = f.label :display do
+              Display on website?
+              = f.check_box :display
+
+        = tab 'Values' do
+          - unless @property_key.new_record?
+            %table.index_table
+              %thead
+                %tr
+                  %th Value
+                  -# %th Active?
+                  %th Destroy?
+              - @property_key.property_values.pluck(:value).uniq.each do |value|
+                %tr
+                  %td= value
+                  -# %td
+                  -#   - values = C::Product::PropertyValue.where(value: value).pluck(:active)
+                  -#   = hidden_field_tag  "[values][#{value}][active]", ''
+                  -#   = check_box_tag "[values][#{value}][active]", 1, values.max_by { |v| values.count(v) }
+                  %td
+                    = hidden_field_tag "[values][#{value}][_destroy]", ''
+                    = check_box_tag "[values][#{value}][_destroy]"
+
+      .actions
+        = f.submit class: 'btn'
+        = link_to 'Delete', confirm_destroy_product_property_key_path(@property_key), class: 'btn btn--secondary', redirection: product_property_keys_path unless @property_key.new_record?

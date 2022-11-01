@@ -1,0 +1,15 @@
+- provide :title, 'Brands'
+
+.index-header.gs
+  .g-3.g-gutter--right
+    %h1= pluralize(@brands.count, 'Brand')
+    = link_to '+ Create Brand', new_brand_path, class: 'btn btn--small'
+    %p
+      These are the brands and manufacturers in your store. You can view their products, add new ones and remove those that are no longer relevant.
+  .g-1.g-gutter
+    = search_form_for @q, html: {data: {skip_alert: true}} do |f|
+      .gs
+        .g-3= f.search_field :name_cont, placeholder: 'Search'
+        .g-1.g-gutter--narrow= submit_tag 'Search', class: 'btn btn--system'
+
+= index_table @brands, C::Brand::INDEX_TABLE, bulk_actions: C::Brand::BULK_ACTIONS

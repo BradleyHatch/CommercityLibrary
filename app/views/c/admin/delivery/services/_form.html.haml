@@ -1,0 +1,64 @@
+
+= form_for @service do |f|
+  = f.error_messages
+  .gs
+    .fixed-form-panel
+      .field
+        = f.label :name
+        = f.text_field :name
+
+      .field
+        = f.label :display_name
+        = f.text_field :display_name
+
+      .field
+        = f.label :provider_id
+        = f.select :provider_id, C::Delivery::Provider.all.pluck(:name, :id), include_blank: '-- Select --'
+
+      .field
+        = f.label :channel
+        = f.select :channel, C::Delivery::Service.channels.keys
+
+      .field
+        = f.label :tax_rate
+        = f.number_field :tax_rate, min: 0, step: 0.1
+
+      .field
+        = f.label :click_and_collect do
+          = f.check_box :click_and_collect
+          %span.checkbox-span-label
+            Click and collect?
+
+    .g-1
+      = tabs do
+        = tab :rules, class: 'table_tab' do
+          %table.index_table
+            %thead
+              %tr
+                %th Zone
+                %th Base Price
+                %th Minimum Cart Price
+                %th Maximum Cart Price
+                %th Edit Sub-Rules
+                %th Delete
+            %tbody
+              = f.nested_fields_for :rules, wrapper_tag: :tr do |ff|
+                %td
+                  = ff.select :zone_id, C::Zone.all.pluck(:name, :id), { include_blank: 'None' }
+                %td
+                  = ff.number_field :base_price, min: 0, step: 0.01
+                %td
+                  = ff.number_field :min_cart_price, min: 0, step: 0.01
+                %td
+                  = ff.number_field :max_cart_price, min: 0, step: 0.01
+                %td
+                  - if ff.object.persisted?
+                    = link_to 'Edit', edit_delivery_service_rule_path(f.object.id, ff.object.id)
+                %td= ff.remove_nested_fields_link 'Delete'
+          .form-page__actions
+            = f.add_nested_fields_link :rules, 'Add Rule', class: 'btn btn--secondary'
+            = f.submit value: 'Save', 'data-disable-with' => 'Saving...', class: 'btn'
+
+  .actions.form-page__actions
+    = f.submit class: 'btn'
+    = link_to_delete 'Delete', @service, class: 'btn btn--secondary', redirection: delivery_services_path unless @service.new_record?

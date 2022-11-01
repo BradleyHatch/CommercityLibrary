@@ -1,0 +1,19 @@
+- obj.images.ordered.each do |image|
+  %label.image_preview.gs
+    .sort_handle.gs.gs--centered.row= fa_icon('ellipsis-v')
+    .g-1.g-gutter.image_container.draggable
+      = hidden_field_tag "#{model_name}[images_attributes][#{image.id - 1}][id]", image.id
+      = hidden_field_tag "#{model_name}[images_attributes][#{image.id - 1}][weight]", image.weight, class: 'order_field'
+      = image_tag (image.image.thumbnail), data: {'image-id': "#{image.id}"}
+    .g-1.g-gutter.image_info_alt
+      = label_tag 'Alt'
+      = text_field_tag "#{model_name}[images_attributes][#{image.id - 1}][alt]", image.alt
+    .g-1.g-gutter.image_info_caption
+      = label_tag 'Caption'
+      = text_field_tag "#{model_name}[images_attributes][#{image.id - 1}][caption]", image.caption
+    .g-1.g-gutter.image_featured
+      = label_tag 'Featured image?'
+      = check_box_tag "#{model_name}[images_attributes][#{image.id - 1}][featured_image]", true, image.featured_image, data: { 'image-id': image.id, 'obj-id': obj.id }
+    .g-1.g-gutter
+      = label_tag 'Destroy?'
+      = check_box_tag "#{model_name}[images_attributes][#{image.id - 1}][_destroy]"

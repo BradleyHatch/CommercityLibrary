@@ -1,0 +1,17 @@
+- if flash.any?
+  .flash.shadow-2dp
+    - flash.each do |k, v|
+      .message{class: k}
+        = raw v
+
+  :javascript
+    $(function() {
+
+        setTimeout(function(){
+            $('.flash').css("opacity", 0)
+            $('.flash').css("max-height", 0)
+            $('.flash').css("margin-bottom", 0)
+            $('.flash').css("padding", 0)
+        }, 5000);
+        
+    })

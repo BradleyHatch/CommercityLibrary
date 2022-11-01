@@ -1,0 +1,19 @@
+
+= "Your order (#{@order.order_number}) has been dispatched using the following shipping service: #{@order.delivery&.delivery_service&.name}"
+%br
+%br
+
+Tracking information:
+%br
+%br
+
+- @order.delivery.trackings.each do |tracking|
+  %span= "#{tracking.provider} "
+  %b= tracking.number
+  %br
+  %br
+
+The order has been dispatched to:
+%br
+%br
+= presenter(@order.shipping_address).block

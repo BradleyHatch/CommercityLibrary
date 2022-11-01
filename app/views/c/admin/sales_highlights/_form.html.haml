@@ -1,0 +1,16 @@
+
+.form-page--narrow
+  .form-page__form
+    = form_for @sales_highlight do |f|
+      = f.error_messages
+
+      .field
+        = f.label :url
+        = f.text_field :url
+
+      .field
+        = f.image_field :image
+
+      .actions
+        = f.submit class: 'btn'
+        = link_to_delete 'Delete', @sales_highlight, redirection: sales_highlights_path, class: 'btn btn--secondary' unless @sales_highlight.new_record?

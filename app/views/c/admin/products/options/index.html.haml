@@ -1,0 +1,26 @@
+- provide :title, 'Product Options'
+
+.index-header.gs
+  .g-3.g-gutter--right
+    %h1= pluralize(@options.count, 'Product Option')
+    = link_to '+ Create Product Option', new_product_option_path, class: 'btn btn--small'
+    %p
+      These are optional purchases available alongside products, such as warranty or insurance.
+
+.index-table
+  .index-table__content
+    .index-table__wrapper
+      %table.index_table
+        %thead
+          %tr
+            %th Name
+            %th Price
+            %th Available on
+            %th Delete
+        %tbody
+          - @options.each do |option|
+            %tr
+              %td= link_to option.name, [:edit, option]
+              %td= humanized_money_with_symbol option.price.with_tax
+              %td= pluralize(option.variants.count, 'Products')
+              %td= link_to 'Delete', [option], method: :delete

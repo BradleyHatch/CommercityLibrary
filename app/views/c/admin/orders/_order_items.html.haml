@@ -1,0 +1,88 @@
+- hide_values ||= false
+
+- if order.items.any?
+  .panel
+    %table.index_table
+      %thead
+        %tr
+          %th.check_box_column.non_printing= check_box_tag :select_all
+          %th.narrow_column= # Thumbnail
+          %th.feature_column Product
+          %th.narrow_column.non_printing= # Edit link
+          %th.narrow_column Quantity
+          - unless hide_values
+            %th Unit Price
+            %th Item Total
+      %tbody
+        - order.items.each do |item|
+          %tr
+            %td.non_printing= check_box_tag :select_all
+            %td.thumbnail_column
+              .small_image_thumbnail= image_tag item.product&.master&.display_thumbnail if item.product&.master&.display_thumbnail
+            %td
+              %b= item.name
+              = render "c/admin/orders/order_items_extra_info", item: item
+              %br
+              = raw "<b>SKU:</b> #{item.sku}"
+              %br
+              = item.description
+              - if item.product && item.product.master && item.product.master.variants.size > 1
+                = raw item.product.property_values.map { |prop_val| "<b>#{prop_val.property_key.key}:</b> #{prop_val.value}" }.join(', ')
+              - if item.gift_wrapping?
+                %br
+                %span 
+                  = fa_icon('gift')
+                  Customer selected gift wrapping for this item
+
+            %td.non_printing
+              = link_to 'Edit', edit_order_sale_order_item_path(order, item)
+              %br
+              = link_to 'Delete', order_sale_order_item_path(order, item), method: :delete
+            %td= item.quantity
+            - unless hide_values
+              - if C.default_tax == :with_tax
+                %td= humanized_money_with_symbol item.price
+                %td= humanized_money_with_symbol item.total_price
+              - else
+                %td= humanized_money_with_symbol item.price_without_tax
+                %td= humanized_money_with_symbol item.total_price_without_tax
+
+        - if C.default_tax == :with_tax
+          - total_rows = { 'Subtotal' => { price: order.total_price, tax: order.total_tax }, 'Shipping' => { price: order.delivery&.price, tax: order.delivery&.tax } }
+          - total_rows.each do |key, value|
+            %tr.total_row
+              %td.non_printing
+              %td
+              %td{colspan: 2}= key
+              %td.non_printing= # Edit link
+              %td.no-wrap{colspan: 2}
+                = humanized_money_with_symbol(value[:price])
+                %small (VAT: #{humanized_money_with_symbol(value[:tax])})
+
+        - else
+          - total_rows = { 'Subtotal' => order.total_price_without_tax, 'VAT' => order.total_tax, 'Shipping' => order.delivery&.price }
+          - total_rows.each do |key, value|
+            %tr.total_row
+              %td.non_printing
+              %td
+              %td{colspan: 2}= key
+              %td.non_printing= # Edit link
+              %td.no-wrap{colspan: 2}
+                #{humanized_money_with_symbol(value)}
+
+        %tr.total_row
+          %td.non_printing
+          %td
+          %td{colspan: 2}
+            %b Total
+          %td.non_printing= # Edit link
+          %td.no-wrap{colspan: 2}
+            %b= humanized_money_with_symbol order.total_price_with_tax_and_delivery_pennies
+            %small= "(VAT: #{humanized_money_with_symbol(order.total_tax + (order.delivery&.tax || 0))})"
+
+
+- else
+  %p
+    %i There are currently no items
+
+= link_to 'Add Item', new_order_sale_order_item_path(order), class: 'non_printing' if order.pending?

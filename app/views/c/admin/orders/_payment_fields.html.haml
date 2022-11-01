@@ -1,0 +1,13 @@
+= field_set_tag '' do
+  %span.fieldset-title Payment Details
+  = f.fields_for :payment do |ff|
+
+    .field.field--inner-label
+      = ff.label :amount_paid
+      = ff.number_field :amount_paid, step: 0.01, min: 0
+
+    = ff.fields_for :payable do |fff|
+      .field.field--inner-label
+        = fff.label :body, 'Description'
+        = fff.text_field :body
+

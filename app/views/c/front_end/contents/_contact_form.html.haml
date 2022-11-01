@@ -1,0 +1,16 @@
+- @enquiry ||= C::Enquiry.new
+= form_for [:front_end, @enquiry] do |f|
+  = f.error_messages
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :email
+    = f.text_field :email
+  .field
+    = f.label :body, 'Message'
+    = f.text_area :body, rows: 8
+  .actions
+    = recaptcha_tags if C.recaptcha
+    %br
+    = submit_tag 'Send', class: 'btn'

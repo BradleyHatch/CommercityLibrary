@@ -1,0 +1,18 @@
+- if C.order_info_fields.any?
+  = f.fields_for :info do |ff|
+    - C.order_info_fields.each do |key, args|
+      - value = f.object.info[key.to_s]
+
+      -# if the key points to a hash, assume it matches the following format: {label: string, options: string[]}
+      -# else default to the OG format and assume its text fields
+      - if args.is_a?(Hash)
+        .field
+          = ff.label key, args[:label]
+          = ff.select key, value: value, options: args[:options]
+
+      - else 
+        .field
+          = ff.label key, args
+          = ff.text_field key, value: value
+
+

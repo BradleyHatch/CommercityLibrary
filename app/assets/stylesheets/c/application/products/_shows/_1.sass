@@ -1,0 +1,122 @@
+//-- PRODUCT SHOW STYLES AND STUFF --//
+// .product-show
+
+.product-show__column
+  vertical-align: top
+  h1
+    margin: 0
+  .brand
+    margin-top: 5px
+
+.product-show__main_image
+  width: 100%
+  img
+    width: 100%
+
+.product-show__thumbnail
+  display: inline-block
+  width: 20%
+  margin: 0 -2px
+  padding: 5px
+
+.product-show__details
+  // this weird nesting is due to weird structure of add to cart helper
+  section
+    margin-bottom: 13px
+    form
+      display: inline-block
+      .btn
+        transition: 0.3s
+        border: 0
+        a, i, span
+          color: white
+          text-transform: uppercase
+        i
+          margin-left: 3px
+      .btn:hover
+        background-color: lighten($primary_color, 10%)
+
+.product-show__brand
+  a
+    color: $primary_text_color
+
+.product-show__switcher
+  select
+    border: 0
+    border-radius: 0
+    height: 40px
+
+.product-show__rrprice
+  color: rgba(black, 0.5)
+  font-weight: bold
+
+.product-show__discount
+
+.product-show__price
+  font-size: 1.5rem
+  font-weight: bold
+  color: #dd3531
+
+.product-show__stock
+  color: white
+  text-transform: uppercase
+  border: 0
+  &--in
+    background-color: $accent_color
+  &--out
+    background-color: #dd3531
+
+.product-show__tabs
+  .tabs_container
+    input[type='radio'].tab_controller
+      @for $i from 1 through 10
+        &:nth-child(#{$i}):checked ~
+          .tab_heads_container
+            label:nth-child(#{$i})
+              color: white
+              border: 0
+              background-color: $primary_color
+
+  .tab_heads_container
+    border: 0
+    background: $accent_color
+    padding: 0
+    label
+      text-transform: uppercase
+      color: white
+      margin: 0
+      padding: 14px
+      font-size: 0.75rem
+      font-weight: 600
+
+  .tab_panels_container
+    padding: 20px
+    background-color: #e5e5e5
+
+    .tab_panel
+      padding: 0
+      background-color: #e5e5e5
+      p
+        margin-top: 0
+        font-weight: 400
+
+.product-show__related_wrapper
+  background: #F2F2F2
+  padding: 20px
+  margin-top: 20px
+  h4
+    text-transform: uppercase
+    font-size: 1.3rem
+    margin-top: 0
+    margin-bottom: 20px
+
+  .product-grid
+    width: 100%
+    .product-grid__preview
+      @media (min-width: 800px)
+        width: 23.4693877551%
+        margin-right: 2.0408163265%
+        &:nth-child(3n)
+          margin-right: 2.0408163265%
+        &:nth-child(4n)
+          margin-right: 0

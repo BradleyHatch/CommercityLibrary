@@ -1,0 +1,20 @@
+= tabs do
+  = tab pluralize(master.documents.count, 'Document') do
+    #main_form.two_panel_form
+      #summary_form_panel
+        .field.file_upload
+          = f.label :new_documents
+          = f.file_field :new_documents, multiple: true
+          = button_tag 'Upload Files', name: :document_upload, class: 'btn btn--small'
+      #uploaded_documents_panel.full_form
+        %table.index_table
+          %tr
+            %th.prime_column Name
+            %th Url
+            %th.icon_column Delete?
+            = f.fields_for :documents do |ff|
+              %tr
+                %td= ff.text_field :name
+                %td= link_to ff.object.document, ff.object.document.url, target: :_blank
+                %td
+                  = ff.check_box :_destroy, class: '_destroy'

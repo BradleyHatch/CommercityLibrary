@@ -1,0 +1,13 @@
+// This partial can be passed two integer variables, 'bar' & 'block', to render
+// a specific version of the results bar and the product preview blocks
+// The default partials are rendered if no values are passed to this partial
+// NOTE: Be sure to include the relevant stylesheets in your application.sass!!!
+
+.product-grid
+  = render "c/front_end/products/_results_bars/#{ defined?(bar) ? bar : 1 }", products: products, search_object: @q if defined? show_controls
+
+  .product-grid__previews
+    = render partial: "c/front_end/products/_blocks/#{ defined?(block) ? block : 1 }", collection: products, as: :product
+
+  = will_paginate products, previous_label: 'Prev', next_label: 'next' rescue nil
+  = render "c/front_end/products/_results_bars/#{ defined?(bar) ? bar : 1 }", products: products, search_object: @q if defined? show_controls

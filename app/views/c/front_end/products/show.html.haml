@@ -1,0 +1,23 @@
+-# Welcome to the product show page
+-# You can pass the render _shows partial call with a variable of images or block
+-# To render a different images partial or display a different block in the related products
+-# Also depending on the partial, you can also pass a variable called render_related to
+-# render the related_products in side of the product details column
+
+- provide :title, @product.name
+- provide :edit, link_to('Edit', c.edit_product_master_path(@product.master))
+
+.row.wrap.page
+  = product_breadcrumb(@product)
+  .gs--m
+    = render 'c/front_end/products/_shows/1', product: @product, images: 2
+
+  .product-show__related_wrapper
+    %h4 Related Products
+    = render 'c/front_end/products/_grids/standard', products: @product.master.related_products
+
+  .heading-bar
+    %span Recently viewed
+  .product-recently-viewed
+    = render 'c/front_end/products/_grids/standard', products: @recently_viewed
+  = link_to_reserve 'Reserve Product', @product

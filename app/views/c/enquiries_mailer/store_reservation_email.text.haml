@@ -1,0 +1,22 @@
+
+A reservation has been placed.
+
+A customer with the following details has reserved an item for collection at
+
+= Time.now.strftime("%D")
+at
+= Time.now.strftime("%T")
+
+Name:
+= @reservation.name
+
+Email:
+= @reservation.email
+
+Phone:
+= @reservation.phone
+
+The following product was reserved:
+
+= @product.name
+= @product.sku

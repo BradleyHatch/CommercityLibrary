@@ -1,0 +1,35 @@
+var propertyValues = function(){
+  var value_selector = ".property_value_field";
+  var key_selector = ".property_key_field";
+  console.log('sup')
+
+  function applyValuesAutocomplete(el, available_values) {
+    $(el).parents("tr").find(value_selector).autocomplete({
+      source: available_values,
+      minLength: 0
+    });
+  }
+
+  function fetchValuesAutocomplete() {
+    key_id = this.value;
+    if (key_id) {
+      $.get("/admin/products/property_values_autocomplete", {
+        key_id: key_id
+      }, function (data) {
+        available_values = data.available_values;
+        applyValuesAutocomplete(this, data.available_values);
+      }.bind(this));
+    } else {
+      applyValuesAutocomplete(this, []);
+    }
+  }
+
+  $(key_selector).on("change", fetchValuesAutocomplete);
+  $("#property_values_table").on("fields_added.nested_form_fields", function (event) {
+    $(event.target).find(key_selector).on("change", fetchValuesAutocomplete);
+    $(event.target).find(key_selector).change();
+  });
+
+  $(key_selector).change()
+
+}

@@ -1,0 +1,13 @@
+.grid-header
+  .grid-header__table
+    .grid-header__results
+      %span Sort by:
+      = link_to 'Recently Added', sort_url(search_object, :id)
+      = link_to 'In stock', sort_url(search_object, 'current_stock desc')
+      = link_to '£ - £££', sort_url(search_object, 'cache_web_price_pennies asc')
+      = link_to '£££ - £', sort_url(search_object, 'cache_web_price_pennies desc')
+    .grid-header__per-page
+      #{results_range(products)} of #{products.count} products
+      = per_page_links(C.per_page_links)
+      %span
+        per page

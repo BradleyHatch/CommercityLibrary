@@ -1,0 +1,51 @@
+.grid-header
+  background-color: $primary_color
+  padding: 13px 16px
+  margin-bottom: 16px
+
+.grid-header__table
+  display: table
+  width: 100%
+
+.grid-header__results
+  display: table-cell
+  vertical-align: middle
+  font-size: 15px
+  color: white
+  @media (max-width: 640px)
+    font-size: 13px
+  select
+    -webkit-appearance: none
+    -moz-appearance: none
+    appearance: none
+    background-color: #fff
+    border-radius: 2px
+    border: none
+    color: #424947
+    padding: 8px 8px 8px
+    width: auto
+    margin: 0 0 0 10px
+    @media (max-width: 550px)
+      margin: 3px 0 0 0
+      display: block
+
+.grid-header__per-page
+  text-align: right
+  display: table-cell
+  vertical-align: middle
+  font-size: 14px
+  color: white
+  @media (max-width: 640px)
+    span
+      display: none
+  @media (max-width: 360px)
+    display: none
+  a
+    display: inline-block
+    padding: 8px 5px
+    background-color: $light_primary_color
+    color: white
+    margin-right: 2px
+    &.selected
+      background-color: white
+      color: $light_primary_color

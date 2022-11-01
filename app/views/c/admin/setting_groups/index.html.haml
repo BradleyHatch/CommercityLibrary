@@ -1,0 +1,32 @@
+.settings.form-page__intro
+  %h1 Settings
+  %p.explainer
+
+  .settings__group
+    %h3= link_to 'Users', users_path
+    %p Manage who can administer your site
+
+  .settings__group
+    %h3= link_to 'Notification emails', notification_emails_path
+    %p Manage emails that receive site notifications
+
+  .settings__group
+    %h3= link_to 'Unassigned Barcodes', product_barcodes_path
+    %p Manage the pool of barcodes to be assigned to new products
+
+  .settings__group
+    %h3= link_to 'Countries', countries_path
+    %p Specify the available countries for checkout
+
+  .settings__group
+    %h3= link_to 'Redirects', redirects_path
+    %p Manage your store redirects
+
+  .settings__group
+    %h3= link_to 'eBay auth', ebayauths_path
+    %p View eBay auth tokens and sign up
+
+  - @setting_groups.each do |setting_group|
+    .settings__group
+      %h3= link_to setting_group.name, setting_group
+      = simple_format setting_group.body

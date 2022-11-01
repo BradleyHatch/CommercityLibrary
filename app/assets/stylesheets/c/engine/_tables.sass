@@ -1,0 +1,200 @@
+.index-table
+  padding: 20px
+  margin-bottom: 50px
+  &__content
+    border: 1px solid #dae4ed
+    border-radius: 3px
+    overflow: hidden
+    box-shadow: 0 5px 15px -5px rgba(0,0,0,.1)
+table
+  width: 100%
+  background-color: white
+  thead
+    tr
+      height: 50px
+      font-size: 11px
+      color: #666666
+      background-color: #f5f5f5
+      &:hover
+        background-color: #f5f5f5
+
+      th
+        font-size: 12px
+        color: #838D94
+        font-weight: 600
+        text-transform: uppercase
+        letter-spacing: .5px
+
+  tr
+    height: 40px
+    border-bottom: 1px solid #ddd
+    &.no-border
+      border-bottom: none
+    &:last-child
+      border-bottom: none
+    &.variant-row
+      background-color: #f5f5f5 !important
+    &.out_of_stock
+      background-color: rgba(214, 0, 0, 0.16)
+    &.discontinued
+      background-color: rgba(100, 154, 255, 0.16)
+    &.display_only
+      background-color: rgba(199, 154, 20, 0.16)
+    &:hover
+      background-color: rgba(80,131,219,.05)
+    .no_hover
+      &:hover
+        background-color: white
+  td, th
+    padding: 5px
+    text-align: left
+    &:first-child
+      padding-left: 15px
+    &:last-child
+      padding-right: 15px
+    &.narrow
+      width: 1px
+    .table_image
+      min-width: 80px
+
+  // Garish colours, just to make sure it's not forgotten!
+
+
+  .nil_data
+    color: #ccc
+
+  .price-field
+    font-weight: bold
+
+.index_key
+  transition: 0.3s
+  opacity: 0
+  transform: scale(0.98)
+  max-height: 0
+  overflow: hidden
+
+  &--show
+    opacity: 1
+    max-height: 400px
+
+  li
+    &:before
+      content: ""
+      width: 16px
+      height: 16px
+      display: inline-block
+      margin-right: 4px
+      border-radius: 2px
+      transform: translateY(3px)
+
+  li.out_of_stock
+    &:before
+      background-color: rgba(214, 0, 0, 0.5)
+    
+  li.discontinued
+    &:before
+      background-color: rgba(100, 154, 255, 0.5)
+    
+  li.display_only
+    &:before
+      background-color: rgba(199, 154, 20, 0.5)
+    
+  li.success
+    &:before
+      background-color: rgba(0, 106, 38, 1)
+    
+  li.error_key
+    &:before
+      background-color: rgba(213, 23, 23, 1)
+    
+  li.nil
+    &:before
+      background-color: #ccc
+    
+  li.sage_error
+    &:before
+      background-color: red
+    
+  li.in_person_row
+    &:before
+      background-color: rgba(128, 0, 0, 0.35)
+    
+  li.has_note_row
+    &:before
+      background-color: rgba(0, 128, 0, 0.45)
+    
+  li.has_voucher_row
+    &:before
+      background-color: rgba(0, 0, 255, 0.35)
+    
+  li.has_pending_pro_forma_row
+    &:before
+      background-color: rgba(230, 230, 75, 0.37)
+    
+  li.in_person
+    &:before
+      background-color: red
+    
+  li.has_note
+    &:before
+      background-color: green
+    
+  li.has_voucher
+    &:before
+      background-color: blue
+    
+  li.has_pro_forma
+    &:before
+      background-color:  #bba145
+    
+  li.has_gift_wrapping
+    &:before
+      background-color:  #fb00ff
+
+
+// .index__highlight-row
+//   background-color: rgba(red, 0.15)
+//   transition: 0.2s
+
+// .index__highlight-row--green
+//   background-color: rgba(green, 0.15)
+
+.bulk_actions_panel
+  opacity: 0
+
+.bulk_actions_show .bulk_actions_panel
+  display: block
+  background-color: white
+  margin: 14px
+  position: fixed
+  bottom: 0
+  right: 0
+  padding: 20px
+  border-radius: 3px
+  opacity: 1
+  transition: opacity 0.4s
+  z-index: 999
+  width: 50%
+  max-width: 450px
+  h4
+    margin-top: 0
+
+.error_data
+  color: rgba(213, 23, 23, 0.66)
+  a
+    color: inherit
+
+.success_data
+  color: rgba(0, 106, 38, 0.83)
+
+.question-table
+  padding: 20px
+
+.answer-table
+  padding: 10px 20px
+  margin-left: 20px
+  border-left: 1px solid #d8d8d8
+
+.filter_panel--current
+  & + .filter_panel.row:not(.hidden)
+    padding-top: 0

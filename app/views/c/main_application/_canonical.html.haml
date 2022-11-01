@@ -1,0 +1,16 @@
+- path = ''
+
+- if @content&.present?
+  - path = front_end_content_path(@content)
+
+- if @category&.present?
+  - path = front_end_category_path(@category)
+
+- if @product&.present?
+  - path = front_end_product_path(@product)
+
+- if @brand&.present?
+  - path = front_end_brand_path(@brand)
+
+- if path.present? && request.path != "/"
+  %link{ rel: "canonical", href: "#{request.protocol + request.host}#{path}" }

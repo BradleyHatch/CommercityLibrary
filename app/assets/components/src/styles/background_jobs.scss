@@ -1,0 +1,28 @@
+@import 'colors';
+@import '../javascript_lib/styles/generic_classes';
+
+
+.background-jobs {
+  @extend .flex-row, .pointer;
+  padding: 10px 20px;
+  line-height: 35px;
+}
+
+.background-jobs__button {
+  padding: 0px 7px;
+  border-radius: 3px;
+  border: $darkGrey2 1px solid;
+  background-color: $header-background-color;
+}
+
+.background-jobs__button-title {
+  @extend .flex-align-center;
+  justify-content: left;
+  margin-left: 10px;
+}
+
+.background-jobs__light {
+  @extend .flex-center;
+  border-radius: 50%;
+  padding: 3px;
+}

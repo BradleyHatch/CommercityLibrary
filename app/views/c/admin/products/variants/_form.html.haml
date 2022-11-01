@@ -1,0 +1,276 @@
+- form_for_url ||= [@master, @variant]
+- duplicate_id ||= ""
+
+.form-page
+  = form_for form_for_url do |f|
+    .gs.gs--nowrap.clear.form-page--wide.shadow-2dp
+      .fixed-form-panel.fixed-form-panel--wide.shadow-2dp
+        .field_group
+          - if duplicate_id.present?
+            = f.hidden_field :duplicate_id, value: duplicate_id
+
+          .field.field--inner-label
+            = f.label :sku, 'SKU'
+            = f.text_field :sku, placeholder: true
+
+          .field.field--inner-label
+            = f.label :name
+            = f.text_field :name
+
+          .field.field--inner-label
+            = f.label :mpn
+            = f.text_field :mpn
+
+          .field.field--inner-label
+            = f.label :oe_number
+            = f.text_field :oe_number
+
+          = field_set_tag '' do
+            .gs
+              .g-1.fieldset-title
+                Barcodes
+              .g-1.fieldset-title.align-right
+                = f.label :no_barcodes do
+                  = f.check_box :no_barcodes
+                  Does Not Apply
+            = f.nested_fields_for :barcodes, wrapper_tag: :div, wrapper_options: { class: 'fields' }  do |fff|
+              .gs--xxl
+                .g-3.field
+                  = fff.text_field :value, placeholder: 'Barcode'
+                .g-2.g-gutter--narrow--xxl.field
+                  = fff.select :symbology, C::Product::Barcode.symbology_array, include_blank: '-- Select --'
+                .field__destroy-nested= fff.remove_nested_fields_link fa_icon('trash')
+            - if f.object.barcodes.empty? && C::Product::Barcode.unassigned.any?
+              .field.field--grow
+                = f.submit 'Auto assign new Barcode', class: 'btn'
+
+            = f.add_nested_fields_link :barcodes, 'Add a Barcode', class: 'btn btn--small btn--secondary'
+
+
+          .gs--xxl
+            .g-1.field.field--inner-label
+              = f.label :package_quantity
+              = f.number_field :package_quantity
+
+            .g-1.g-gutter--narrow--xxl.field.field--inner-label
+              = f.label :current_stock
+              = f.number_field :current_stock
+            .g-1.g-gutter--narrow--xxl.field.field--inner-label
+              = f.label :weight, 'Weight'
+              = f.number_field :weight, step: 0.01, min: 0
+
+          %fieldset
+            %span.fieldset-title Dimensions
+
+            .gs--xxl
+              .g-1.field.field--inner-label
+                = f.label :x_dimension, 'Width'
+                = f.number_field :x_dimension
+
+              .g-1.g-gutter--narrow--xxl.field.field--inner-label
+                = f.label :y_dimension, 'Height'
+                = f.number_field :y_dimension
+
+              .g-1.g-gutter--narrow--xxl.field.field--inner-label
+                = f.label :z_dimension, 'Depth'
+                = f.number_field :z_dimension
+
+              .g-1.g-gutter--narrow--xxl.field.field--inner-label
+                = f.label :dimension_unit, 'Unit'
+                = f.text_field :dimension_unit
+
+          .gs--xxl
+            .field.field--inner-label.g-1
+              = f.label :country_of_manufacture_id
+              = f.select :country_of_manufacture_id, C::Country.ordered.pluck(:name, :id), { include_blank: 'Select Country' }
+
+            .field.field--inner-label.g-1.g-gutter--narrow--xxl
+              = f.label :manufacturer_product_url
+              = f.text_field :manufacturer_product_url
+
+          .gs--xxl
+            .field.field--inner-label.g-1
+              = f.label :cost_price, 'Cost Price'
+              = f.number_field :cost_price, step: 0.01, min: 0
+            .field.field--inner-label.g-1.g-gutter--narrow--xxl
+              = f.label :rrp, 'RRP'
+              = f.number_field :rrp, step: 0.01, min: 0
+
+          = f.price_field :retail_price
+
+          .field.field__with-post-checkbox
+            = f.label :has_delivery_override, 'Override the delivery rate with a flat cost'
+            = f.check_box :has_delivery_override, class: 'conditional_checkbox'
+            .field.field--inner-label.checkbox-hidden
+              = f.label :delivery_override
+              = f.number_field :delivery_override, step: 0.01, min: 0
+
+          - if C.product_info_fields.any?
+            = f.fields_for :info do |info_form|
+              - C.product_info_fields.each do |key, config|
+                .field.field--inner-label
+                  = info_form.label key, config[:name]
+                  - if config[:type] == :boolean
+                    = info_form.check_box key, checked: !!f.object.info[key.to_s]
+                  - else
+                    = info_form.text_field key, value: f.object.info[key.to_s]
+                  - if config[:help].present?
+                    .field__help
+                      %p= config[:help]
+      .g-1
+        = tabs do
+          = tab :publishing_options, 'Publishing' do
+            .field
+              = f.label :status do
+                = f.check_box :status, {}, 'active', 'inactive'
+                %span Active
+            .field
+              = f.label :display_in_lists do
+                - if f.object.new_record?
+                  = f.check_box :display_in_lists, { checked: C.default_display_in_lists }
+                - else
+                  = f.check_box :display_in_lists
+                %span Display product in lists
+            .field
+              = f.label :featured do
+                = f.check_box :featured
+                %span Featured
+            .field
+              = f.label :published_web do
+                = f.check_box :published_web
+                %span Publish on web
+            .field
+              = f.label :published_amazon do
+                = f.check_box :published_amazon
+                %span Publish on Amazon
+            .field
+              = f.label :published_ebay do
+                = f.check_box :published_ebay
+                %span Publish on Ebay
+            .field
+              = f.label :discontinued do
+                = f.check_box :discontinued
+                %span Discontinue Product
+
+            .field.field--inner-label
+              = f.label :order
+              = f.number_field :order
+              .field__help
+                %p Set the order that this product will appear in category listings.
+
+            .field
+              = f.label :description
+              = f.tiny_mce_text_area :description
+
+          = tab :properties, 'Properties' do
+            .panel_buttons
+              .btn.btn--secondary
+                = f.add_nested_fields_link :property_values, 'Add property value'
+
+            %table.form_table#property_values_table
+              %tbody
+                %tr
+                  %th
+                    %span Keys
+                  %th Values
+                = f.nested_fields_for :property_values, wrapper_tag: :tr, wrapper_options: {class: 'bordered_tr'} do |ff|
+                  %td.padded_td
+                    = ff.select :property_key_id, C::Product::PropertyKey.pluck(:key, :id), {}, { class: 'property_key_field' }
+                  %td.padded_td
+                    = ff.text_field :value, placeholder: 'E.g. Red..', class: 'property_value_field'
+                  %td.padded_td
+                    .red_x_button= ff.remove_nested_fields_link 'x'
+
+          = tab :options, 'Options' do
+            %table.form_table
+              %tbody
+                %tr
+                  %th
+                    %span Options
+                  %th Available for this product?
+                = f.collection_check_boxes(:option_ids, C::Product::Option.all, :id, :name_and_price) do |b|
+                  - id = b.value
+                  - option_variant = C::Product::OptionVariant.find_by(option_id: id, variant_id: @variant.id)
+                  - has_carts = option_variant.present? ? option_variant.cart_item_option_variants.any? : false
+                  %tr
+                    %td.padded_td= b.label
+                    %td.padded_td
+                      = b.check_box 
+                      - if has_carts
+                        %i
+                          = " "  
+                          (is currently in a cart)
+
+          = tab :images, 'Images' do
+            .field{ style: "display: inline-block" }
+              = f.label :image_variant_id
+              = f.select :image_variant_id, @variant.sibling_variants_with_images.map { |v| [v.name_with_value(C.variant_property_key_concat), v.id] }.sort_by { |n, i| n&.downcase }, include_blank: '-- Select Image Variant --'
+              .field__help
+                %p Select a variant to default to its images when this variant has no selected images
+                
+            - if @master.images.any? && !@variant.new_record?
+              .gs
+                .g-1
+                  %h4 Unselected Images
+                  .field_help
+                    %p These are images currently not displayed in the shop for this product
+                  #web_images_container
+                    = render 'variant_select_image', master: @master, variant: @variant
+                .g-1
+                  %h4 Selected Images
+                  .field_help
+                    %p These are images currently displayed in the shop for this product that appear in order. Drag to reorder them
+                  #web_channel_images_container.reorderable
+                    = render 'variant_image', master: @master, variant: @variant
+
+              -#.field
+              -#  - @master.images.each do |image|
+              -#    .inline_block
+              -#      = image_tag(image.image.thumbnail)
+              -#      = File.basename(image.image.path)
+              -#      = label_tag :variant, 'Variant image?'
+              -#      = check_box_tag "associate_image[#{image.id}]", 1, image.variant_id == @variant.id
+
+            - else
+              %p
+                %i No images on product
+
+          = tab :prices, 'Prices' do
+            .field
+              = f.label :cost_price
+              = f.number_field :cost_price, step: 0.01, min: 0
+            .field
+              = f.label :rrp
+              = f.number_field :rrp, step: 0.01, min: 0
+
+            = f.price_field :web_price
+            = f.price_field :amazon_price
+            = f.price_field :ebay_price
+
+          = tab :seo, 'SEO' do
+            = render 'c/admin/seo', f: f
+
+          - if f.object.ebay_last_push_body
+            = tab :activity, 'eBay Activity' do
+              .field
+                = field_set_tag 'Last push response' do
+                  - if f.object.ebay_last_push_body['issues']
+                    %h4 Issues with the listing
+                    %ul
+                      - f.object.ebay_last_push_body['issues'].each do |error|
+                        - if !error['error_parameters'].nil? && error['error_parameters'].length == 1
+                          %li= "#{error['long_message']} #{error['error_parameters']['value'].to_s.titleize}"
+                        - else
+                          %li= "#{error['long_message']}"
+                  - if f.object.ebay_last_push_body['errors']
+                    %h4 Errors with the listing
+                    %ul
+                      - f.object.ebay_last_push_body['errors'].each do |error|
+                        - if !error['error_parameters'].nil? && error['error_parameters'].length == 1
+                          %li= "#{error['long_message']} #{error['error_parameters']['value'].to_s.titleize}"
+                        - else
+                          %li= "#{error['long_message']}"
+
+    .actions.form-page__actions
+      = f.submit class: 'btn'
+      = link_to_delete 'Delete', @variant, nested: @master, class: 'btn btn--secondary', redirection: edit_product_master_path(@master)  unless @variant.new_record?

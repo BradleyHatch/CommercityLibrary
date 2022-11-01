@@ -1,0 +1,8 @@
+- provide :title, 'Sales Highlights'
+
+.index-header
+  %h1= pluralize(@sales_highlights.count, 'Sales Highlight')
+  %p
+    Edit the sales highlights which appear on the store
+
+= index_table @sales_highlights.ordered, C::SalesHighlight::INDEX_TABLE, sortable: sort_sales_highlights_path

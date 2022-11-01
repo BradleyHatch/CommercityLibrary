@@ -1,0 +1,2 @@
+$(".channel_image_<%= @channel_image.id %>").remove()
+$("div#<%= @channel_type %>_images_container").html("<%= escape_javascript(render 'select_image', channel_type: @channel_type, image: @image, master: @master ) %>");

@@ -1,0 +1,20 @@
+= form_for @team_member do |f|
+  = f.error_messages
+  = tabs do
+    = tab :content do
+      .field
+        = f.label :name
+        = f.text_field :name
+
+      .field
+        = f.label :role
+        = f.text_field :role
+
+      .field
+        = f.label :body
+        = f.text_area :body,  class: 'ckeditor'
+      .field
+        = f.image_field :image
+  .actions.form-page__actions
+    = f.submit class: 'btn'
+    = link_to_delete 'Delete', @team_member, redirection: team_members_path, class: 'btn btn--secondary' unless @team_member.new_record?

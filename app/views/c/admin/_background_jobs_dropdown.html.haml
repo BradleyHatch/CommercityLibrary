@@ -1,0 +1,18 @@
+- unless @background_jobs.blank?
+  #background_jobs
+    .label
+      = fa_icon('caret-down')
+      = pluralize(@background_jobs_count, 'Running Job')
+    .background_jobs_container
+      %ul
+        - @background_jobs.each do |product|
+          %li
+            - max_length = 20
+            %p
+              Processing Amazon data for
+              %span.product_name
+                = "#{product.name[0..max_length]}#{'...' if product.name.length > max_length}"
+        - difference = @background_jobs_count - @background_jobs.count
+        - if difference > 0
+          %li
+            %p And #{difference} more

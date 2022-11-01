@@ -1,0 +1,42 @@
+.form-page--narrow.form-page--mce
+  .form-page__form
+    = form_for [@group, @region, @block] do |f|
+      = f.error_messages
+
+      = tabs do
+
+        = tab :block do
+
+          .field
+            = f.label :name, placeholder: 'Block name'
+            = f.text_field :name
+
+          .field
+            = f.label :body
+            = f.tiny_mce_text_area :body
+
+          .field
+            = f.label :url, placeholder: 'Link for the block'
+            = f.text_field :url
+
+          .field
+            = f.label :kind_of, 'Type'
+            = f.select :kind_of, C::Template::Block.kind_ofs.keys
+
+          .field
+            = f.label :size
+            = f.select :size, C::Template::Block.sizes.keys
+
+          -# .field
+            -# = f.image_field :image
+
+        = tab :media do
+          .field
+            - if @block.new_record?
+              %label Please save this to enable image uploading
+            - else
+              = render 'preview_upload', model_type: :blocks, model_name: :template_block, obj: @block, f: f, no_preview: true
+
+      .actions.form-page__actions
+        = f.submit class: 'btn'
+        = link_to 'Delete', [@group, @region, @block], method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn--secondary' unless @block.new_record?

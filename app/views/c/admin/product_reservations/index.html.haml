@@ -1,0 +1,14 @@
+- provide :title, 'Product Reservations'
+
+.index-header.gs
+  .g-3.g-gutter--right
+    %h1= pluralize(@product_reservations.count, 'Product Reservation')
+    %p
+      All the product reservations made through the store.
+  .g-1.g-gutter
+    = search_form_for @q do |f|
+      .gs
+        .g-3= f.search_field :name_or_email_or_reference_cont, placeholder: 'Search'
+        .g-1.g-gutter--narrow= submit_tag 'Search', class: 'btn btn--system'
+
+= index_table @product_reservations, C::ProductReservation::INDEX_TABLE

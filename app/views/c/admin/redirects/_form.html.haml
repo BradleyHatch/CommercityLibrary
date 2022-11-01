@@ -1,0 +1,15 @@
+.form-page--narrow
+  .form-page__form
+    = form_for @redirect do |f|
+      = f.error_messages
+      .field
+        = f.label :old_url
+        = f.text_field :old_url
+
+      .field
+        = f.label :new_url
+        = f.text_field :new_url
+
+      .actions
+        = f.submit class: 'btn'
+        = link_to_delete 'Delete', @redirect, redirection: redirects_path, class: 'btn btn--secondary' unless @redirect.new_record?

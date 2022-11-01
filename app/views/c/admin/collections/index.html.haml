@@ -1,0 +1,9 @@
+- provide :title, 'Collections'
+
+.index-header
+  %h1= pluralize(C::Collection.count, 'Collection')
+  = link_to '+ Create Collection', new_collection_path, class: 'btn btn--small'
+  %p
+    This is the list of all the collections on your store. A collection is a curated section of products that you can link to.
+
+= index_table @collections, C::Collection::INDEX_TABLE

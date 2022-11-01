@@ -1,0 +1,6 @@
+%fieldset
+  = f.fields_for :info do |ff|
+    - C.order_info_fields.each do |key, name|
+      .field.field--inner-label
+        = ff.label key, name
+        = ff.text_field key, value: f.object.info[key.to_s]

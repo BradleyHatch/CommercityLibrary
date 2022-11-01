@@ -1,0 +1,7 @@
+- provide :title, 'Slideshows'
+.index-header
+  %h1= pluralize(@slideshows.count, 'Slideshow')
+  %p
+    Control the slideshows that appear on the site. You can have unlimited
+    slideshows, however new ones will have to be configured into your site by the dev team.
+= index_table @slideshows, C::Slideshow::INDEX_TABLE

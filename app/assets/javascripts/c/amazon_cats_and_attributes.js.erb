@@ -1,0 +1,60 @@
+var amazonCategoriesAttributes = function(){
+  var category_selector = "#product_master_amazon_channel_attributes_amazon_category_id";
+  var product_type_selector = "#product_master_amazon_channel_attributes_product_type_id";
+  var available_properties = [];
+
+  function applyAmazonAutocomplete(available_properties) {
+    $('.amazon_autocomplete').autocomplete({
+      source: available_properties,
+      minLength: 0
+    });
+  }
+
+  function fetchAmazonAutocomplete() {
+    product_type_id = $(product_type_selector).val()
+    if (product_type_id) {
+      $.get("/admin/products/amazon_autocomplete", {
+        product_type_id: product_type_id
+      }, function (data) {
+        available_properties = data.available_properties;
+        applyAmazonAutocomplete(data.available_properties);
+      });
+    } else {
+      applyAmazonAutocomplete([]);
+    }
+  }
+
+  function replaceProductTypes(data) {
+    $p = $(product_type_selector);
+    $p.empty(); // remove old options
+    // Append blank option
+    $p.append($("<option></option>").attr("value", "").text("-- Choose Type --"));
+    $.each(data.available_product_types, function(key, value) {
+      $p.append($("<option></option>")
+        .attr("value", value).text(key));
+    });
+  }
+
+  $(product_type_selector).on("change", fetchAmazonAutocomplete);
+  $("#properties_table").on("fields_added.nested_form_fields", function () {
+    applyAmazonAutocomplete(available_properties);
+  });
+
+  $(category_selector).on("change", function () {
+    var val = $(category_selector).val();
+
+    if (val != 0) {
+      $.get("/admin/products/amazon_product_types", {
+        category_id: val
+      }, function (data) {
+        replaceProductTypes(data);
+        $(product_type_selector).prop("disabled", false);
+      });
+    } else {
+        replaceProductTypes([]);
+        $(product_type_selector).prop("disabled", "disabled");
+    }
+  });
+
+  fetchAmazonAutocomplete();
+}

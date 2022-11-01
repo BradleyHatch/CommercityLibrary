@@ -1,0 +1,81 @@
+.index-header.gs
+  .g-3.g-gutter--right
+    %h1= @data_transfer.name.blank? ? 'Import' : @data_transfer.name
+    - if @data_transfer.import_at && @data_transfer.import_at > Time.now
+      %p= "Your data will be imported on #{@data_transfer.import_at}. Alternatively, use the button below to import now"
+    - else
+      %p A summary of your import is below
+      %p= "Total rows: #{@row_count}"
+
+    - error_count = @results_hash.inject(0) { |sum, m| sum + (m.key?(:error) ? 1 : 0) }
+
+    - unless error_count.zero?
+      %p
+        %strong= pluralize(error_count, 'Error')
+      %p All products with errors will be ignored on import.
+
+    - if @data_transfer.import_finished_at.present?
+      %p Imported #{time_ago_in_words @data_transfer.import_finished_at} ago
+
+    .actions.gs
+      = button_to 'Import Now', csv_import_data_transfer_path(@data_transfer), class: 'btn'
+      = link_to_delete 'Delete', @data_transfer, redirection: [:contents], class: 'btn btn--secondary' unless @data_transfer.new_record?
+
+  .g-1.g-gutter
+    = form_for @data_transfer do |f|
+      = f.error_messages
+      .field
+        = f.label :import_at, 'Schedule import'
+        = f.date_field :import_at
+      .actions
+        = f.submit class: 'btn'
+
+.pagination.data-transfer-links
+  - @page_links.each do |page_link|
+    - if page_link == @page
+      %em{ class: :current }
+        = "#{page_link + 1}"
+    - else
+      = link_to "#{page_link + 1}", data_transfer_path(@data_transfer, {page: page_link})
+
+%table
+  %thead
+    %tr
+      %th sku
+      %th mpn
+      %th name
+      %th description
+      %th features
+      %th specification
+      %th retail_price
+      %th web_price
+      %th previous_price
+      %th rrp
+      %th cost_price
+      %th barcodes
+      %th images
+    - @results_hash.each do |json|
+      - if json[:error]
+        %tr
+          %td= json[:sku]
+          %td{colspan: 9}
+            %strong Errors:
+            = json[:error]
+      - else
+        %tr
+          %td= json[:main_variant_attributes][:sku]
+          %td= json[:main_variant_attributes][:mpn]
+          %td= json[:main_variant_attributes][:name]
+          %td= json[:web_channel_attributes][:description]
+          %td= json[:web_channel_attributes][:features]
+          %td= json[:web_channel_attributes][:specification]
+          %td= json[:main_variant_attributes][:retail_price_attributes][:with_tax]
+          %td= json[:main_variant_attributes][:web_price_attributes][:with_tax]
+          %td= json[:web_channel_attributes][:discount_price]
+          %td= json[:main_variant_attributes][:rrp]
+          %td= json[:main_variant_attributes][:cost_price]
+          %td
+            %ul
+              - json[:main_variant_attributes][:barcodes_attributes].each do |barcode|
+                %li #{barcode[:symbology]}: #{barcode[:value]}
+          %td= json[:remote_image_array]

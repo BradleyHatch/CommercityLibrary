@@ -1,0 +1,76 @@
+.product-grid__preview
+  @media (min-width: 1301px)
+    width: 23.4693877551%
+    margin-right: 2.0408163265%
+    &:nth-child(4n)
+      margin-right: 0
+  @media (max-width: 1300px) and (min-width: 701px)
+    width: 31.2210424899%
+    margin-right: 3.1684362651%
+    &:nth-child(3n)
+      margin-right: 0
+  @media (max-width: 700px) and (min-width: 460px)
+    width: 48%
+    margin-right: 4%
+    &:nth-child(2n)
+      margin-right: 0
+  @media (max-width: 460px)
+    width: 100%
+  display: inline-block
+  position: relative
+  vertical-align: top
+  border: 1px solid #bbb
+  margin-top: 10px
+  margin-bottom: 10px
+
+  &:focus
+    box-shadow: 0px 0px 0 5px rgba($primary_color, 0.2)
+
+  figure
+    padding: 10px
+    margin: 0
+    width: 100%
+    img
+      width: 100%
+
+  &:hover
+    text-decoration: none !important
+
+.product-grid__info
+  padding: 10px
+  border-top: 1px solid #ddd
+  position: relative
+  transition: 0.3s
+  &:hover
+    background-color: rgba($primary_color, 0.1)
+    a
+      text-decoration: none
+
+  h3
+    font-size: 1rem
+    margin: 0
+    font-weight: 700
+    color: #333
+    min-height: 100px
+
+  h4
+    color: #666
+    font-weight: normal
+    font-size: 14px
+    margin: 0 0 10px
+    min-height: 20px
+
+.product-grid__more
+  padding: 10px
+  background-color: #1e9a3e
+  font-size: 14px
+  color: white
+  position: absolute
+  right: 10px
+  bottom: 10px
+  font-weight: 600
+
+.product-grid__price
+  font-size: 22px
+  font-weight: 600
+  color: darkred

@@ -1,0 +1,90 @@
+#deko-finance-container.payment_details.finance.deko
+  = image_tag 'c/deko_cool.svg'
+  = form_tag deko_payment_checkout_path, method: :post do
+    = field_set_tag 'Finance Options' do
+      - options = options_for_select(C::DEKO_CONFIG.pluck(:name, :key))
+      = select_tag :deko_payment_option, options
+
+      - default_percentage = 10
+      - min_pc = C.deko_finance_min_deposit_pc
+      - max_pc = C.deko_finance_max_deposit_pc
+
+      .field
+        = label_tag :deko_deposit_slider, 'Deposit Percentage'
+        = range_field_tag :deko_deposit_slider, default_percentage, in: min_pc..max_pc, step: 5
+
+      .field
+        = number_field_tag :deko_deposit_value, default_percentage
+
+      %table
+        %tr
+          %th Term Length
+          %td#deko__term-length
+        %tr
+          %th APR
+          %td#deko__apr
+        %tr
+          %th Deposit Amount
+          %td#deko__deposit-amount
+        %tr
+          %th Monthy Installment
+          %td#deko__per-month
+        %tr
+          %th Overall Cost of Loan
+          %td#deko__overall-cost
+
+      = submit_tag 'Pay with Deko Finance', id: :deko_link, class: 'btn minor_form_button'
+
+- if ENV['DEKO_LIVE']
+  %script{type: 'text/javascript', src: "https://secure.dekopay.com/js_api/FinanceDetails.js.php?api_key=#{ENV['DEKO_API_KEY']}"}
+- else
+  %script{type: 'text/javascript', src: "https://test.dekopay.com/js_api/FinanceDetails.js.php?api_key=#{ENV['DEKO_API_KEY']}"}
+
+:javascript
+  $(function() {
+    var select_id = '#deko_payment_option';
+    var slider_id = '#deko_deposit_slider';
+    var number_field_id = '#deko_deposit_value';
+    var cart_price = #{cart.price};
+
+    var getSelectedFinanceOption = function() {
+      return $(select_id).find(":selected").val();
+    };
+
+    var setFinanceCosts = function() {
+      deko_object = new FinanceDetails(
+        getSelectedFinanceOption(),
+        cart_price,
+        parseInt($(slider_id).val(), 10),
+        0
+      );
+
+      $('#deko__deposit-amount').html('£' + deko_object.d_amount);
+      $('#deko__term-length').html(deko_object.term + ' Months');
+      $('#deko__apr').html(deko_object.apr + '%');
+      // This is the only one that's a number. Ensure it's to 2 decimal places.
+      $('#deko__per-month').html('£' + deko_object.m_inst.toFixed(2));
+      $('#deko__overall-cost').html('£' + deko_object.total);
+    };
+
+    setFinanceCosts();
+
+    $(select_id).on('change', function() {
+      setFinanceCosts();
+    });
+
+    $(slider_id).on('change', function() {
+      var value = $(slider_id).val();
+      $(number_field_id).val(value);
+
+      setFinanceCosts();
+    });
+
+    $(number_field_id).on('change', function() {
+      var value = $(number_field_id).val();
+      $(slider_id).val(value);
+
+      var normalised_value = $(slider_id).val();
+      $(number_field_id).val(normalised_value);
+    });
+  });

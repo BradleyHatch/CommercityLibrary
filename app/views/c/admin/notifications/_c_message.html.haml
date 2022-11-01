@@ -1,0 +1,10 @@
+- message = @notification.notifiable
+%p
+  %b Subject:
+  = message.subject
+%p
+  %b Sender:
+  = message.sender_id
+%p
+  %b Body:
+  %iframe.c-message{ src: render_message_notification_path		}

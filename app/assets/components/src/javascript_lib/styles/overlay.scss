@@ -1,0 +1,16 @@
+@import 'box_shadows';
+@import 'generic_classes';
+@import 'transitions';
+
+
+ .overlay {
+   @extend .absolute-0, .width-100;
+   opacity: 1;
+   transition: opacity $overlay-transition;
+   box-shadow: $shadow2;
+
+  &--fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+ }

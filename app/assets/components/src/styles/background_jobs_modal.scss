@@ -1,0 +1,15 @@
+@import '../javascript_lib/styles/colors';
+@import '../javascript_lib/styles/generic_classes';
+
+
+.background-jobs-modal__panel {
+  line-height: 40px;
+  min-width: 300px;
+  padding: 9px;
+  z-index: 999;
+  background-color: $lightGrey;
+}
+
+.background-jobs-modal__inner-panel {
+  @extend .flex-column-1;
+}

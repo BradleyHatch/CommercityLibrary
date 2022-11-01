@@ -1,0 +1,20 @@
+
+The following item(s) will be processed shortly.
+%br
+%br
+
+= render 'order_table', order: @order
+
+- if @order.checkout_notes
+  %p= @order.checkout_notes
+  %br
+  %br
+
+- if @order.click_and_collect?
+  We will be in touch shortly with details when the order is ready for collection.
+
+- else
+  The order will be dispatched to the following address.
+  %br
+  %br
+  = presenter(@order.shipping_address).block

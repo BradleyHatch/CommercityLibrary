@@ -1,0 +1,215 @@
+= will_paginate collection rescue nil
+
+.index-table
+  .index-table__content
+    // Generated tables using JSON
+
+    - bulk_path = url_for(action: :bulk_actions) rescue ''
+
+    - filter_data_objs = []
+
+    - index_data.except(:ROW_CLASS).keys.each_with_index do |key, i|
+      - if index_data[key][:filter]
+        - filter_data = index_data[key][:filter]
+        - filter_data_objs.push({ display: filter_data[:display], collection: filter_data[:collection], name: filter_data[:name], label: filter_data[:label] })
+
+    :javascript
+      $(function() {
+        $(".filter_toggle").on("click", function() {
+          $(".filter_panel").toggleClass("hidden")
+        })
+      })
+
+    - params_q = request.query_parameters[:q] || {}
+    - current_filter_syms = params_q.keys.map(&:to_sym) & filter_data_objs.map { |o| o[:name] }.map(&:to_sym)
+    - params_q_has_filters = params_q.values.reject(&:blank?).any?
+    - if current_filter_syms.any? && params_q_has_filters
+      .filter_panel--current.row
+        %a.filter_toggle{ style: "cursor: pointer" }
+          Currently filtering by: 
+          = current_filter_syms.map { |sym| params_q[sym] }.reject(&:blank?).join(", ")
+
+    .filter_panel.hidden.row
+      - if filter_data_objs.any?
+        .filter{class: "filter"}
+          = search_form_for @q do |f|
+            - filter_data_objs.each do |filter_data_obj|
+              - filter_i = filter_data_obj[:i]
+              - filter_name = filter_data_obj[:name]
+              - filter_collection = filter_data_obj[:collection]
+              - filter_display = filter_data_obj[:display]
+              - filter_label = filter_data_obj[:label]
+              .field
+                = f.label filter_label.present? ? filter_label : filter_name
+                .gs.gs--centered
+                  .g-1
+                    = f.collection_select filter_name, instance_eval { eval filter_collection }, filter_display, filter_display, include_blank: true
+                  .g-gutter
+                  = link_to 'Clear', request.query_parameters.merge(q: params_q.except(filter_name))
+                
+
+            = submit_tag :Search, class: 'btn btn--small'
+            -# = link_to 'Show none', request.query_parameters.merge(q: {"#{filter_name.gsub('_eq', '_null')}": 1})
+
+
+    = form_tag bulk_path do
+      #index_table__wrapper{class: ('bulk_actions_container' if bulk_actions)}
+        - if bulk_actions
+          .bulk_actions_panel.hidden.shadow-8dp
+            %h4 Select Bulk Action
+            .gs
+              .g-3
+                = select_tag :bulk_actions, options_for_select(bulk_actions)
+              .g-1.g-gutter
+                = submit_tag 'Submit', class: 'btn'
+
+        %table.index_table{class: ('sortable_table' if sortable)}
+          %thead
+            - if sortable
+              %th.sort_column
+            - if bulk_actions
+              %th= check_box_tag :select_all
+            - index_data.except(:ROW_CLASS).keys.each_with_index do |key, i|
+              - next if index_data[key][:display] && !instance_eval { eval index_data[key][:display] }
+              %th.no-wrap{class: "column_#{i}"}
+                - next if key[0] == '_'
+                - if (sort = index_data[key][:sort])
+                  = sort_link @q, sort, raw(key.to_s)
+
+
+                - else
+                  = key
+                - if index_data[key][:filter]
+                  = link_to fa_icon('filter'), 'javascript:void(0)', class: 'filter_toggle', data: {filter: "filter_#{i}"}
+
+
+          %tbody{'index_data-sort' => sortable}
+            - collection.each do |object|
+
+              - row_klass = ""
+              - if (klass = index_data[:ROW_CLASS])
+
+                - if klass[:toggle]
+                  - toggles = Array.wrap(klass[:toggle])
+                  - toggles.each do |toggle|
+
+                    - result = object.instance_eval { eval toggle[:condition] }
+
+                    - if result
+                      - row_klass = "#{row_klass} + #{toggle[:true]}"
+
+                    - elsif result.nil?
+
+                      - row_klass = "#{row_klass} + #{toggle[:nil]}"
+                    - else
+
+                      - row_klass = "#{row_klass} + #{toggle[:false]}"
+                - else
+                  - row_klass = klass[:text]
+
+              %tr{id: "#{controller_name.singularize}_#{object.id}", class: "#{row_klass} object_#{object.id} #{object.respond_to?(:index_table_row_class) ? object.index_table_row_class : ''}", data: {columns: index_data.except(:ROW_CLASS).values.count}}
+                - if sortable
+                  %td.sort_handle
+                    = fa_icon('ellipsis-v')
+                - if bulk_actions
+                  %td.check_box_column.narrow= check_box_tag "#{controller_name.singularize}[]", object.id
+
+                - index_data.except(:ROW_CLASS).values.each_with_index do |value, i|
+                  - begin
+                    - next if value[:display] && !instance_eval { eval value[:display] }
+                    - if (klass = value[:class])
+                      - if klass[:toggle]
+
+                        - result = object.instance_eval { eval klass[:toggle][:condition] }
+                        - if result
+                          - klass = klass[:toggle][:true]
+                        - elsif result.nil?
+                          - klass = klass[:toggle][:nil]
+                        - else
+                          - klass = klass[:toggle][:false]
+
+                    %td{class: "column_#{i} #{'narrow' if (value[:image])} #{klass if klass}"}
+                      - unless value[:condition] && object.instance_eval { eval value[:condition] }
+
+                        - if value[:primary]
+                          = link_to(object.send(value[:primary]), [:edit, object])
+
+                        - if value[:toggle]
+                          - if object.instance_eval { eval value[:toggle][:condition] }
+                            - value = value[:toggle][:true]
+                          - else
+                            - value = value[:toggle][:false]
+
+
+                        - if (link = value[:link])
+                          - if link[:raw_options]
+                            - options = link[:raw_options]
+                          - else
+                            - unless object.instance_eval { eval link[:options] } == [nil]
+                              - options = object.instance_eval { eval link[:options] }
+                          - if options
+                            = link_to options, remote: link[:remote], method: link[:method], data: link[:data] do
+                              = link[:name][:call] ? raw(object.instance_eval { eval link[:name][:call] }) : link[:name][:text]
+
+                        - elsif (price = value[:price])
+                          = humanized_money_with_symbol object.instance_eval { eval price[:call] }
+
+                        - elsif (link = value[:image])
+                          = image_tag object.instance_eval { eval value[:image] }, class: 'table_image'
+
+                        - elsif (icon = value[:icon])
+                          = fa_icon(icon)
+
+                        - else
+                          = raw(value[:call] ? object.instance_eval { eval value[:call] } : value[:text])
+                  - rescue
+
+              - if C.show_all_variants_in_products_table && object.is_a?(C::Product::Master)
+                - C::Product::Variant.where(master_id: object.id).where.not(id: object.main_variant.id).each do |variant|
+                  - next if variant.main_variant?
+                  %tr{id: "#{controller_name.singularize}_#{variant.id}", class: "#{row_klass} variant_#{variant.id} variant-row", data: {columns: index_data.except(:ROW_CLASS).values.count}}
+                    - if sortable
+                      %td
+                    - if bulk_actions
+                      %td
+
+                    - index_data_json = index_data.to_json
+                    - index_data_json = index_data_json.gsub("main_variant.", "").gsub('main_variant_', '')
+                    - index_data_for_variant = JSON.parse(index_data_json).with_indifferent_access
+
+                    - index_data_for_variant.except(:ROW_CLASS).values.each_with_index do |value, i|
+                      %td{class: "column_#{i} #{'narrow' if (value[:image])}"}
+                        - unless value[:condition] && variant.instance_eval { eval value[:condition] }
+                          - if value[:primary]
+                            = link_to(variant.send(value[:primary]), [:edit, variant])
+
+                          - if value[:toggle]
+                            - if variant.instance_eval { eval value[:toggle][:condition] }
+                              - value = value[:toggle][:true]
+                            - else
+                              - value = value[:toggle][:false]
+
+                          - if (link = value[:link])
+                            - if link[:raw_options]
+                              - options = link[:raw_options]
+                            - else
+                              - unless variant.instance_eval { eval link[:options] } == [nil]
+                                - options = variant.instance_eval { eval link[:options] }
+                            - if options
+                              = link_to options, remote: link[:remote], method: link[:method], data: link[:data] do
+                                = link[:name][:call] ? raw(variant.instance_eval { eval link[:name][:call] }) : link[:name][:text]
+
+                          - elsif (price = value[:price])
+                            = humanized_money_with_symbol variant.instance_eval { eval price[:call] }
+
+                          - elsif (link = value[:image])
+                            - begin
+                              = image_tag variant.instance_eval { eval value[:image] }, class: 'table_image'
+                            - rescue
+                              -# eee
+
+                          - elsif (icon = value[:icon])
+                            = fa_icon(icon)
+
+                          - else
+                            = raw(value[:call] ? variant.instance_eval { eval value[:call] } : value[:text])

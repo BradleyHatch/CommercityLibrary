@@ -1,0 +1,38 @@
+- if @order.is_pro_forma?
+  %h4{ style: "margin: 0" } This is a pro forma order completed by a trade customer
+  %br
+  %br
+
+- if @order.click_and_collect?
+  %h4{ style: "margin: 0" } This is a click and collect order
+  %br
+  %br
+
+- if @order.is_gift_wrapping?
+  %h4{ style: "margin: 0" } Customer has requested gift wrapping for some items
+  %br
+  %br
+
+The following item(s) has been purchased:
+%br
+%br
+
+= render 'order_table', order: @order, store: true
+
+The purchase was made by:
+%br
+= presenter(@order.shipping_address).block
+%br
+%br
+
+%span= "#{@order.customer&.email} is a "
+- if @order.customer&.orders&.size > 1
+  %b returning 
+- else
+  %b new
+%span customer.
+
+= render "c/order_mailer/notify_store_extra_html", order: @order
+%br
+%br
+%h4 To view the order, sign in to your store and go to orders.

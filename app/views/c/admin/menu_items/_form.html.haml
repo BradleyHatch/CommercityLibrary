@@ -1,0 +1,44 @@
+= form_for @menu_item do |f|
+  = f.error_messages
+  .gs
+    .fixed-form-panel
+      .field
+        = f.label :name, placeholder: 'Menu Item name'
+        = f.text_field :name
+
+        .field
+          = f.label :link
+          = f.text_field :link
+
+        .field
+          = f.label :target
+          = f.select :target, [:blank, :self, :parent, :top], include_blank: '-- Select --'
+
+        .field
+          = f.label :parent_id
+          = f.select :parent_id, depth_select_options(@menu_item), include_blank: '-- Select Menu Item --'
+
+        .field
+          = f.label :content_id, 'Page (Note this overrides the link above)'
+          = f.collection_select :content_id, C::Content.basic_page.all, :id, :name, include_blank: true
+
+
+    .g-1
+      = tabs do
+        = tab '?' do
+          %h3 New Menu Item
+          %p Create a new menu item using this form:
+          %ul
+            %li
+              %b Name -
+              The name of your menu item
+            %li
+              %b Link -
+              The path you want your menu link to goto
+            %li
+              %b Parent
+              Select where in a hierachy you want your menu item to appear
+
+  .actions.form-page__actions
+    = f.submit class: 'btn'
+    = link_to_delete 'Delete', @menu_item, class: 'btn btn--secondary' unless @menu_item.new_record?

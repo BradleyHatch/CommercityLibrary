@@ -1,0 +1,30 @@
+
+
+%table
+  %thead
+    %tr
+      %th sku
+      %th mpn
+      %th name
+      %th description
+      %th specification
+      %th retail_price
+      %th web_price
+      %th rrp
+      %th cost_price
+      %th images
+    - @results_hash.each do |json|
+      - if json[:error]
+        %tr
+          %td{colspan: 10}= json[:error]
+      - else
+        %td= json[:main_variant_attributes][:sku]
+        %td= json[:main_variant_attributes][:mpn]
+        %td= json[:main_variant_attributes][:name]
+        %td= json[:web_channel_attributes][:description]
+        %td= json[:web_channel_attributes][:specification]
+        %td json[:retail_price]
+        %td json[:web_price]
+        %td= json[:main_variant_attributes][:rrp]
+        %td= json[:main_variant_attributes][:cost_price]
+        %td json[:images]

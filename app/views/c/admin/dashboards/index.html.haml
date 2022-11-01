@@ -1,0 +1,25 @@
+-# This is a sales dashboard on the back office of the website (there is a button but it does not go anywhere).
+-# He has promised me this for over a year. It means we can see sales of products over time/product/channel.
+
+-# I asked for product/channel/period and then frequency within that period.
+
+-# So we can search for eBay sales over the last year with a week by week frequency for a specific product! Very, very handy and important!!!
+
+- provide :title, 'Dashboard'
+
+.index-header.gs
+  .g-3.g-gutter--right
+    %h1 Dashboard
+    %p See the sales history across channels for your products.
+
+
+  .g-1.g-gutter
+    -# a
+
+.row.wrap
+  .row
+    = render "c/admin/dashboards/form"
+
+    - @data ||= nil
+    - if @data.present?
+      = line_chart @data, width: "100%", height: "600px", legend: @data.length < 11

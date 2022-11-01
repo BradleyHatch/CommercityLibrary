@@ -1,0 +1,10 @@
+- provide :title, 'Navigation'
+
+.index-header
+  %h1= pluralize(C::MenuItem.count, 'Menu Item')
+  = link_to '+ Create Menu Item', new_menu_item_path, class: 'btn btn--small'
+  %p
+    This is the navigation of your site. Reorder and change the level of a move menu items by dragging them.
+
+.draggable_tree_list_container.draggable_tree_children{data: {reorder_url: update_order_menu_items_path}}
+  = render 'menu_item_list_item', menu_items: @menu_items

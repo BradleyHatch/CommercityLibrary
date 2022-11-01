@@ -1,0 +1,6 @@
+<% if @check == 'check' %>
+  $("#ebay_categories").append("<%= escape_javascript(render 'ebay_categories', ebay_cat: @ebay_cat, check: @check, cats:  @cats, save_name: @save_name ) %>");
+<% end %>
+<% if @check == 'get' %>
+  $("#ebay_categories").append("<%= escape_javascript(render 'ebay_categories', ebay_cat: @ebay_cat, check: @check, i: @inc, save_name: @save_name ) %>");
+<% end %>

@@ -1,0 +1,9 @@
+- provide :title, 'Meet The Team'
+
+.index-header
+  %h1= pluralize(@team_members.count, 'Team Member')
+  = link_to '+ Create Team Member', new_team_member_path, class: 'btn btn--small'
+  %p
+    List of team members for your workplace to be displayed on the site
+
+= index_table @team_members.ordered, C::TeamMember::INDEX_TABLE, sortable: sort_team_members_path

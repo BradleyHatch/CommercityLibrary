@@ -1,0 +1,202 @@
+= f.fields_for :main_variant do |ff|
+  .field.channel_toggle_check_box
+    = ff.label :published_amazon do
+      = ff.check_box :published_amazon
+      %span.checkbox-span-label
+        Sync with Amazon
+        - unless C::Setting.get(:amazon_sync)
+          (Sync disabled)
+
+= tabs do
+
+  = f.fields_for :amazon_channel do |ff|
+    = tab :item_details do
+      - if [@amazon_validation_errors, @amazon_return_errors, @amazon_pipeline_error].any?(&:present?)
+        .sync-error__panel
+          - variants_to_be_pushed = @master.variants.where(published_amazon: true)
+          - if variants_to_be_pushed.count > 1
+            %p
+              %strong Will push the following SKUs:
+            %ul
+              - variants_to_be_pushed.each do |v|
+                %li= v.sku
+
+          - if @amazon_validation_errors.present?
+            .validation_errors
+              %h4 Local Validation Errors
+              %p These errors are preventing the product from being sent to Amazon
+              %ul
+                - @amazon_validation_errors.each do |error_message|
+                  %li= error_message
+
+          - if @amazon_return_errors.present?
+            .validation_errors
+              %h4 Amazon Validation Errors
+              %p The product was sent to Amazon, but it was rejected with these errors
+              %ul
+                - @amazon_return_errors.each do |error_message|
+                  %li
+                    %strong Error code:
+                    = error_message['ResultMessageCode'] || error_message['code']
+                    %p= error_message['ResultDescription'] || error_message['description']
+
+          - if @amazon_pipeline_error.present?
+            .validation_errors
+              %h4 Amazon Sync Error
+              %p= @amazon_pipeline_error
+              
+      - elsif @amazon_pipeline_message.present?
+        .sync__panel
+          .validation_errors
+            %h4 Amazon Sync Status
+            %p= @amazon_pipeline_message
+
+      = ff.hidden_field :id
+      .field.field--inner-label
+        = ff.label :name
+        = ff.text_field :name
+
+      .field.field--inner-label
+        = ff.label :amazon_category_id
+        = ff.select :amazon_category_id, C::AmazonCategory.pluck_categories, {include_blank: '-- Choose Category --'}
+
+      .field.field--inner-label
+        = ff.label :product_type_id
+        - types = @master.amazon_channel.amazon_category&.pluck_product_types
+        - if types.nil?
+          = ff.select :product_type_id, [], {include_blank: '-- Choose Type --'}, {disabled: true}
+        - else
+          = ff.select :product_type_id, types, {include_blank: '-- Choose Type --'}
+
+      .field.field--inner-label
+        = ff.label :amazon_browse_node_ids, 'Recommended Browse Nodes'
+        = ff.select :amazon_browse_node_ids, C::AmazonBrowseNode.pluck(:node_path, :id), {include_blank: '-- Choose Browse Nodes --'}, multiple: true, data: { max_choices: 2 }
+        
+      = field_set_tag '' do	
+        %span.fieldset-title	
+          Bullet Points	
+        = ff.nested_fields_for :bullet_points, wrapper_tag: :div, wrapper_options: {class: 'fields'} do |fff|	
+          .field	
+            .gs	
+              .g-1= fff.text_field :value, placeholder: 'Bullet point...'	
+              .field__destroy-nested= fff.remove_nested_fields_link fa_icon('trash')	
+        = ff.add_nested_fields_link :bullet_points, 'Add a bullet point', class: 'btn btn--small btn--secondary'
+
+      .field
+        = ff.label :description
+        = ff.tiny_mce_text_area :description
+      .field.field--inner-label
+        = ff.label :key_product_features
+        = ff.text_field :key_product_features
+
+      = field_set_tag '' do
+        %span.fieldset-title Search Terms
+        = ff.nested_fields_for :amazon_search_terms, wrapper_tag: :div, wrapper_options: {class: 'fields'} do |fff|
+          .field
+            .gs
+              .g-1= fff.text_field :term, placeholder: 'Search term...'
+              .field__destroy-nested= fff.remove_nested_fields_link fa_icon('trash')
+
+        = ff.add_nested_fields_link :amazon_search_terms, 'Add a Search Term', class: 'btn btn--small btn--secondary'
+
+    = tab :images do
+      .gs
+        .g-1
+          %h4 Unselected Images
+          .field_help
+            %p These are images currently not displayed on Amazon for this product
+          #amazon_images_container
+            = render 'select_image', channel_type: :amazon, master: @master
+        .g-1
+          %h4 Selected Images
+          .field_help
+            %p These are images currently displayed on Amazon for this product that appear in order. Drag to reorder them. You can only have a maximum of 6.
+          #amazon_channel_images_container.reorderable
+            = render 'channel_image', channel_type: :amazon, master: @master
+
+    = tab :offer_and_pricing do
+      .field.field--inner-label
+        = ff.label :condition_note
+        = ff.text_field :condition_note
+
+      = f.fields_for :main_variant do |fff|
+        = fff.price_field :amazon_price
+
+      .field.field--inner-label
+        = ff.label :de_price
+        = ff.number_field :de_price, step: 0.01, min: 0
+      .field.field--inner-label
+        = ff.label :fr_price
+        = ff.number_field :fr_price, step: 0.01, min: 0
+      .field.field--inner-label
+        = ff.label :it_price
+        = ff.number_field :it_price, step: 0.01, min: 0
+      .field.field--inner-label
+        = ff.label :es_price
+        = ff.number_field :es_price, step: 0.01, min: 0
+
+    = tab :shipping do
+      .field.field--inner-label
+        = ff.label :shipping_cost
+        = ff.number_field :shipping_cost, step: 0.01, min: 0
+
+    - if ENV['USE_AMAZON_PRODUCT_PIPELINE']
+      = tab :ebc do
+        - channel = @master.amazon_channel
+        - if @master.main_variant.published_amazon && channel.ebc_fields.any? { |k, v| v.present? } && !channel.ebc_valid?
+          .sync-error__panel
+            EBC data cannot be sent to Amazon as it is missing required fields:
+            %ul
+              - channel.ebc_fields.select { |k, v| v.blank? }.each do |k, v|
+                %li= k.to_s.gsub('ebc_', '').titleize
+        .field.field
+          = ff.label :logo
+          = image_tag(channel.ebc_logo || "", style: "max-width: 300px;")
+          %div= ff.file_field(:ebc_logo)
+        .field
+          = ff.label :description
+          = ff.tiny_mce_text_area :ebc_description
+        = field_set_tag '' do
+          %span.fieldset-title
+            Module 1
+          .field
+            = ff.label :heading
+            = ff.text_field :ebc_module1_heading
+          .field
+            = ff.label :body
+            = ff.tiny_mce_text_area :ebc_module1_body
+        = field_set_tag '' do
+          %span.fieldset-title
+            Module 2
+          .field
+            = ff.label :heading
+            = ff.text_field :ebc_module2_heading
+          .field
+            = ff.label :sub_heading
+            = ff.text_field :ebc_module2_sub_heading
+          .field
+            = ff.label :body
+            = ff.tiny_mce_text_area :ebc_module2_body
+          .field
+            = ff.label :image
+            = image_tag(channel.ebc_module2_image || "", style: "max-width: 300px;")
+            %div= ff.file_field(:ebc_module2_image)
+
+    - if ENV['USE_AMAZON_PRODUCT_PIPELINE']
+      = tab :logs do
+        .index-table
+          .index-table__content
+            %table.index_table
+              %thead
+                %tr
+                  %th Event
+                  %th Source
+                  %th Message
+                  %th Date
+              %tbody
+                - @amazon_pipeline_logs.each do |log|
+                  %tr
+                    %td= log["type"].titleize
+                    %td= log["source"]
+                    %td= log["message"]
+                    %td= DateTime.parse(log["createdAt"])

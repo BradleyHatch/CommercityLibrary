@@ -1,0 +1,10 @@
+Thank you for your reservation
+This email is to confirm your reservation on
+
+= Time.now.strftime("%D")
+at
+= Time.now.strftime("%T")
+
+We shall set the following product aside, ready for collection within one hour.
+= @product.name
+= @product.sku

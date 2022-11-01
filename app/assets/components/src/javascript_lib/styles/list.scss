@@ -1,0 +1,12 @@
+@import 'dimensions';
+@import 'generic_classes';
+
+
+ .list {
+   @extend .flex-column-1;
+ }
+
+ .list__item {
+   @extend .flex-1;
+   max-height: $list-item-max-height;
+ }

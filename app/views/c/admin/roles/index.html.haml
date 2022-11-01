@@ -1,0 +1,17 @@
+- provide :title, 'Roles'
+
+.index-header
+  %h1= pluralize(@roles.count, 'Role')
+  = link_to 'New Role', new_role_path, class: 'btn btn--small'
+  %p
+    Manage the different roles and permissions in your store.
+
+%table
+  %thead
+    %th Name
+    %th Edit
+  %tbody
+    - @roles.each do |role|
+      %tr
+        %td= role.name
+        %td= link_to 'Edit', edit_role_path(role), class: 'table_icon'

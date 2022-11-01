@@ -1,0 +1,178 @@
+@import c/vendor
+@import c/variables
+@import c/core
+
+body
+  font-family: "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif
+  -webkit-font-smoothing: antialiased
+  font-size: 80%
+
+#print_page:not(:first-child)
+  page-break-before: always
+
+
+a
+  color: black
+  text-decoration: none
+  a:hover
+    text-decoration: underline
+img
+  max-width: 100%
+
+.hidden
+  display: none
+
+h1, h2, h3, h4, h5, h6, p, li
+  color: #333
+
+p
+  line-height: 1.5rem
+
+fieldset
+  border: 1px solid #eee
+  padding: 12px
+  margin-bottom: 4px
+  height: 100%
+
+.gs
+  margin-bottom: 10px
+
+legend
+  font-size: 1.1rem
+  color: #aaa
+
+#invoice
+  box-sizing: border-box
+  max-width: 80rem
+  line-height: 15px!important
+
+  .logo
+    max-width: 150px
+
+  .row
+    display: flex
+    .collapse
+      flex: 1
+      vertical-align: bottom
+
+  .label
+    font-weight: bold
+
+  .value
+    margin-bottom: 1rem
+
+  #order_items
+
+    .total_row
+      background-color: rgba(170, 180, 200, 0.1)
+      font-weight: bold
+      height: inherit
+
+    tbody tr
+      height: 4.5rem
+#invoice
+
+  .print_header
+    display: block
+    margin-bottom: 0.5cm
+    width: 100%
+
+    div
+      display: inline-block
+      height: 2cm
+
+    .logo img
+      width: 120px
+
+    .order_number
+      float: right
+      font-size: 1.2rem
+      text-align: right
+
+  table
+    padding-top: 30px
+    table-layout: fixed
+
+  th
+    border: none
+    height: 10px
+    font-weight: 600
+
+  legend
+    display: none
+
+  thead, th, .total_row
+    background: transparent
+
+  .total_row
+    font-weight: bold
+    height: inherit
+
+  tbody tr
+    height: 4.5rem
+
+  .small_image_thumbnail
+    margin: auto
+    width: 100px
+    img
+      width: 100px
+
+  .total_row
+    display: none
+
+.non_printing
+  display: none
+
+div#delivery_address
+  font-size: 1.1rem
+  font-weight: 600
+  .label
+    display: none
+    margin-bottom: 10px
+  .value
+    margin-bottom: 0
+  a
+    display: none
+
+.inline_invoice_fields > div
+  display: table-cell
+  line-height: 20px
+  width: 180px
+
+#payment_details
+  a
+    display: none
+
+table
+  width: 100%
+  background-color: white
+  thead
+    tr
+      height: 30px
+      font-size: 11px
+      color: #666666
+      th
+        font-weight: 200
+        letter-spacing: 1px
+        text-transform: uppercase
+        border-bottom: 1px solid #bbb
+        border-top: 1px solid #bbb
+
+  tr
+    height: 40px
+    border-bottom: 1px solid #ddd
+  td, th
+    padding: 5px
+    text-align: left
+    &:first-child
+      padding-left: 15px
+    &:last-child
+      padding-right: 15px
+      text-align: right
+    &.narrow
+      width: 1px
+    .table_image
+      min-width: 80px
+
+.cc
+  padding-top: 20px

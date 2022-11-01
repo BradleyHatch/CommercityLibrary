@@ -1,0 +1,9 @@
+- provide :title, 'Property Keys'
+
+.index-header
+  %h1= pluralize(@property_keys.count, 'Key')
+  = link_to '+ Create Property Key', new_product_property_key_path, class: 'btn btn--small'
+  %p
+    Property keys allow you to group like products by their categories, and create dynamic filters for products. To add property keys into the category pages, add them in the list of property keys when editing a category.
+
+= index_table @property_keys, C::Product::PropertyKey::INDEX_TABLE

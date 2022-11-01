@@ -1,0 +1,10 @@
+- pages.each do |page, children|
+  .draggable_tree_container{data: {draggable: '.draggable_tree_move_handle:first', draggable_tree_id_field: 'page-id', page_id: page.id}}
+    = check_box_tag "hide_children_#{page.id}", nil, false, class: 'hide_children hidden'
+    .draggable_tree_row
+      .draggable_tree_move_handle
+      .draggable_tree_collapse_handle= label_tag "hide_children_#{page.id}", fa_icon('chevron-down')
+      = link_to page.name, [:edit, page], class: 'draggable_tree_link'
+
+    .draggable_tree_children
+      = render 'content_list_item', pages: children

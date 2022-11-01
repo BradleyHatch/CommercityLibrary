@@ -1,0 +1,68 @@
+.draggable_tree_list_container
+  position: relative
+.draggable_tree_container
+  margin-bottom: 5px
+  background-color: #ffffff
+  border: 1px solid rgba(170, 180, 200, 0.5)
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05)
+  border-radius: 3px
+  padding: 0 5px 0 0
+  +user-select(none)
+  position: relative
+
+  &.floating
+    position: absolute
+    z-index: 999
+    width: 100%
+    box-sizing: border-box
+
+  input[type=checkbox].hide_children:checked
+
+    + .draggable_tree_row
+      label i:before
+        transform: rotate(-90deg)
+    ~ .draggable_tree_children
+      height: 0
+
+  .draggable_tree_move_handle
+    display: inline-block
+    opacity: 1
+    transition: 0.4s
+    width: 10px
+    background-image: image_url('c/drag_handle.gif')
+    height: 16px
+    background-repeat: no-repeat
+    vertical-align: middle
+    cursor: move
+
+  .draggable_tree_collapse_handle
+    display: inline-block
+    vertical-align: middle
+    margin: 0 12px 0 5px
+    cursor: pointer
+    i:before
+      display: block
+      transition: 0.3s
+      line-height: 10px
+      opacity: 0.7
+
+  .draggable_tree_link
+    display: inline-block
+    vertical-align: middle
+
+  .draggable_tree_row
+    padding: 14px
+
+  .draggable_tree_children
+    margin-left: 30px
+    overflow: hidden
+    transition: 0.3s
+    position: relative
+
+.draggable_tree_row:hover .draggable_tree_move_handle
+  opacity: 1
+
+[data-ghost]
+  box-shadow: 0 0 4px rgba(0,0,0,0.1)
+  background: rgba(black, 0.1)
+  margin: 5px

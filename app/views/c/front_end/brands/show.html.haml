@@ -1,0 +1,19 @@
+.row.wrap.page.gs--l
+
+  .g-1
+    .categories-menu
+
+      %section.categories-menu__section
+        = check_box_tag :collapse_1
+        = label_tag :collapse_1, '', class: 'categories-menu__expand'
+        %h2= 'Categories'
+
+        .categories-menu__list
+          %ul
+            - @brand.categories.uniq.each do |category|
+              %li
+                = link_to "#{category.name}", front_end_category_path(category)
+
+  .g-gutter--l.g-3
+    %h1= @brand.name
+    = render 'c/front_end/products/_grids/standard', products: @products

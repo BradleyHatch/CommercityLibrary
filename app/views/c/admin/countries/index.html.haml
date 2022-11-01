@@ -1,0 +1,10 @@
+- provide :title, 'Countries'
+
+.index-header
+  %h1 Countries
+  %p
+    This is the list of countries for your store. You can enable and disable different countries for different
+    delivery services globally with the tick boxes below, or manage them in each delivery service in the delivery
+    services section.
+
+= index_table @countries, C::Country::INDEX_TABLE

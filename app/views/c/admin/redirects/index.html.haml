@@ -1,0 +1,9 @@
+- provide :title, 'Redirects'
+
+.index-header
+  %h1= pluralize(@redirects.count, 'Redirect')
+  = link_to '+ Create Redirect', new_redirect_path, class: 'btn btn--small'
+  %p
+    Create 301s to redirect users from an old or missing page to the correct location
+
+= index_table @redirects, C::Redirect::INDEX_TABLE ,bulk_actions: [['Delete', :delete]]

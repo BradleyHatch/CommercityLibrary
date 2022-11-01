@@ -1,0 +1,48 @@
+
+= form_for @collection do |f|
+  = f.error_messages
+  .gs.gs--nowrap.clear.form-page--wide.shadow-2dp
+    .fixed-form-panel.shadow-2dp
+
+      .field.field--inner-label
+        = f.label :name
+        = f.text_field :name
+
+      .field.field--inner-label
+        = f.label :collection_type
+        = f.select :collection_type, C::Collection.collection_types.keys.to_a
+
+    .g-1
+      = tabs do
+
+        = tab :Content do
+          .field
+            = f.label :body, 'Description'
+            = f.tiny_mce_text_area :body
+
+          .field
+            = f.image_field :image
+
+          .field
+            = f.image_field :image_alt
+
+        = tab :Products do
+          .collection_checkboxes
+            = f.collection_check_boxes(:variant_ids, C::Product::Variant.all.order(sku: :asc), :id, :sku_and_name) do |b|
+              = b.label(:"data-value" => b.value)  do
+                = b.check_box
+                = b.text
+
+        = tab :Categories do
+          .collection_checkboxes
+            = f.collection_check_boxes(:category_ids, C::Category.all.order(name: :asc), :id, :name) do |b|
+              = b.label(:"data-value" => b.value)  do
+                = b.check_box
+                = b.text
+
+        = tab :seo, 'SEO' do
+          = render 'c/admin/seo', f: f
+
+  .actions.form-page__actions
+    = f.submit class: 'btn'
+    = link_to_delete 'Delete', @collection, redirection: collections_path, class: 'btn btn--secondary' unless @collection.new_record?

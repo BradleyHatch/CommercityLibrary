@@ -1,0 +1,104 @@
+= form_for @content do |f|
+  = f.error_messages
+  = tabs do
+
+    = tab :content do
+      .field
+        = f.label :name
+        = f.text_field :name
+
+      .field
+        = f.label :body
+        = f.tiny_mce_text_area :body
+
+      .field
+        = f.label :parent_id, 'Parent Page'
+        = f.collection_select :parent_id, C::Content.where.not(id: @content.id), :id, :name, include_blank: '-- Choose Parent --'
+
+      .field
+        = f.label :template_group_id
+        = f.select :template_group_id, C::Template::Group.pluck(:name, :id), include_blank: '-- Select Template Group --'
+
+    = tab :seo, 'SEO' do
+      = render 'c/admin/seo', f: f
+
+    = tab :media do
+      - if @content.new_record?
+        %label Please save this to enable image uploading
+      - else
+        = render 'preview_upload', model_type: :contents, model_name: :content, obj: @content, f: f
+
+      -# .gs
+      -#   .reorderable.g-3
+      -#     = f.fields_for :images, f.object.images.sort_by(&:weight) do |f|
+      -#       .fields_for.gs{class: ('not_persisted' if f.object.image_cache.present?)}
+      -#         = f.hidden_field :image_cache
+      -#         = f.hidden_field :weight, class: 'order_field'
+      -#         .g-gutter
+      -#           .sort_handle= fa_icon('ellipsis-v')
+      -#         .g-gutter
+      -#           .image_preview
+      -#             = image_tag f.object.image.preview
+      -#         .g-gutter
+      -#           .field
+      -#             = f.label :alt
+      -#             = f.text_field :alt
+      -#         .g-gutter
+      -#           .field
+      -#             = f.label :caption
+      -#             = f.text_field :caption
+      -#         .g-gutter
+      -#           .field
+      -#             = f.label :featured_image, 'Feature Image?'
+      -#             = f.check_box :featured_image
+      -#         .g-gutter
+      -#           .field
+      -#             = f.label :preview_image, 'Preview Image?'
+      -#             = f.check_box :preview_image
+      -#         .g-gutter
+      -#           .field
+      -#             = f.label :_destroy, 'Delete Image?'
+      -#             = f.check_box :_destroy, class: '_destroy'
+      -#   .g-1.g-gutter
+      -#     .field
+      -#       = f.label :new_images
+      -#       = f.file_field :new_images, multiple: true
+
+    = tab :documents do
+      .gs
+        .g-1
+          .field.file_upload
+            = f.label :new_documents
+            = f.file_field :new_documents, multiple: true
+        .g-1.g-gutter
+          %table.index_table
+            %tr
+              %th.prime_column Name
+              %th Url
+              %th.icon_column Delete?
+              = f.fields_for :documents do |ff|
+                %tr
+                  %td= ff.text_field :name
+                  %td= link_to ff.object.document, ff.object.document.url, target: :_blank
+                  %td
+                    = ff.check_box :_destroy, class: '_destroy'
+
+
+    = tab :publish do
+      .field
+        = f.label :published do
+          = f.check_box :published
+          %span Publish Page
+
+    =  tab :admin do
+      .field
+        = f.label :content_type
+        = f.select :content_type, C::Content.content_types.keys.map{|c| [c.humanize, c]}
+
+      .field
+        = f.label :template
+        = f.text_field :template
+
+  .actions.form-page__actions
+    = f.submit "#{@content.new_record? ? 'Create' : 'Update'} #{@content.content_type.titleize}", class: 'btn'
+    = link_to_delete 'Delete', @content, redirection: [@content.content_type.to_sym, :contents], class: 'btn btn--secondary' unless @content.new_record? || @content.protected

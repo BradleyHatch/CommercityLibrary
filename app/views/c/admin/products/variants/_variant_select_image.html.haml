@@ -1,0 +1,13 @@
+.unselected-images
+  - master.images.each do |image|
+    - unless @variant.images.ids.include?(image.id)
+      .image_container.no_drag{class: "select_image_#{image.id}"}
+        .gs
+          .column.select_image_link
+            = link_to fa_icon('arrow-right'), assign_image_product_master_product_variant_path(@master, @variant, image_id: image.id), method: :post
+          .g-1.column
+            = image_tag(image.image.thumbnail)
+            .name
+              %span= File.basename(image.image.path)
+
+

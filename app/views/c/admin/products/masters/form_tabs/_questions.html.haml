@@ -1,0 +1,21 @@
+.panel
+  %table.index_table
+    %thead
+      %tr
+        %th Sender
+        %th Subject
+        %th Recieved
+        %th Source
+    %tbody
+      - if @master.main_variant.questions.any?
+        - @master.main_variant.questions.each do |question|
+          %tr
+            %td= question.sender_email
+            %td= link_to question.display_subject, question
+            %td= question.created_at
+            %td= question.source.titleize
+
+      - else
+        %tr
+          %td{colspan: 3}
+            %i No questions currently

@@ -1,0 +1,38 @@
+- provide :title, 'Products'
+
+.index-header.gs
+  .g-3.g-gutter--right
+    %h1 Price Matches
+    %p Summary of your price matched products
+
+
+.index-table
+  .index-table__content.shadow-4dp
+    #index_table__wrapper
+      %table.index_table
+        %table
+          %thead
+            %tr
+              %th Product
+              %th Our Price
+              - C::Product::PriceMatch.competitors.keys.each do |key|
+                %th= key.humanize
+              %th Last Updated
+              %th Update
+              %th Save
+          %tbody
+            - @products.each do |product|
+              %tr
+                %td= link_to safe_raw(product.master.table_name), [:edit, product.master]
+                %td= humanized_money_with_symbol product.retail_price.with_tax
+
+                - C::Product::PriceMatch.competitors.keys.each do |key|
+                  %td
+                    - if (@price_match = product.price_matches.find_by(competitor: key))
+                      = raw @price_match.display_price
+                    - else
+                      = '-'
+
+                %td= safe_raw product.price_matches.first.display_last_updated
+                %td= link_to 'Update price match', update_price_matches_product_master_path(id: product.master.id), method: :post, class: 'btn btn--small'
+                %td= link_to 'Save best price', save_best_price_match_product_master_path(id: product.master.id), method: :post, class: 'btn btn--secondary btn--small'

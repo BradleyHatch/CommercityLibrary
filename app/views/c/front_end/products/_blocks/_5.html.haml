@@ -1,0 +1,11 @@
+- cache product do
+  .product-preview
+    %a{:href => front_end_product_path(product), title: product.name, class: ''}
+
+      %div{:class => "#{product.product_tag&.parameterize} product-preview__perk"}
+      %figure= image_tag(product.cache_image&.image&.grid_square || 'placeholder.png')
+
+      .product-preview__info
+        %h3= product.web_channel.sub_title
+        %span.product-preview__price
+          = humanized_money_with_symbol product.cache_web_price

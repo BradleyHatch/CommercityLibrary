@@ -1,0 +1,9 @@
+- provide :title, 'Documents'
+
+.index-header
+  %h1= pluralize(@documents.count, 'Document')
+  = link_to '+ Upload Documents', new_document_path, class: 'btn btn--small'
+  %p
+    This is the list of files currently on your site. You can add additional files as storage and reference.
+
+= index_table @documents.order(created_at: :desc), C::Document::INDEX_TABLE

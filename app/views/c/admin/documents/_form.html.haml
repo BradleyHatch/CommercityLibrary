@@ -1,0 +1,8 @@
+.form-page--narrow
+  .form-page__form
+    = form_tag bulk_upload_documents_path, multipart: true do
+      .field
+        = label_tag :new_documents
+        = file_field_tag :new_documents, multiple: true, name: 'documents[attachments][][attachment]'
+      .actions
+        = submit_tag 'Upload', class: 'btn'

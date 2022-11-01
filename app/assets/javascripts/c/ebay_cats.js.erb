@@ -1,0 +1,59 @@
+var ebayCategories = function(){
+  if ($('#ebay_categories').length){
+    var newField = 'new_ebay_category'
+    var oldField = 'old_ebay_category'
+    var catSelector = $('#ebay_categories')
+    var saveName = $('#ebay_categories').data('save-name');
+    var cUrl = $('#ebay_categories').data('req-url');
+
+    var checkFields = function(){
+      var params = {
+        'check': 'check',
+        'save_name': saveName,
+      }
+
+      $.ajax({
+        type: "GET",
+        url: cUrl+"/ebay_category",
+        data: params
+      })
+
+    }
+
+    var addField = function(){
+      catSelector.on('change', 'select', function(){
+        var field = $(this).closest('.field')
+        var selected = $(this)
+        var catID = $(this).val()
+
+        $('#ebay_category').attr('id', oldField)
+
+        $(field).nextAll().remove();
+
+        var dataInc = (parseInt($(field).attr('data'))+1)
+
+        var params = {
+          'catID': catID,
+          'i': dataInc.toString(),
+          'check': 'get',
+          'save_name': saveName,
+        }
+
+        // ?catID="+catID+"&i="+dataInc.toString()+"&check=get&save+name=" + saveName
+
+        $.ajax({
+         type: "GET",
+         url: cUrl+"/ebay_category",
+         data: params,
+       });
+
+        var last = $( "#ebay_categories > .field:last-child > select" )
+        last.attr('id', saveName)
+        last.attr('name', saveName)
+
+      })
+    }
+    checkFields()
+    addField()
+  }
+}

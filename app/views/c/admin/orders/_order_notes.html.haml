@@ -1,0 +1,11 @@
+.notes__form
+  = f.fields_for :notes do |ff|
+    - if !ff.object.new_record?
+      = simple_format ff.object.note
+      %i= ff.object.created_by&.name
+    - else
+      .field
+        = ff.label :note
+        = ff.text_area :note, placeholder: 'Note...'
+      .actions
+        = ff.submit 'Save note', class: 'btn'

@@ -1,0 +1,36 @@
+
+- if @order.click_and_collect?
+  = "The following item(s) are ready for collection"
+- else
+  = "The following item(s) have been dispatched using the following shipping service: #{@order.delivery&.delivery_service&.name}"
+
+%br
+%br
+
+- if @order.delivery && @order.delivery.trackings.any?
+  - tracking = @order.delivery.trackings.first
+
+  = "Tracking information: (#{tracking.provider}) #{tracking.number}"
+  %br
+  %br
+
+  - service = @order.delivery.delivery_service
+  - if service.present? && service.provider.present? && service.provider.tracking_link.present?
+    Track your parcel here:
+    %a{ href: service.provider.tracking_link }= service.provider.tracking_link
+    %br
+    %br
+
+= render 'order_table', order: @order
+
+- if @order.click_and_collect?
+  The order is ready for collection at our store: 
+  %br
+  %br
+  = C.click_and_collect_address
+- else
+  The order has been dispatched to:
+  %br
+  %br
+  - if @order.shipping_address.present?
+    = presenter(@order.shipping_address).block

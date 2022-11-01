@@ -1,0 +1,25 @@
+= form_tag assign_property_values_update_product_masters_path do
+  %ul
+    - @objects.each do |object|
+      %li= object.name
+  %p
+
+  .fields
+    .field.field--2
+      = label_tag :property_key_id
+      = select_tag :property_key_id, options_from_collection_for_select(@keys, 'id', 'key'), { class: 'property_key_field' }
+    .field.field--2
+      = label_tag :value
+      = text_field_tag :value
+
+  = hidden_field_tag :ids, params[:ids]
+
+  = submit_tag 'Assign'
+  or
+  = link_to 'cancel', action: :index
+
+
+:javascript
+  $(document).ready(function () {
+    propertyValues();
+  };

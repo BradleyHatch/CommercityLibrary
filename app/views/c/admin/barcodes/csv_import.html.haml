@@ -1,0 +1,26 @@
+%h1 Import Results
+
+%p
+  New Barcodes:
+  = @new_barcodes.count
+
+%p
+  Barcodes Already Imported:
+  = @barcodes.count - @new_barcodes.count
+
+
+- if @invalid_barcodes.present?
+  %h3= pluralize(@invalid_barcodes.count, 'Invalid Barcode')
+  %table
+    %thead
+      %tr
+        %th Line No
+        %th Value
+        %td Type
+    %tbody
+      - @invalid_barcodes.each do |barcode, index|
+        %tr
+          %td ##{index + 1}
+          %td= barcode.value
+          %td= barcode.symbology
+

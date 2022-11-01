@@ -1,0 +1,14 @@
+.wrap
+  = content_breadcrumb(@content)
+.wrap.row.page
+
+  .contact-us.gs
+    .g-3
+      = safe_raw @content.body
+      .contact_form
+        = contact_form
+    .g-1.g-gutter
+      %h4 Details
+      %p
+        Email:
+        = Array.wrap(C::NotificationEmail.enquiry_recipients).join(", ")

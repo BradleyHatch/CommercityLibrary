@@ -1,0 +1,25 @@
+= form_for @slideshow do |f|
+  = f.error_messages
+  .gs
+    .fixed-form-panel
+      .field
+        = f.label :name, placeholder: 'Slideshow name'
+        = f.text_field :name, disabled: !@slideshow.new_record?
+      .field
+        = f.label :body
+        = f.text_area :body
+
+
+    .g-1
+
+      = tabs do
+        = tab :slides, class: 'table_tab' do
+          - if @slideshow.new_record?
+            .padded
+              Your slides will appear here
+          - else
+            = index_table @slideshow.slides.ordered, C::Slide::INDEX_TABLE, sortable: sort_slideshow_slides_path(@slideshow)
+            .padded
+              = link_to 'Add Slide', [:new, @slideshow, :slide], class: 'button' unless @slideshow.new_record?
+  .actions.form-page__actions
+    = f.submit class: 'btn'

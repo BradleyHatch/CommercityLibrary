@@ -1,0 +1,8 @@
+@import 'box_shadows';
+@import 'generic_classes';
+
+
+.panel {
+  @extend .width-100;
+  box-shadow: $shadow3;
+}

@@ -1,0 +1,22 @@
+- if check == 'check'
+  - if cats.present? && cats.any?
+    - i = 1
+    - cats.each do |cat|
+      - if cats.last == cat
+        .field{data: i}
+          = select_tag :ebay_category, options_for_select(cat.self_and_siblings.pluck(:category_name, :id), selected: cat.id), {class: save_name, name: save_name}
+        - if cat.children.any?
+          .field{data: i}
+            = select_tag :ebay_category, options_for_select(cat.children.pluck(:category_name, :id)), {class: save_name, name: save_name, prompt: '-- Please select --'}
+      - else
+        .field{data: i}
+          = select_tag :ebay_category, options_for_select(cat.self_and_siblings.pluck(:category_name, :id), selected: cat.id)
+        - i += 1
+  - else
+    .field{data: 1}
+      = select_tag :ebay_category, options_for_select(C::EbayCategory.roots.pluck(:category_name, :id)), {class: save_name, name: save_name, prompt: '-- Please select --'}
+
+- if check == 'get'
+  - if !ebay_cat.children.empty?
+    .field{data: i}
+      = select_tag :ebay_category, options_for_select(ebay_cat.children.pluck(:category_name, :id)), prompt: '-- Please select --'

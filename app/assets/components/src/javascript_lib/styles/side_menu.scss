@@ -1,0 +1,25 @@
+@import 'box_shadows';
+@import 'generic_classes';
+@import 'transitions';
+@import 'z_indexes';
+
+
+.side-menu {
+  @extend .width-auto;
+  z-index: $side-menu-z-index;
+  background: black;
+}
+
+.side-menu__overlay {
+  @extend .absolute, .x-hidden-y-auto;
+  transition: left $side-menu-transition, right $side-menu-transition, top $side-menu-transition, bottom $side-menu-transition;
+  box-shadow: $shadow3;
+}
+
+.side-menu__overlay-inner {
+  @extend .width-height-100;
+}
+
+.side-menu__spacer {
+  transition: width $side-menu-transition, height $side-menu-transition;
+}

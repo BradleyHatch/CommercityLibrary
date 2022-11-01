@@ -1,0 +1,62 @@
+-# Alfashop / general car parts LOL
+
+.heading-bar
+  = link_to 'Home >', '/'
+  = link_to @product.name, front_end_product_path(@product)
+
+.gs--m.product-details
+  .g-1
+    = product_images(product)
+  .g-gutter--m.g-2
+    %h1= product.name
+    %h3= raw product.web_channel.sub_title
+
+    %section.product-details__section.product-details__section--bordered
+      %table
+        %tr
+          %td Availability:
+          - if product.in_stock?
+            %td.stock--in in stock
+          - else
+            %td.stock--out out of stock
+        %tr
+          %td Part number:
+          %td= product.sku
+        %tr
+          %td
+            %br
+        %tr
+          %td
+            Price:
+            - account_type = (current_front_customer_account.account_type rescue :web)
+            = humanized_money_with_symbol product.price(channel: account_type, fallback: :web)
+        - unless product.weight.zero?
+          %tr
+            %td
+              Weight:
+              = "#{product.weight} KG"
+
+    - unless product.discontinued?
+      %section.product-details__section.gs.gs--centered
+        - unless defined? no_quantity
+          .g-1.product-details__qty
+            %span QTY
+            = number_field_tag :QTY, 1
+        .g-1.align-right.product-details__cart
+          - if product.in_stock?
+            .btn.btn--simple.btn--success
+              = link_to_add_to_cart 'foobar', product do
+                %span Add to Basket
+                = fa_icon('shopping-basket')
+          - else
+            %span not available
+    = tabs do
+      - unless product.web_channel.description.blank?
+        = tab :description do
+          = simple_format product.web_channel.description
+      - unless product.web_channel.specification.blank?
+        = tab :specification do
+          = simple_format product.web_channel.specification
+      - unless product.web_channel.features.blank?
+        = tab :features do
+          = simple_format product.web_channel.features

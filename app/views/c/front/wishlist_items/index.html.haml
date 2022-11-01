@@ -1,0 +1,42 @@
+.cart.wrap
+  .gs
+    .g-2
+      %h1 Your wishlist
+    .g-full.g-2--m.align-right
+      = link_to(raw("#{fa_icon('angle-left')} Continue Shopping"), wishlist_continue_shopping_link_to, class: 'btn btn--secondary')
+
+  - if @wishlist.any?
+    %section.section
+      %table.cart-items
+
+        %thead
+          %th.cart-items__heading.cart-items__heading--align-left
+          %th.cart-items__heading.cart-items__heading--align-left Product
+          %th.cart-items__heading.cart-items__heading--align-right
+          %th.cart-items__heading.cart-items__heading--align-right Remove From Wishlist
+
+        %tbody
+          - @wishlist.each do |item|
+            %tr.cart-items__row
+
+              %td.cart-items__cell.cart-items__cell--align-left
+                = link_to image_tag(item.variant.primary_web_image), front_end_product_path(item.variant)
+
+              %td.cart-items__cell.cart-items__cell--align-left
+                %h3= link_to item.variant&.name, front_end_product_path(item.variant)
+                = item.variant.property_values.map(&:value).join(', ')
+
+              %td.cart-items__cell.cart-items__cell--align-right
+                %span.stock_notice= "#{item.variant.current_stock} in stock"
+
+              %td.cart-items__cell.cart-items__cell--align-right
+                = remove_from_wishlist(item, nil, fa_icon('trash'))
+
+          %tr
+            %td
+            %td
+            %td
+
+  - else
+    %section.section
+      %h3 Your wishlist is currently empty

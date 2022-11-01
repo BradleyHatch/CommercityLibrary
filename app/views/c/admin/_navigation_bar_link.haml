@@ -1,0 +1,5 @@
+- if params[:q]
+  - new_param[:q] = params[:q].merge(new_param[:q])
+  = link_to name, request.query_parameters.merge(new_param), class: ('selected' if selected_condition)
+- else
+  = link_to name, url_for(new_param), class: ('selected' if selected_condition)

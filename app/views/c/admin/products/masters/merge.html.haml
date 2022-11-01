@@ -1,0 +1,15 @@
+= form_tag merge_update_product_masters_path do
+  %h2 <strong>Warning:</strong> This will merge the following:
+  %ul
+    - @objects.each do |object|
+      %li= object.name
+  %p
+
+  %p Select the new master product
+  = select_tag :master, options_from_collection_for_select(@objects, 'id', 'name')
+
+  = hidden_field_tag :ids, params[:ids]
+
+  = submit_tag 'Merge'
+  or
+  = link_to 'cancel', action: :index

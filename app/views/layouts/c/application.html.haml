@@ -1,0 +1,19 @@
+!!!
+%html
+  %head
+    %title= store_page_title(yield(:title))
+    = stylesheet_link_tag    'c/application', media: 'all'
+    = javascript_include_tag 'c/application'
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    = csrf_meta_tags
+  %body{data: { no_turbolinks: true }}
+
+    .gs.gs--nowrap
+      = render 'c/admin/side_menu'
+
+      .g-1.main-app
+        = render 'c/admin/header_bar'
+        = render 'navigation_bar'
+        .main-app__content
+          = render 'c/admin/flash_messages'
+          = yield

@@ -1,0 +1,55 @@
+- provide :title, 'Confirm Listing'
+
+- success = true
+
+.row
+  - if @result[:errors]
+    %h2 Issues with the listing
+    %ul
+      - @result[:errors].each do |error|
+        - if error[:severity_code] != 'Error'
+          - if !error[:error_parameters].nil? && error[:error_parameters].length == 1
+            %li= "#{error[:long_message]} #{error[:error_parameters][:value]}"
+          - else
+            %li= "#{error[:long_message]}"
+        - else
+          - success = false
+
+  - if !success
+    %h2 Errors with the listing
+    %ul
+      - @result[:errors].each do |error|
+        - if error[:severity_code] == 'Error'
+          - if !error[:error_parameters].nil? && error[:error_parameters].length == 1
+            %li= "#{error[:long_message]} #{error[:error_parameters][:value]}"
+          - else
+            %li= "#{error[:long_message]}"
+
+  -if @call != 'revise' && success
+    %h2 Fees
+    %ul
+      - total = 0
+      - @result[:fees][:fee].each do |fee|
+        - if fee[:fee] != 0
+          %li
+            = "#{fee[:name].titleize}: "
+            %strong= "£#{fee[:fee]}"
+            - total += fee[:fee]
+    %p
+      %strong= "Total fees: £#{total}"
+
+  #ebay_buttons
+    .field
+      .field_help
+      - if success
+        - if @call == 'upload'
+          %p= 'Are you sure you want to upload this to eBay?'
+          = link_to 'Upload to eBay', ebay_methods_product_master_path(val: 'add'), class: 'btn'
+          = link_to 'Return to product form', edit_product_master_path(@master), class: 'btn btn--secondary'
+        - if @call == 'revise'
+          %p= 'Are you sure you want to revise this eBay listing?'
+          = link_to 'Revise eBay listing', ebay_methods_product_master_path(val: 'revise'), class: 'btn'
+          = link_to 'Return to product form', edit_product_master_path(@master), class: 'btn btn--secondary'
+      - else
+        %p= 'Cannot upload to eBay. Please fix the errors'
+        = link_to 'Return to product form', edit_product_master_path(@master), class: 'btn btn--secondary'

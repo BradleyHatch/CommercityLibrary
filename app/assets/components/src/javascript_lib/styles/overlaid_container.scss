@@ -1,0 +1,20 @@
+@import 'box_shadows';
+@import 'dimensions';
+@import 'generic_classes';
+@import 'transitions';
+
+
+.overlaid-container {
+  @extend .relative, .flex-1;
+  box-shadow: $shadow1;
+  min-height: $overlaid-container-min-height;
+}
+
+.overlaid-container__container {
+  @extend .flex-width-100, .overflow-hidden;
+  pointer-events: none;
+
+  &--fade-in {
+    pointer-events: auto;
+  }
+}

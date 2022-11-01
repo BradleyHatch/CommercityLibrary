@@ -1,0 +1,201 @@
+.cart.wrap
+  = render 'c/admin/flash_messages'
+  .gs
+    .g-2
+      %h1 Your #{C.cart_name}
+    .g-full.g-2--m.align-right
+      = link_to(raw("#{fa_icon('angle-left')} Continue Shopping"), @cart.first_cart_item_category.blank? ? '/' : front_end_category_path(@cart.first_cart_item_category), class: 'btn btn--secondary')
+
+  - if @cart.cart_items.present?
+    %section.section
+      = form_for @cart do |f|
+        %table.cart-items
+
+          %thead
+            %th.cart-items__heading.cart-items__heading--align-left
+            %th.cart-items__heading.cart-items__heading--align-left Product
+            %th.cart-items__heading.cart-items__heading--align-right Quantity
+            %th.cart-items__heading.cart-items__heading--align-right Total
+
+          %tbody
+            = f.fields_for :cart_items do |ff|
+              %tr.cart-items__row
+
+                %td.cart-items__cell.cart-items__cell--align-left
+                  - unless ff.object.voucher
+                    = link_to image_tag(ff.object.variant.primary_web_image), front_end_product_path(ff.object.variant)
+
+                %td.cart-items__cell.cart-items__cell--align-left
+                  - if ff.object.variant
+                    %h3= link_to ff.object.variant&.name, front_end_product_path(ff.object.variant)
+                    = ff.object.variant.property_values.map(&:value).join(', ')
+                  - elsif ff.object.voucher
+                    %h3= "[#{ff.object.voucher.code}]: #{ff.object.voucher.name}"
+
+                %td.cart-items__cell.cart-items__cell--align-right
+                  %div
+                    = link_to fa_icon('trash'), c.cart_cart_item_path(ff.object), method: :delete
+
+                    - if ff.object.variant
+                      = ff.number_field :quantity, min: 0
+                      %span.stock_notice= "of #{ff.object.variant.current_stock} in stock"
+
+                      - if C.no_checkout_when_no_stock && ff.object.chosen_quantity_out_of_stock?
+                        %span.stock_notice.stock_notice--alert More selected than we have in stock
+
+                    - elsif ff.object.voucher
+                      = 1
+                  
+                  - if ff.object.variant.present? &&  C.gift_wrapping
+                    %br
+                    = label_tag "gift_wrapping_#{ff.object.id}" do
+                      = check_box_tag "gift_wrapping_#{ff.object.id}", '1', ff.object.gift_wrapping, { id: "gift_wrapping_#{ff.object.id}", data: { id: ff.object.id } }
+                      %span   Free gift wrapping?
+
+                    :javascript
+                      $(function() {
+                          var $gift_wrapping = $('#gift_wrapping_#{ff.object.id}')
+                          $gift_wrapping.on('click', function(e) {
+                            $.post("/cart/toggle_gift_wrapping?id=#{ff.object.id}")
+                          })
+                      })
+
+                %td.cart-items__cell.cart-items__cell--align-right
+                  - if ff.object.voucher
+                    %b= humanized_money_with_symbol ff.object.price
+                    %span.ind_price= "(#{ff.object.voucher.breakdown})"
+                  - elsif ff.object.quantity == 1
+                    - if C.default_tax == :with_tax
+                      %b= humanized_money_with_symbol ff.object.unit_price
+                    - else
+                      %b= humanized_money_with_symbol ff.object.unit_price_without_tax
+                  - else
+                    - if C.default_tax == :with_tax
+                      %b= humanized_money_with_symbol ff.object.price
+                      %span.ind_price= "(#{humanized_money_with_symbol ff.object.unit_price} each)"
+                    - else
+                      %b= humanized_money_with_symbol ff.object.price_without_tax
+                      %span.ind_price= "(#{humanized_money_with_symbol ff.object.unit_price_without_tax} each)"
+
+              - if ff.object.variant&.options&.any?
+                %tr.cart-items__row
+                  %td.cart-items__cell
+                  %td.cart-items__cell.cart-items__cell--align-left
+                    .field__with-collection-check-box
+                      - if C.can_select_many_product_options
+                        = ff.collection_check_boxes(:option_ids, ff.object.variant.options, :id, :name)
+                      - else
+                        = ff.collection_select(:option_ids, ff.object.variant.options, :id, :name)
+                  %td.cart-items__cell
+                  %td.cart-items__cell
+            %tr
+              %td
+              %td
+              %td.cart-items__cell.cart-items__cell--last.align-right
+                = f.submit class: 'btn btn--small'
+              %td
+
+    %div{ style: "max-width: 400px; margin-left: auto;" }
+      - if !@cart.has_voucher? && C::Product::Voucher.any? && C.show_vouchers_on_cart
+        = form_tag(add_voucher_cart_path) do
+          .field
+            = label_tag "Enter a voucher code"
+            = text_field_tag :code
+            .field__error= @voucher_error
+          = submit_tag 'Add Voucher', class: 'btn btn--small'
+
+        %br
+
+      %div
+        %table
+          %tr
+            %td.order-summary__cell.order-summary__cell--first
+              Items:
+            %td.order-summary__cell.order-summary__cell--last.align-right
+              - if C.default_tax == :with_tax
+                %span= humanized_money_with_symbol @cart.item_subtotal
+              - else
+                %span= humanized_money_with_symbol @cart.item_subtotal_without_tax
+
+          - if @cart.delivery && !@cart.prefer_click_and_collect
+            %tr
+              %td.order-summary__cell.order-summary__cell--first
+                Shipping:
+              %td.order-summary__cell.order-summary__cell--last.align-right
+                - if C.default_tax == :with_tax
+                  %span= humanized_money_with_symbol @cart.delivery.price
+                - else
+                  %span= humanized_money_with_symbol @cart.delivery.price_without_tax
+
+
+          - unless C.hide_cart_tax && @cart.tax.zero?
+            %tr
+              %td.order-summary__cell.order-summary__cell--first
+                VAT:
+              %td.order-summary__cell.order-summary__cell--last.align-right
+                %span= humanized_money_with_symbol @cart.tax
+
+          %tr
+            %td.order-summary__cell.order-summary__cell--first
+              Order Total:
+            %td.order-summary__cell.order-summary__cell--last.align-right
+              %b= humanized_money_with_symbol @cart.price
+
+        %br
+
+        %div
+          - cannot_checkout = C.no_checkout_when_no_stock && @cart.cart_items.any? { |c| !c.voucher && c.quantity > c.variant.current_stock }
+          - privacy_policy_accepted = @cart.accepted_privacy_policy || current_front_customer_account&.accepted_privacy_policy
+
+          - if !cannot_checkout
+            .field
+              = label_tag :accepted_privacy_policy do
+                = check_box_tag :accepted_privacy_policy, '1', privacy_policy_accepted
+                = render 'c/front/carts/privacy_checkbox_content'
+            .field#privacy_policy_message{ style: "transition: 0.2s; opacity: #{privacy_policy_accepted ? 0 : 1}; max-height: #{privacy_policy_accepted ? '0px' : '32px'}" }
+              %span You must agree to the privacy policy to continue
+
+
+          %div.align-right
+            = link_to(raw("#{fa_icon('angle-left')} Continue Shopping"), @cart.first_cart_item_category.blank? ? '/' : front_end_category_path(@cart.first_cart_item_category), class: 'btn btn--secondary')
+            
+            - if cannot_checkout
+              = link_to 'Checkout Disabled', '#', class: 'btn btn--alert'
+              .checkout-disabled.align-right
+                %span Your cart contains products with more quantity selected than we have in stock.
+
+            - else
+              = link_to 'Checkout', checkout_path(privacy: true), class: 'btn'
+
+
+  - else
+    %section.section
+      %h3 Your #{C.cart_name} is currently empty
+
+:javascript
+  $(function() {
+      var $checkout = $('a.btn:contains(Checkout)')
+      var $checkbox = $('#accepted_privacy_policy')
+      var $message = $('#privacy_policy_message')
+
+      if (!$checkbox.prop('checked')) {
+        $checkout.addClass('btn--disabled')
+      }
+
+      $checkout.on('click', function(e) {
+        if (!$checkbox.prop('checked')) {
+          e.preventDefault()
+          alert("You must agree to the privacy policy to continue")
+        }
+      })
+
+      $checkbox.on('change', function(e) {
+        if ($checkbox.prop('checked')) {
+          $checkout.removeClass('btn--disabled')
+          $message.css({opacity: 0, "max-height": "0px"});
+        } else {
+          $checkout.addClass('btn--disabled')
+          $message.css({opacity: 1, "max-height": "32px"});
+        }
+      })
+  })

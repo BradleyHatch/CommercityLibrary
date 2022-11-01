@@ -1,0 +1,9 @@
+.grid-header
+  .grid-header__table
+    .grid-header__results
+      Showing #{results_range(products)} of #{products.count} ordered by
+      = filter_select_tag(search_object)
+    .grid-header__per-page
+      = per_page_links(C.per_page_links)
+      %span
+        per page

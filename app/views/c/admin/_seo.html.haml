@@ -1,0 +1,9 @@
+.field
+  = f.label :slug
+  = f.text_field :slug
+.field
+  = f.label :title, 'Page Title'
+  = f.text_field :title, data: {length_min: 0, length_max: 64}
+.field
+  = f.label :meta_description
+  = f.text_area :meta_description, data: {length_min: 0, length_max: 160}

@@ -1,0 +1,121 @@
+.header
+
+  &__text
+    color: white
+    a
+      color: white
+  &__wrap
+    position: relative
+    background: $header_background
+    padding: 10px 10px 10px 0
+    @media (min-width: $m)
+      padding: 20px 20px 20px 0
+    &--narrow
+      padding: 5px
+
+  &__logo
+    height: $logo_height
+
+  &__toggle
+    i
+      font-size: 1.5rem
+    @media (min-width: $m)
+      display: none
+
+  &__search
+    input[type="search"]
+      background: #e5e5e5
+      border: 0
+      padding: 0 12px
+      height: 36px
+      width: 100%
+      max-width: 460px
+    &--bordered
+      input[type="search"]
+        border: 1px solid #929292
+
+  &__menu
+    display: none
+    ul
+      margin: 0
+      padding: 0
+    li
+      list-style: none
+      display: inline-block
+      margin-right: 15px
+    &--uppercase
+      li
+        text-transform: uppercase
+    &--colored
+      li
+        color: $primary_color
+    @media (min-width: $m)
+      display: block
+
+  &__basket
+    padding: 20px 30px
+    text-align: center
+    background-color: $primary_color
+    transition: 0.2s
+    a
+      color: white
+    b
+      display: block
+      font-size: 1.15rem
+    // &:hover
+    //   background-color: $light_primary_color
+    &--rounded
+      border-radius: 4px
+    &--full-height
+      height: 100%
+
+.main-menu
+  position: relative
+  padding: 0 16px
+  display: none
+  a
+    color: white
+    text-transform: uppercase
+  &--centered
+    text-align: center
+  .show-menu &
+    display: block
+  @media (min-width: $m)
+    display: block
+
+.main-menu__item--root
+  display: inline-block
+  margin-right: 16px
+  list-style: none
+  padding: 16px 0
+  width: 100%
+  @media (min-width: $m)
+    width: initial
+
+.main-menu__item--child
+  display: none
+  margin: 16px 0 0 0
+  padding: 0
+  list-style: none
+  padding: 0 16px 16px 16px
+  ul
+    list-style: none
+    margin: 0
+    padding: 0
+  li
+    padding-top: 16px
+    display: inline-block
+    width: 100%
+  @media (min-width: $m)
+    column-count: 3
+  @media (max-width: $m + 1px )
+    text-align: center
+
+.main-menu__item--root:hover .main-menu__item--child
+  display: block
+  width: 100%
+  background-color: #2b2b2b
+  left: 0
+  z-index: 2
+  @media (min-width: $m)
+    position: absolute

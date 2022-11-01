@@ -1,0 +1,83 @@
+.checkout__summary
+  .checkout__content
+    %table
+      - @cart.cart_items.order(:id).each do |item|
+        %tr
+          %td.checkout__summary-td
+            = image_tag(item.variant.primary_web_image('thumbnail')) unless item.voucher
+          %td.checkout__summary-td
+            %p
+              %b= item.voucher ? item.voucher.name : item.variant.name
+              - if item.options&.any?
+                %br
+                = "with #{item.options.pluck(:name).to_a.to_sentence}"
+              %br
+              = humanized_money_with_symbol(item.price)
+            - if item.variant.present? && C.gift_wrapping
+              = label_tag "gift_wrapping_#{item.id}" do
+                = check_box_tag "gift_wrapping_#{item.id}", '1', item.gift_wrapping, { id: "gift_wrapping_#{item.id}", data: { id: item.id } }
+                %span   Free gift wrapping?
+
+              :javascript
+                $(function() {
+                    var $gift_wrapping = $('#gift_wrapping_#{item.id}')
+                    $gift_wrapping.on('click', function(e) {
+                      $.post("/cart/toggle_gift_wrapping?id=#{item.id}")
+                    })
+                })
+
+    .checkout__content--splitter
+    %table
+      %tr
+        %td.checkout__summary-td.checkout__summary-td--label
+          Subtotal
+        %td.checkout__summary-td.align-right
+          - if C.default_tax == :with_tax
+            %span= humanized_money_with_symbol @cart.item_subtotal
+          - else
+            %span= humanized_money_with_symbol @cart.item_subtotal_without_tax
+
+      - if @cart.delivery && !@cart.prefer_click_and_collect
+        %tr
+          %td.checkout__summary-td.checkout__summary-td--label Delivery
+          %td.checkout__summary-td.align-right
+            - if C.default_tax == :with_tax
+              %span= humanized_money_with_symbol @cart.delivery.price
+            - else
+              %span= humanized_money_with_symbol @cart.delivery.price_without_tax
+      
+      %tr
+        %td.checkout__summary-td.checkout__summary-td.checkout__summary-td--label
+          VAT:
+        %td.checkout__summary-td.align-right
+          %span= humanized_money_with_symbol @cart.tax
+
+    .checkout__content--splitter
+
+    %table
+      %tr
+        %td.checkout__summary-td.checkout__summary-td--label.checkout__summary-td--label-large
+          Total
+        %td.checkout__summary-td.checkout__summary-td--bold.align-right
+          = humanized_money_with_symbol @cart.price
+
+    %br
+    
+    - if @cart.contains_out_of_stock_items?
+      .checkout__stock-warning
+        %h3 Stock Availability
+        %p
+          You are ordering more of an item than we have in stock. This
+          may cause a delay in dispatching your order.          
+
+    = render 'c/main_application/extra_checkout_message', cart: @cart
+
+:javascript
+  $(function() {
+      var $gift_wrapping = $('#gift_wrapping')
+
+      $gift_wrapping.on('click', function(e) {
+         $.post("/cart/toggle_gift_wrapping/")
+      })
+      
+  })

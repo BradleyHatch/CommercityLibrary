@@ -1,0 +1,20 @@
+%h1 Upload CSV list of Barcodes
+
+%p
+  %strong Warning:
+  Only two column CSV files with headers of 'value' and 'type' will be
+  accepted. The Barcode number should be in 'value'. The barcode type can be
+  one of:
+
+%ul
+  - C::Product::Barcode.symbology_array.each do |i|
+    %li= i
+
+%p
+  Invalid barcodes will not be imported. Barcodes that are already in the
+  system will be ignored.
+
+= form_tag({action: :csv_import}, multipart: true) do
+  = file_field_tag :import_file
+
+  = submit_tag 'Upload'

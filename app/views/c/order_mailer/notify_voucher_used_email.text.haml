@@ -1,0 +1,11 @@
+
+= "A purchase has been made on #{C.store_name} using your voucher."
+
+Voucher codes used:
+
+- @vouchers.each do |v|
+  = v.code
+
+Cost of items:
+
+= ActionController::Base.helpers.humanized_money_with_symbol @order.total_price

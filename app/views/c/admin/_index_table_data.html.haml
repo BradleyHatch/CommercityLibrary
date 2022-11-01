@@ -1,0 +1,17 @@
+- unless value[:condition] && object.instance_eval { eval value[:condition] }
+  - if (link = value[:link])
+    - unless object.instance_eval { eval link[:options] } == [nil]
+      = link_to object.instance_eval { eval link[:options] } do
+        = link[:name][:call] ? raw(object.instance_eval { eval link[:name][:call] }) : link[:name][:text]
+
+  - elsif (price = value[:price])
+    = humanized_money_with_symbol object.instance_eval { eval price[:call] }
+
+  - elsif (link = value[:image])
+    = image_tag object.instance_eval { eval value[:image] }
+
+  - elsif (icon = value[:icon])
+    = fa_icon(icon)
+
+  - else
+    = value[:call] ? object.instance_eval { eval value[:call] } : value[:text]

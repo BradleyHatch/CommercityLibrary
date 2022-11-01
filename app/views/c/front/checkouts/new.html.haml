@@ -1,0 +1,88 @@
+
+%h3 Confirm your order
+
+.checkout__content-summary
+  .gs
+    .g-2
+      %h4= @cart.prefer_click_and_collect ? "Collection Address" : "Shipping Address"
+    .g-2.align-right
+      = link_to 'Edit', new_address_checkout_path
+  = presenter(@cart.shipping_address).block
+
+
+.checkout__content-summary
+  %h4 Delivery
+  %p= "#{@cart.delivery.name}"
+  %strong
+    - if C.default_tax == :with_tax
+      %p= humanized_money_with_symbol @cart.delivery.price
+    - else
+      %p= humanized_money_with_symbol @cart.delivery.price_without_tax
+
+.checkout__content-summary
+  %h4 Payment
+
+  - if C.default_tax == :with_tax
+    %p
+      Sub total
+      %br
+      %b= humanized_money_with_symbol @cart.item_subtotal
+  - else
+    %p
+      Sub total
+      %br
+      %b= humanized_money_with_symbol @cart.item_subtotal_without_tax
+
+  - if !@cart.prefer_click_and_collect
+    %p
+      Shipping cost
+      %br
+      - if C.default_tax == :with_tax
+        %b= humanized_money_with_symbol @cart.delivery.price
+      - else
+        %b= humanized_money_with_symbol @cart.delivery.price_without_tax
+
+  - if C.default_tax != :with_tax
+    %p
+      VAT
+      %br
+      %b= humanized_money_with_symbol @cart.tax
+
+  %p
+    Total
+    %br
+    %b= humanized_money_with_symbol @cart.payment.amount_paid
+
+.checkout__content-summary.checkout__notes
+  %h4
+    Note
+  - if params[:notes_saved]
+    %span.checkout__note-confirm Note saved!
+
+  = form_for (@cart.order), url: notes_checkout_path, method: :post do |f|
+    .field
+      = f.text_area :checkout_notes
+
+    .field.align-right
+      = f.submit 'Save Note', class: 'btn btn--secondary '
+
+- unless @cart.payment&.payable&.off_site_confirmation?
+  = form_tag url: checkout_path, method: :post do |form| 
+    %input{:name => "browserJavaEnabled", :type => "hidden", :value => "" }
+    %input{:name => "browserLanguage", :type => "hidden", :value => "" }
+    %input{:name => "browserColorDepth", :type => "hidden", :value => "" }
+    %input{:name => "browserScreenHeight", :type => "hidden", :value => "" }
+    %input{:name => "browserScreenWidth", :type => "hidden", :value => "" }
+    %input{:name => "browserTZ", :type => "hidden", :value => "" }
+  
+    .checkout_button_container
+      %button{ :class => "btn", :type => "submit" }
+        Confirm Order
+
+  :javascript
+    $("[name='browserJavaEnabled']").val(navigator.javaEnabled())
+    $("[name='browserLanguage']").val(navigator.language)
+    $("[name='browserColorDepth']").val(screen.colorDepth)
+    $("[name='browserScreenHeight']").val(screen.height)
+    $("[name='browserScreenWidth']").val(screen.width)
+    $("[name='browserTZ']").val(new Date().getTimezoneOffset())

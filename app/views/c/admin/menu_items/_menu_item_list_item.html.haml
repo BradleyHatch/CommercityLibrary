@@ -1,0 +1,10 @@
+- menu_items.each do |menu_item, children|
+  .draggable_tree_container{data: {draggable: '.draggable_tree_move_handle:first', draggable_tree_id_field: 'menu-item-id', menu_item_id: menu_item.id}}
+    = check_box_tag "hide_children_#{menu_item.id}", nil, false, class: 'hide_children hidden'
+    .draggable_tree_row
+      .draggable_tree_move_handle
+      .draggable_tree_collapse_handle= label_tag "hide_children_#{menu_item.id}", fa_icon('chevron-down')
+      = link_to "#{menu_item.name} (#{menu_item.machine_name})", [:edit, menu_item], class: 'draggable_tree_link'
+      = "- #{menu_item.link}"
+    .draggable_tree_children
+      = render 'menu_item_list_item', menu_items: children

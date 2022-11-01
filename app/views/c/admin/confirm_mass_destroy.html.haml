@@ -1,0 +1,10 @@
+= form_tag mass_destroy_customers_path do
+  %h2 Are you sure you want to delete these #{controller_name.humanize.pluralize.downcase}?
+  %ul
+    - @objects.each do |object|
+      %li= object.name
+  %p
+    = hidden_field_tag :ids, params[:ids]
+    = submit_tag 'delete'
+    or
+    = link_to 'cancel', action: :index

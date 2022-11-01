@@ -1,0 +1,97 @@
+- price_names = ['retail', 'web', 'amazon', 'ebay']
+
+= tabs do
+  - price_names.each do |price_name|
+    = tab "#{price_name.titleize} price changes" do
+      - price = @master.main_variant.send("#{price_name}_price")
+      - price_changes = price&.price_changes&.order(id: :desc)&.limit(10) || []
+
+      - if price_changes.empty?
+        %p No price changes recorded
+      - else
+        .index-table
+          .index-table__content
+            %table.index_table
+              %thead
+                %tr 
+                  %th Previous Price
+                  %th Changed to
+                  %th Changed at
+                  %th= ""
+              %tbody
+                - price_changes.each do |price_change|
+                  %tr
+                    %td
+                      %div
+                        %b Without tax
+                        %span= humanized_money_with_symbol price_change.was_without_tax 
+                      %div
+                        %b With tax
+                        %span= humanized_money_with_symbol price_change.was_with_tax 
+                      %div
+                        %b Tax rate
+                        %span= price_change.was_tax_rate
+                    %td
+                      %div
+                        %b Without tax
+                        %span= humanized_money_with_symbol price_change.without_tax 
+                      %div
+                        %b With tax
+                        %span= humanized_money_with_symbol price_change.with_tax 
+                      %div
+                        %b Tax rate
+                        %span= price_change.tax_rate
+                    %td= price_change.changed_at
+                    %td.price_change_reason_form
+                      .field
+                        = label_tag "Reason for price change"
+                        = text_field_tag :value, price_change.reason
+                      .field
+                        = button_tag 'Save', name: :value, value: price_change.id,  class: 'btn btn--secondary'
+                      .message
+                        %small= ""
+          :javascript
+            $(function() {
+              $('.price_change_reason_form input').on('keypress', function(e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) { 
+                  e.preventDefault();
+                  return false;
+                }
+              });
+
+              $(".price_change_reason_form button").on('click', function (e) {
+                e.preventDefault()
+                e.stopPropagation()
+                
+                var $this = $(this)
+                var $wrapper = $this.parent().parent()
+                
+                setMessage("", $wrapper)
+
+                function success(data, wrapper) {
+                  setMessage(data.message, wrapper)
+                }
+
+                function setMessage(message, wrapper) {
+                  wrapper.find(".message small").text(message)
+                }
+
+                var id = $this.attr("value")
+                var value = $wrapper.find("input")[0].value
+
+                $.ajax({
+                  type: "POST",
+                  url: "/admin/save_price_change_reason",
+                  data: {
+                    id: id,
+                    value: value
+                  },
+                  success: function(data) {
+                    success(data, $wrapper)
+                  },
+                });
+
+              })          
+            })
+            

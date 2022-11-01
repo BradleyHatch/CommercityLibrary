@@ -1,0 +1,65 @@
+-# This is the default show page (the one that is used on security parts online)
+
+.product-show__column.g-1
+  = product_images(product, :left, nil)
+
+.product-show__details.product-show__column.g-gutter.g-2
+  %h1= product.name
+  %p= product.sku
+
+  %p.product-show__brand= "by #{link_to product.brand&.name, front_end_brand_path(product.brand)}".html_safe if product.brand
+
+  - vals_str = product.property_values.map{ |v| "#{v.property_key.key}: #{v.value}"}
+  - vals_str.unshift("MPN: #{product.mpn}") unless product.mpn.blank?
+  - unless vals_str.empty?
+    %p.product-show__mpn= vals_str.join(', ')
+
+  %p.product-show__discount= "Was #{humanized_money_with_symbol product.web_channel.discount_price}" unless product.web_channel.discount_price.blank? || product.web_channel.discount_price.zero?
+
+  %p
+    %span.product-show__price= humanized_money_with_symbol product.cache_web_price
+    %span.product-show__rrprice= "RRP: #{humanized_money_with_symbol product.rrp}" unless product.rrp.blank? || product.rrp.zero?
+
+  = variant_switcher(product)
+
+  - unless product.discontinued?
+    %section
+      - if product.in_stock?
+        %span.btn.product-show__stock.product-show__stock--in in stock
+        = link_to_add_to_cart 'foobar', product do
+          .btn
+            %span Add to Basket
+            = fa_icon('shopping-basket')
+      - else
+        %span.btn.product-show__stock.product-show__stock--out out of stock
+      = add_to_wishlist(product)
+
+  .product-show__tabs
+    = tabs do
+      - unless product.web_channel.description.blank?
+        = tab :description do
+          = simple_format product.web_channel.description
+      - unless product.web_channel.features.blank?
+        = tab :features do
+          = simple_format product.web_channel.features
+      - unless product.web_channel.specification.blank?
+        = tab :specification do
+          = simple_format product.web_channel.specification
+      - unless product.master.documents.empty?
+        = tab :documents do
+          - product.master.documents.each do |document|
+            %p= link_to (document.name.blank? ? document[:document] : document.name), document.document.url
+
+  - if defined? render_related
+    .product-show__related_wrapper
+      %h4 related products
+      = render 'c/front_end/products/_grids/standard', products: product.master.related_products, horizontal: true, block: defined?(block) ? block : 1
+
+:javascript
+  var $selector = $('select#product_switcher_select');
+
+  $selector.on('change', function() {
+    $this = $(this);
+    slug = $this.find(":selected").val();
+    window.location.href = '/products/' + slug;
+  });

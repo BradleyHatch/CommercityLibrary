@@ -1,0 +1,11 @@
+.wrap.wrap--padded.checkout
+  %h2 Order Complete
+  
+  - if @order.present?
+
+    #checkout_content.order_completion_page
+
+      .column--main
+        %ul
+          - @order.items.each do |item|
+            %li= item.name

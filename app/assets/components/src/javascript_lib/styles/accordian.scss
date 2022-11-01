@@ -1,0 +1,30 @@
+@import 'colors';
+@import 'dimensions';
+@import 'generic_classes';
+@import 'transitions';
+
+
+.accordian {
+  @extend .flex-column;
+}
+
+.accordian__content {
+  @extend .flex-column;
+  transition: height $accordian-transition;
+  background-color: $accordianContent;
+  color: $accordianContentFont;
+}
+
+.accordian__row {
+  @extend .flex-width-align;
+  height: $accordion-row;
+
+  &--header {
+    background-color: $accordianHeader;
+    color: $accordianHeaderFont;
+  }
+
+  &--with-divider {
+    border-bottom: $accordianHeaderDivider 1px solid;
+  }
+}

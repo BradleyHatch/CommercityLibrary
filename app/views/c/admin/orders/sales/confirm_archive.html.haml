@@ -1,0 +1,9 @@
+.index-header
+  = form_tag({action: :archive}) do
+    %h2 Are you sure you want to delete this order?
+    %br
+    %br
+    = submit_tag 'Delete', class: 'btn'
+    = link_to 'cancel',
+              Rails.application.routes.url_helpers.method_defined?(:index) ? {action: :index} : '/admin',
+              class: 'btn btn--secondary'

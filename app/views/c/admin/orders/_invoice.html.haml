@@ -1,0 +1,176 @@
+- printing ||= false
+- hide_values = printing && C.packing_print_off
+
+#invoice
+  .print_header
+    .invoice-logo
+      = image_tag 'c/logo--dark.svg'
+    .order_number
+      = order.channel.titleize
+      %br
+      = "Order \##{order.id}"
+
+  %fieldset.order-details.collapse
+    %span.fieldset-title Order
+    .inline_invoice_fields
+      .label Order Placed
+      .value= order.recieved_at
+    - unless hide_values
+      .inline_invoice_fields
+        .label Order Total
+        .value= humanized_money_with_symbol order.total_price_with_tax_and_delivery_pennies
+    = render 'c/admin/orders/order_items', order: order, hide_values: hide_values
+
+  .order-details
+    - if order.is_gift_wrapping? || order.has_an_in_person_delivery_service
+      %fieldset
+        - if order.is_gift_wrapping?
+          %span 
+            = fa_icon('gift')
+            Customer selected gift wrapping for some items
+        - if order.is_gift_wrapping? && order.has_an_in_person_delivery_service
+          %br
+        - if order.has_an_in_person_delivery_service
+          %span 
+            = fa_icon('user')
+            Customer selected to collect in store
+    .gs
+      .g-1
+        %fieldset#delivery_details.collapse
+          %span.fieldset-title Delivery Details
+
+          #delivery_address
+            .label Delivery Address
+            .value
+              - if order.shipping_address
+                = presenter(order.shipping_address).block
+                - if order.shipping_address.phone.present?
+                  Phone: #{order.shipping_address.phone} <br />
+                = link_to 'Edit Address', edit_order_sale_address_path(order, order.shipping_address, address_type: :shipping)
+              - else
+                Not set
+                = link_to 'Add Address', new_order_sale_address_path(order, address: {address_type: :shipping})
+
+      - unless hide_values
+        .g-1.g-gutter
+          %fieldset.order-details.collapse
+            %span.fieldset-title  Order Details
+            .inline_invoice_fields
+              .label Items
+              .value= order.items.sum(:quantity)
+
+            .inline_invoice_fields
+              .label Shipping Service
+              .value= order.delivery.delivery_service&.name
+
+            .inline_invoice_fields
+              .label Shipping Cost
+              .value
+                = order.delivery.price.format
+
+            .inline_invoice_fields
+              .label Carrier
+              .value= order.delivery.delivery_provider
+
+            .inline_invoice_fields
+              .label Tracking Number
+              .value= order.tracking_code
+
+            %br
+            #total_price
+              .inline_invoice_fields
+                .label Item Subtotal
+                - if C.default_tax == :with_tax
+                  .value= humanized_money_with_symbol(order.total_price)
+                - else
+                  .value= humanized_money_with_symbol(order.total_price_without_tax)
+              .inline_invoice_fields
+                .label VAT
+                .value= humanized_money_with_symbol(order.total_tax + (order.delivery&.tax || 0))
+              .inline_invoice_fields
+                .label Total Price
+                .value= humanized_money_with_symbol(order.total_price_with_tax_and_delivery_pennies)
+
+
+    .gs
+      .g-1
+        %fieldset#payment_details.collapse
+          %span.fieldset-title  Payment Details
+
+
+          #payment_address
+            - if order.billing_address_id?
+              .label Billing Address
+              = presenter(order.billing_address).block
+              - if order.billing_address.phone.present?
+                Phone: #{order.billing_address.phone} <br />
+              = link_to 'Edit Address', edit_order_sale_address_path(order, order.billing_address, address_type: :billing)
+            - else
+              .label
+                Billing Address
+                %small (Using shipping address)
+              - if order.billing_address
+                = presenter(order.billing_address).block
+                - if order.billing_address.phone.present?
+                  Phone: #{order.billing_address.phone} <br />
+              = link_to 'Add Billing Address', new_order_sale_address_path(order, address: {address_type: :billing})
+
+            .cc{class: ('hidden' unless params[:cc]) }
+              .label Credit Card Details
+              .inline_invoice_fields
+                .label Card No.
+                .value.cc_num_capt{data: {dec: params[:cc_number_encrypt]}}
+              .inline_invoice_fields
+                .label CVV
+                .value.cc_cvv_capt{data: {dec: params[:cvv_encrypt]}}
+              .inline_invoice_fields
+                .label Expiry
+                .value.cc_csv_exp{data: {dec: params[:expiry_encrypt]}}
+
+
+      .g-1.g-gutter
+        %fieldset#customer_details.collapse
+          %span.fieldset-title  Customer Details
+          #name.inline_invoice_fields
+            .label Name
+            .value= order.name  || order&.customer&.email || 'Not given'
+          #email.inline_invoice_fields
+            .label Email Address
+            .value= order.email || order&.customer&.email || 'Not given'
+          .phone.inline_invoice_fields
+            .label Phone Number
+            .value= order.phone || order&.customer&.phone || 'Not given'
+          .phone.inline_invoice_fields
+            .label Mobile Number
+            .value= order.mobile || order&.customer&.mobile || 'Not given'
+
+          - if order.checkout_notes
+            .inline_invoice_fields
+              .label Notes
+              .value= order.checkout_notes
+
+    - unless hide_values
+      .gs
+        .g-1
+          %fieldset#channel_details.collapse
+            .gs
+              .g-1
+                %span.fieldset-title= "#{order.channel} order details".titleize
+                = inline_invoice_fields('Order ID') { order.channel_order_id }
+                = inline_invoice_fields('Username') { order.user_id }
+
+                - if order.payment&.payable&.persisted?
+                  = inline_invoice_fields('Payment Gateway') { order.payment.payment_method_name }
+
+                = inline_invoice_fields('Amount Paid') { order.payment.amount_paid }
+                = inline_invoice_fields('Currency') { order.items.first.price_currency }
+                = inline_invoice_fields('Transaction ID') { order.transaction_id }
+                = inline_invoice_fields('Gateway Transaction ID') { order.gateway_transaction_id }
+                = inline_invoice_fields('Sales Record Number') { order.id }
+                = inline_invoice_fields('PayPal Seller Protection') { order.ebay_order.seller_protection_eligibility } if order.ebay_order
+                = inline_invoice_fields('eBay Sales Record ID') { order.ebay_order.sales_record_id } if order.ebay_order
+
+              - if order.has_an_ebay_checkout_message
+                .g-1
+                  %span.fieldset-title= " "
+                  = inline_invoice_fields('Checkout Message') { order.ebay_order.checkout_message }

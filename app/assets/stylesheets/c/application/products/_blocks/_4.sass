@@ -1,0 +1,48 @@
+.product-preview
+  border: 1px solid $divider_color
+  display: inline-block
+  vertical-align: top
+  margin-bottom: 8px
+  @media (min-width: 1001px)
+    width: 24.21939%
+    margin-right: 1.0408163265%
+    &:nth-child(4n)
+      margin-right: 0
+  @media (max-width: 1000px) and (min-width: 701px)
+    width: 32.2210424899%
+    margin-right: 1.1684362651%
+    &:nth-child(3n)
+      margin-right: 0
+  @media (max-width: 700px) and (min-width: 401px)
+    width: 49%
+    margin-right: 2%
+    &:nth-child(2n)
+      margin-right: 0
+  @media (max-width: 400px)
+    width: 100%
+
+.product-preview__info
+  padding: 16px 8px
+  h3
+    text-transform: uppercase
+    color: $primary_color
+    font-size: 1.1rem
+    margin-bottom: 0
+    min-height: 45px
+
+
+.product-preview__part-no
+  font-size: 0.8rem
+  color: #777
+  text-transform: uppercase
+.product-preview__price
+  color: #1b1b1b
+  font-size: 1.1rem
+  font-weight: bold
+.product-preview__features
+  font-size: 0.9rem
+  min-height: 50px
+  font-weight: 500
+  p
+    margin: 0
+    color: #1b1b1b

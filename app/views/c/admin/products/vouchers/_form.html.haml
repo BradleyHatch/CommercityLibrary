@@ -1,0 +1,168 @@
+.form-page
+  = form_for @voucher do |f|
+    = f.error_messages
+    .gs.gs--nowrap.clear.form-page--wide.shadow-2dp
+      .fixed-form-panel.fixed-form-panel--wide.shadow-2dp
+        .field_group
+          .field.field--inner-label
+            = f.label :code
+            = f.text_field :code
+            .field__help
+              %p Customers must enter this code to add the voucher to their cart.
+
+          .field.field--inner-label
+            = f.label :name
+            = f.text_field :name
+            .field__help
+              %p This will be displayed in the customer's cart, and at the checkout.
+        %br
+        .field_group
+          .field.field--inner-label
+            = f.label :start_time
+            = f.datetime_field :start_time
+
+          .field.field--inner-label
+            = f.label :end_time
+            = f.datetime_field :end_time
+          .field__help
+            %p The date range within which the voucher will be valid.
+
+          .field.field--inner-label
+            = f.label :uses
+            = f.number_field :uses
+          
+          .field__help
+            %p How many times the voucher can be added to an order. Leave blank or 0 for unlimited uses.
+
+        %br
+        .field_group
+          .field
+            = f.label :active do
+              = f.check_box :active, {checked: !@voucher.active}, 0, 1
+              %span Deactivated
+          .field__help
+            %p Manually mark this voucher as invalid.
+
+      .g-1
+        = tabs do
+          = tab :Discount do
+            .field
+              = f.label :discount_multiplier
+              = f.number_field :discount_multiplier, step: :any, min: 0, max: 1
+              .field__help
+                %p A mutilplier applied to the final price. For example, 0.8 is 20% off.
+
+            .field
+              = f.label :flat_discount, 'Flat discount (£)'
+              = f.number_field :flat_discount, step: 0.01, min: 0
+              .field__help
+                %p A fixed amount removed from the final price.
+
+            .field
+              = f.label :per_item_discount, 'Per-item discount (£)'
+              = f.number_field :per_item_discount, step: 0.01, min: 0
+              .field__help
+                %p A fixed amount removed from the price of each applicable item.
+
+            .field
+              = f.label :per_item_discount_multiplier, 'Per-item percentage discount'
+              = f.number_field :per_item_discount_multiplier, step: 0.01, min: 0
+              .field__help
+                %p A multiplier applied to the price of each applicable item.
+
+          - unless @voucher.new_record?
+            = tab :Restrictions do
+              .field
+                = f.label :minimum_cart_value, 'Minimum cart value (£)'
+                = f.number_field :minimum_cart_value, step: 0.01, min: 0
+                .field__help
+                  %p The voucher cannot be used unless the cart already contains products totalling this value.
+
+              %br
+              .field
+                = f.label :restricted_brand do
+                  = f.check_box :restricted_brand
+                  %span Only available on selected brands
+                .field__help
+                  %p
+                    When checked, this voucher's discounts only apply to the
+                    brands selected. At least one product with the selected
+                    brand must be in the cart for the voucher to be usable. If
+                    a product is also specified, that product will be excluded
+                    from minimum cart total restrictions.
+              %br
+              .panel_buttons
+                .btn.btn--secondary
+                  = f.add_nested_fields_link :brand_vouchers, 'Add brand'
+              %table.form_table#property_values_table
+                %tbody
+                  %tr
+                    %th
+                      %span Brands
+                  = f.nested_fields_for :brand_vouchers, wrapper_tag: :tr, wrapper_options: {class: 'bordered_tr'} do |ff|
+                    %td.padded_td
+                      = ff.select :brand_id, C::Brand.order(name: :asc).pluck(:name, :id), {}, { class: 'property_key_field' }
+                    %td.padded_td
+                      .red_x_button= ff.remove_nested_fields_link 'x'
+
+              %br
+              .field
+                = f.label :restricted_category do
+                  = f.check_box :restricted_category
+                  %span Only available on selected categories
+                .field__help
+                  %p
+                    When checked, this voucher's discounts only apply to the
+                    categories selected. At least one product with the selected
+                    category must be in the cart for the voucher to be usable. If
+                    a product is also specified, that product will be excluded
+                    from minimum cart total restrictions.
+              %br
+              .panel_buttons
+                .btn.btn--secondary
+                  = f.add_nested_fields_link :category_vouchers, 'Add category'
+              %table.form_table#property_values_table
+                %tbody
+                  %tr
+                    %th
+                      %span Categories
+                  = f.nested_fields_for :category_vouchers, wrapper_tag: :tr, wrapper_options: {class: 'bordered_tr'} do |ff|
+                    %td.padded_td
+                      = ff.select :category_id, depth_select_options(C::Category.first), {}, { class: 'property_key_field' }
+                    %td.padded_td
+                      .red_x_button= ff.remove_nested_fields_link 'x'
+
+              %br
+              .field
+                = f.label :restricted do
+                  = f.check_box :restricted
+                  %span Only available on selected products
+                .field__help
+                  %p When checked, this voucher's discounts only apply to the products below. At least one selected product must be in the cart for the voucher to be usable.
+              %br
+              .panel_buttons
+                .btn.btn--secondary
+                  = f.add_nested_fields_link :variant_vouchers, 'Add product'
+              %table.form_table#property_values_table
+                %tbody
+                  %tr
+                    %th
+                      %span Products
+                  = f.nested_fields_for :variant_vouchers, wrapper_tag: :tr, wrapper_options: {class: 'bordered_tr'} do |ff|
+                    %td.padded_td
+                      = ff.select :variant_id, C::Product::Variant.order(sku: :asc).pluck(:sku, :name, :id).map{|x| x[0] = "#{x[0]}: #{x[1]}"; x[1] = x[2]; x }, {}, { class: 'property_key_field' }
+                    %td.padded_td
+                      .red_x_button= ff.remove_nested_fields_link 'x'
+
+          - unless @voucher.new_record?
+            = tab :Orders do
+              %div
+                - if @orders.blank? || @orders.empty?
+                  %p Voucher is not used for any orders.
+                - else
+                  - @orders.each do |order|
+                    %p= link_to order.order_number, "/admin/sales/#{order.id}/"
+
+    .actions.form-page__actions
+      = f.submit class: 'btn'
+      = link_to_delete 'Delete', @voucher, class: 'btn btn--secondary' unless @voucher.new_record?
