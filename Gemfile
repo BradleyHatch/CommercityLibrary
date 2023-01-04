@@ -29,7 +29,7 @@ group :development, :test do
   gem 'selenium-webdriver', '3.4.0'
   gem 'brakeman', :require => false
   gem 'haml-lint', require: false
-  gem 'rails_best_practices'
+  # gem 'rails_best_practices'
   gem 'reek'
   gem 'rubocop', require: false
   gem 'rubocop-rspec', require: false
