@@ -19,9 +19,9 @@ Gem::Specification.new do |s|
 
   s.test_files = Dir['spec/**/*']
 
-  s.required_ruby_version = '>= 2.3.0'
+  s.required_ruby_version = '>= 3.1.2'
 
-  s.add_dependency 'rails', '~> 5.0.3'
+  s.add_dependency 'rails', '~> 6.1.7'
   s.add_dependency 'puma'
   s.add_dependency 'redis-rails'
   s.add_dependency 'redis', '3.3.5'
@@ -34,14 +34,14 @@ Gem::Specification.new do |s|
   s.add_dependency 'jquery-ui-rails', '~> 5.0.5'
 
   s.add_dependency 'haml-rails'
-  s.add_dependency 'sass-rails', '~> 5.0'
+  s.add_dependency 'sass-rails', '>= 5.0'
 
-  s.add_dependency 'money-rails', '1.8.0'
+  s.add_dependency 'money-rails', '>= 1.8.0'
   s.add_dependency 'google_currency'
   # used for rates because google rates doesnt work 
-  s.add_dependency 'eu_central_bank'
+  s.add_dependency 'eu_central_bank', '>= 1.7.0'
 
-  s.add_dependency 'devise', '4.5.0'
+  # s.add_dependency 'devise', '>= 4.8.1'
 
   s.add_dependency 'font-awesome-rails'
   s.add_dependency 'closure_tree'
@@ -59,11 +59,11 @@ Gem::Specification.new do |s|
   s.add_dependency 'jeff', '2.0'
   s.add_dependency 'activemerchant', '~> 1.107.3'
   s.add_dependency 'worldpay'
-  s.add_dependency 'cd2_tabs'
+  # s.add_dependency 'cd2_tabs'
 
-  s.add_dependency 'deep_cloneable', '~> 2.2.2'
+  s.add_dependency 'deep_cloneable', '~> 3.2.0'
   s.add_dependency 'htmlentities'
-  s.add_dependency 'tinymce-rails-imageupload', '4.0.17.beta'
+  # s.add_dependency 'tinymce-rails-imageupload', '>= 4.0.17.beta'
   s.add_dependency 'tinymce-rails', '4.6.7'
 
   s.add_dependency 'fake_ftp'
@@ -82,7 +82,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'write_xlsx'
 
   # Audit trail
-  s.add_dependency 'paper_trail', '~> 7.0.2'
+  s.add_dependency 'paper_trail', '>= 7.0.2'
 
   # HTTP Request Library
   # Bit of a mess due to the Deko rush - will sort out later

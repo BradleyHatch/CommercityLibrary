@@ -2,13 +2,13 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby '2.4.1'
+ruby '3.1.2'
 
 gemspec
 
 gem 'figaro'
 gem 'pg', '0.18.4'
-gem 'ebay-trader', git: 'https://github.com/CD2/ebay_trader.git'
+gem 'ebay-trader', git: 'https://github.com/BradleyHatch/EbayTraderLibrary.git', branch: 'heroku-22'
 gem 'mailchimp-api'
 gem 'eu_central_bank'
 gem 'repost', '0.3.0'
